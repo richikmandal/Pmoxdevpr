@@ -1,0 +1,1077 @@
+angular.module('PmoxApp')
+// Creating the Angular Controller
+    .controller('HomeController', function ($http, $scope, $state,AuthService,$rootScope) {
+        $scope.user = AuthService.user;
+      // $scope.user = AuthService.user.name;
+        // $scope.userPrjData = '';
+        var selectedPmId='';
+        var selectedPrjId='';
+        $scope.showProjects=true;
+        $scope.showAssociates=false;
+        $scope.makeShrink = false;  
+        $scope.manNames=[];
+        $scope.pgManagers=[];
+        $scope.prjTech = [];
+        $scope.prjTechCnt = [];
+        $scope.prjType = [];
+        $scope.prjTypeCnt = [];
+          $scope.init = function () {
+            
+             $scope.disableTabs=true;           
+             $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
+             
+             $scope.totalProjectCount = $scope.user.totalProjectCount;
+             $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
+             $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
+             $scope.totalRevenue = $scope.user.totalRevenue;
+             $scope.totalEbidta = $scope.user.totalEbidta;
+             
+             $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
+             $scope.loadProjStatus($scope.user.projMasterData);
+             $scope.loadProjManaged($scope.user.projMasterData); 
+             $scope.loadProjTech($scope.user.projMasterData);
+             $scope.loadProjType($scope.user.projMasterData);
+             $scope.loadProjLocChrt($scope.user.resourceMap);
+
+              
+         };
+         
+         $scope.loadProjectMasterData = function(userFrSearch){
+          
+           var usr = [];
+           $.ajax({
+             url: "api/projects/getprojectsfruser",
+             error: function (e) {
+               // alert(JSON.stringify(e))
+             },
+             dataType: "json",
+             contentType: 'application/json; charset=utf-8',
+            // headers: {"Authorization": "Bearer "+AuthService.token},
+             type: "POST",
+             async: false,
+             cache: false,
+             data: JSON.stringify(userFrSearch),
+             timeout: 30000,
+             crossDomain: true,
+             success: function (data) {               
+              
+               usr.push(data);
+             }
+             
+           });
+           
+           return usr;
+           
+         }
+         
+
+         $scope.loadFiltersWithStatusData = function(selectedPmId,selectedPrjId,projMasterData){
+           
+           //alert('insidefiltermet'+selectedPmId+"---"+selectedPrjId+"----"+projMasterData)
+
+           var lastPgmId = 0;
+           var lastPgmName = '';
+           var lastPmId = 0;
+           var lastPmName = '';
+           
+           
+
+           if((selectedPmId==='' || selectedPmId==='allpm') && (selectedPrjId==='' || selectedPmId==='allprj'))
+             {
+               var managers = new Object();
+               managers.pid="allpm";
+               managers.pmname="---All PMs---";
+               $scope.manNames.push(managers);
+               $scope.pmData=$scope.manNames[0];
+               
+               var pgm = new Object();
+               pgm.id="allpgm";
+               pgm.name="---All PGMs---";
+               $scope.pgManagers.push(pgm);
+               
+               $scope.projects=[];
+               var projects = new Object();
+               projects.pid="allprj";
+               projects.pname="---All Projects---";
+               $scope.projects.push(projects);
+               $scope.selProject=$scope.projects[0];
+            
+             angular.forEach(projMasterData, function (valueOut, keyOut) {
+                              
+                 if(valueOut.pgmId!=lastPgmId)
+                 {
+                   var pgm = new Object();
+                   pgm.id=valueOut.pgmId;
+                   pgm.name=valueOut.pgmName;
+                   $scope.pgManagers.push(pgm);
+                   $scope.pgmdata=$scope.pgManagers[0];
+                   
+                   lastPgmId = valueOut.pgmId;
+                   lastPgmName = valueOut.pgmName;
+                 }
+                 
+                 if(valueOut.pmId!=lastPmId)
+                 {
+                   var managers = new Object();
+                   managers.pid=valueOut.pmId;
+                   managers.pmname=valueOut.pmName;
+                   $scope.manNames.push(managers);
+
+                   lastPmId = valueOut.pmId;
+                   lastPmName = valueOut.pmName;
+                 } 
+                 
+                 var projects = new Object();
+                 projects.pid=valueOut.projectId;
+                 projects.pname=valueOut.projectDescription;
+                 $scope.projects.push(projects);
+     
+             }); 
+            }
+           
+         }
+         
+         $scope.getDetailsDataPgm=function(pgm){
+           
+          // alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
+           
+           $scope.projects=[];
+           $scope.manNames=[];
+           $scope.pmData={};
+           var lastPmId = '';
+           var userDataPrj =[];
+           $scope.showdropdown=true; 
+           
+            
+            if(pgm.id==='allpgm'){
+              userDataPrj = $scope.user;
+            }else{
+              var user = new Object();
+              user.username = pgm.id;
+              user.name = pgm.name;
+              user.roleName = 'PGM';
+              userDataPrj = $scope.loadProjectMasterData(user)[0];
+            }
+ 
+            $scope.totalProjectCount = userDataPrj.totalProjectCount;
+            $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
+            $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
+            $scope.totalRevenue = userDataPrj.totalRevenue;
+            $scope.totalEbidta = userDataPrj.totalEbidta;
+            
+           // $scope.loadFiltersWithStatusData('','',userDataPrj.projMasterData);
+            $scope.loadProjStatus(userDataPrj.projMasterData);  
+            $scope.loadProjManaged(userDataPrj.projMasterData);
+            $scope.loadProjTech(userDataPrj.projMasterData);
+            $scope.loadProjType(userDataPrj.projMasterData);
+            $scope.loadProjLocChrt(userDataPrj.resourceMap);
+            
+            var managers = new Object();
+            managers.pid="allpm";
+            managers.pmname="---All PMs---";
+            $scope.manNames.push(managers);
+            $scope.pmData=$scope.manNames[0];
+           // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+           // $scope.pmData=$scope.manNames[0];
+           // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+            
+            var projs = new Object();
+            projs.pid="allprj";
+            projs.pname="---All Projects---";
+            $scope.projects.push(projs);
+           
+            angular.forEach(userDataPrj.projMasterData, function (valueOut, keyOut) { 
+                       
+                  if(valueOut.pmId!=lastPmId)
+                  {
+                    var managers = new Object();
+                    managers.pid=valueOut.pmId;
+                    managers.pmname=valueOut.pmName;
+                    $scope.manNames.push(managers);
+    
+                    lastPmId = valueOut.pmId;
+                    lastPmName = valueOut.pmName;
+                  } 
+                  
+                  var projects = new Object();
+                  projects.pid=valueOut.projectId;
+                  projects.pname=valueOut.projectDescription;
+                  $scope.projects.push(projects);
+            }); 
+            
+            //alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+            
+            $scope.pmData=$scope.manNames[0];
+            $scope.selProject=$scope.projects[0];
+            
+         }; 
+         
+         $scope.getDetailsDataPm=function(pm){
+           
+          // alert('inside the getDetailsData ')
+           
+           $scope.projects=[];
+           var userDataPrj =[];
+           $scope.showdropdown=true; 
+           var projs = new Object();
+           projs.pid="allprj";
+           projs.pname="---All Projects---";
+            $scope.projects.push(projs);
+            //alert('$scope.pgmdata.id--'+$scope.pgmdata.id)
+            if(pm.pid==='allpm'){
+              //alert('pm.pid--'+pm.pid)
+              var user = new Object();
+              user.username =  $scope.pgmdata.id;
+              user.name = $scope.pgmdata.name;
+              user.roleName = 'PGM';
+              if($scope.pgmdata.id==='allpgm')
+                {
+                  userDataPrj = $scope.user;
+                }
+              else{
+                 userDataPrj = $scope.loadProjectMasterData(user)[0];
+              }
+             
+            }else{
+              
+              var user = new Object();
+              user.username = pm.pid;
+              user.name = pm.pmname;
+              user.roleName = 'PM';
+              userDataPrj = $scope.loadProjectMasterData(user)[0];
+            }
+            
+            $scope.totalProjectCount = userDataPrj.totalProjectCount;
+            $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
+            $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
+            $scope.totalRevenue = userDataPrj.totalRevenue;
+            $scope.totalEbidta = userDataPrj.totalEbidta;
+            
+            $scope.loadFiltersWithStatusData(pm.pid,'',userDataPrj.projMasterData);
+            $scope.loadProjStatus(userDataPrj.projMasterData);  
+            $scope.loadProjManaged(userDataPrj.projMasterData);
+            $scope.loadProjTech(userDataPrj.projMasterData);
+            $scope.loadProjType(userDataPrj.projMasterData);
+            $scope.loadProjLocChrt(userDataPrj.resourceMap);
+           
+            angular.forEach(userDataPrj.projMasterData, function (valueOut, keyOut) { 
+                       
+                     if(valueOut.pmId==pm.pid){
+                    
+                          var managers = new Object();
+                               managers.pid=valueOut.projectId;
+                               managers.pname=valueOut.projectDescription;
+                            $scope.projects.push(managers);
+
+                      } 
+            }); 
+            
+          //  alert('$scope.projects----'+JSON.stringify($scope.projects))
+            
+            $scope.selProject=$scope.projects[0];
+            
+         }; 
+         
+         $scope.getDetailsDataPrj=function(selProject){
+              
+           var user = new Object();
+           user.username = $scope.pmData.pid;
+           user.name = $scope.pmData.pmname;
+           alert(selProject.pid==='allprj')
+           alert('-selProject.pid---'+selProject.pid)
+           if(selProject.pid==='allprj'){
+             user.projectSelected = '';
+           }
+           else{
+             user.projectSelected = selProject.pid;
+           }
+           //user.projectSelected = selProject.pid;
+           user.roleName = 'PM';
+          var userDataPrj = $scope.loadProjectMasterData(user)[0];
+          
+         alert('getDetailsDataPrj---'+JSON.stringify(userDataPrj))
+                   
+          $scope.totalProjectCount = userDataPrj.totalProjectCount;
+          $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
+          $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
+          $scope.totalRevenue = userDataPrj.totalRevenue;
+          $scope.totalEbidta = userDataPrj.totalEbidta;
+          
+          $scope.loadFiltersWithStatusData('',selProject.pid,userDataPrj.projMasterData);         
+          $scope.loadProjStatus(userDataPrj.projMasterData);         
+          $scope.loadProjManaged(userDataPrj.projMasterData);          
+          $scope.loadProjTech(userDataPrj.projMasterData);         
+          $scope.loadProjType(userDataPrj.projMasterData);          
+          $scope.loadProjLocChrt(userDataPrj.resourceMap);
+
+         }; 
+         
+         $scope.loadProjStatus = function(projMasterData) {
+           
+           var uniqsStatus = projMasterData.reduce((acc, val) => {
+             acc[val.status] = acc[val.status] === undefined ? 1 : acc[val.status] += 1;
+             return acc;
+           }, {});
+           
+          var statusFlag = [];
+          var statusFlagData = [];
+          var statusSeriesData = [];
+         
+            angular.forEach(uniqsStatus, function (value, key) {
+              
+              statusFlag =  [key, value];
+              statusFlagData.push(statusFlag);
+            
+            });
+            
+            statusSeriesData.push({data:statusFlagData});
+          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
+            
+            $scope.chartOptionStat = {
+                    chart: {
+                      type: 'pie',
+                      options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                  },
+                  title: {
+                      text: 'Project Status',
+                  },
+                 credits: {
+                    enabled: false
+                  },
+                  plotOptions: {
+                        pie: {
+                          dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y}',
+                            distance: -60,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }
+                          },
+                          innerSize: 100,
+                          depth: 45
+                      }
+                  },
+                  colors: ['#79d279','#ffb84d'],
+                  series: statusSeriesData
+                };
+
+         }
+         
+         $scope.loadProjManaged = function(projMasterData) {
+           
+           alert(JSON.stringify(projMasterData))
+           
+           var uniqsStatus = projMasterData.reduce((acc, val) => {
+             acc[val.deliveryOwnership] = acc[val.deliveryOwnership] === undefined ? 1 : acc[val.deliveryOwnership] += 1;
+             return acc;
+           }, {});
+           
+           //alert(uniqsStatus+'---uniqsStatus----'+JSON.stringify(uniqsStatus))
+           
+          var statusFlag = [];
+          var statusFlagData = [];
+          var managedSeriesData = [];
+         
+            angular.forEach(uniqsStatus, function (value, key) {
+  
+              statusFlag =  [key, value];
+              statusFlagData.push(statusFlag);
+            
+            });
+            
+            managedSeriesData.push({data:statusFlagData});
+          // alert(managedSeriesData+'-----uniqs----'+JSON.stringify(managedSeriesData))
+            
+            $scope.chartOptionsMan = {
+                    chart: {
+                      type: 'pie',
+                      options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                  },
+                  title: {
+                      text: 'Project Managed',
+                  },
+                 credits: {
+                    enabled: false
+                  },
+                  plotOptions: {
+                        pie: {
+                          dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y}',
+                            distance: -60,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }
+                          },
+                          innerSize: 100,
+                          depth: 45
+                      }
+                  },
+                  colors: ['#b3e0ff','#bf80ff'],
+                  series: managedSeriesData
+                };
+
+         }
+         
+         $scope.loadProjTech = function(projMasterData) {
+           
+           var arr = projMasterData;
+           var pieDataP = [];
+           
+           var uniqs = arr.reduce((acc, val) => {
+             acc[val.projectTechnology] = acc[val.projectTechnology] === undefined ? 1 : acc[val.projectTechnology] += 1;
+             return acc;
+           }, {});
+           
+          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
+           
+           angular.forEach(uniqs, function (value, key) {
+             
+             var pieData = new Object();
+             pieData.name = key;
+             pieData.y =value;
+             pieDataP.push(pieData);
+           
+           });
+
+             $scope.pieData = pieDataP ; 
+         }
+         
+         $scope.loadProjType = function(projMasterData) {
+
+           var arr = projMasterData;
+           var pieDataPtyp = [];
+                    
+           var uniqs = arr.reduce((acc, val) => {
+             acc[val.projectType] = acc[val.projectType] === undefined ? 1 : acc[val.projectType] += 1;
+             return acc;
+           }, {});
+           
+          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
+           
+           angular.forEach(uniqs, function (value, key) {
+             
+             var pieData = new Object();
+             pieData.name = key;
+             pieData.y =value;
+             pieDataPtyp.push(pieData);
+           
+           });
+
+             $scope.pieFrPtch = pieDataPtyp ;
+         }
+         
+         $scope.loadProjLocChrt = function(resourceMap) {
+
+           var pieDataPtyp = [];
+           var pieDataPtypBand = [];
+           var resMapData = [];
+           $scope.seriesHtrg = [];
+
+           angular.forEach(resourceMap, function (valueOut, keyOut) {
+
+             angular.forEach(valueOut, function (valueIn, keyIn) {
+             
+                 var pieData = new Object();
+                 pieData.country = valueIn.country;
+                 pieData.band= valueIn.band;
+                 pieData.htrFlag= valueIn.htrFlag;
+                 resMapData.push(pieData);
+             });
+           });
+           
+           var uniqsHtr = resMapData.reduce((acc, val) => {
+             acc[val.htrFlag] = acc[val.htrFlag] === undefined ? 1 : acc[val.htrFlag] += 1;
+             return acc;
+           }, {});
+           
+          var htrFlag = [];
+          var htrFlagData = [];
+         
+            angular.forEach(uniqsHtr, function (value, key) {
+              
+              htrFlag =  [key, value];
+              htrFlagData.push(htrFlag);
+            
+            });
+            
+            $scope.seriesHtrg.push({data:htrFlagData});
+
+          $scope.chartOptionsHtr = {
+                  chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                },
+                title: {
+                    text: 'Project Managed'
+                },
+                credits: {
+                  enabled: false
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: 100,
+                        depth: 45,
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y}'
+                        }  
+                    }
+                },
+                colors: ['#006600','#800000','#3285a8'],
+                series: $scope.seriesHtrg
+              };
+           
+         //  alert(resMapData+'---resMapData--'+JSON.stringify(resMapData))
+           
+           var uniqsCntry = resMapData.reduce((acc, val) => {
+             acc[val.country] = acc[val.country] === undefined ? 1 : acc[val.country] += 1;
+             return acc;
+           }, {});
+           
+           //alert(uniqsCntry+'-----uniqs-cntry---'+JSON.stringify(uniqsCntry))
+           
+           angular.forEach(uniqsCntry, function (value, key) {
+             
+             var pieData = new Object();
+             pieData.name = key;
+             pieData.y =value;
+             pieDataPtyp.push(pieData);
+           
+           });
+           
+           $scope.pieFrCntry = pieDataPtyp ;
+             
+           var uniqsBand = resMapData.reduce((acc, val) => {
+             acc[val.band] = acc[val.band] === undefined ? 1 : acc[val.band] += 1;
+             return acc;
+           }, {});
+           
+          // alert(uniqsCntry+'-----uniqs-cntry---'+JSON.stringify(uniqsCntry))
+           
+           angular.forEach(uniqsBand, function (value, key) {
+             
+             var pieData = new Object();
+             pieData.name = key;
+             pieData.y =value;
+             pieDataPtypBand.push(pieData);
+           
+           });
+           
+           $scope.pieFrBand = pieDataPtypBand ;
+                         
+         }
+         
+         $scope.showAssociateChrt = function() {
+           
+           $scope.showProjects=false;
+           $scope.showAssociates=true;
+           
+         }
+         
+         $scope.showProjectChrt = function() {
+           
+           $scope.showProjects=true;
+           $scope.showAssociates=false;
+           
+         }
+        
+        $scope.showprj = function() {
+               
+          $scope.showprofitandloss=false;
+          $scope.showproject=true;
+          $scope.showCapsum=false;
+          $scope.showresult = "Project Report";
+
+          $.ajax({
+            url: "api/projects/getPmrSmryDataFrUser/" + AuthService.user.username,
+            error: function(e) {
+              alert(656565)
+            },
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            type: "GET",
+            async: false,
+            cache: false,
+            timeout: 30000,
+            crossDomain: true,
+            success: function(data) {
+             
+             $scope.userPmrData=data;
+             
+            }
+
+          });
+        }
+        
+        $scope.showPrjMasterData = function() {
+            
+            $scope.showprofitandloss=false;
+            $scope.showproject=true;
+            $scope.showCapsum=false;
+            $scope.showresult = "Project Master Report";
+         
+            $.ajax({
+              url: "api/projects/getPrjMasterDataFrUser/" + AuthService.user.username,
+              error: function(e) {
+                alert(656565)
+              },
+              dataType: "json",
+              contentType: 'application/json; charset=utf-8',
+              type: "GET",
+              async: false,
+              cache: false,
+              timeout: 30000,
+              crossDomain: true,
+              success: function(data) {
+               
+               $scope.prjMasterDataFrUser=data;
+
+              }
+
+            });
+          }
+        
+        
+        $scope.showCasum = function() {
+            
+            $scope.showprofitandloss=false;
+            $scope.showproject=false;
+            $scope.showCapsum=true;
+            
+            $.ajax({
+              url: "api/projects/getCasum/" + AuthService.user.username,
+              error: function(e) {
+                alert(656565)
+              },
+              dataType: "json",
+              contentType: 'application/json; charset=utf-8',
+              type: "GET",
+              async: false,
+              cache: false,
+              timeout: 30000,
+              crossDomain: true,
+              success: function(data) {
+           
+               $scope.userCasumData=data;
+              }
+
+            });            
+          }
+        
+       $scope.showP_l=function(){
+		   $scope.showprofitandloss=true;
+       $scope.showproject=false;
+       $scope.showCapsum=false;
+       $.ajax({
+         url: "api/projects/getprofitandloss/"+$scope.user.username,
+         error: function (e) {
+          console.log(e)
+         },
+         dataType: "json",
+         contentType: 'application/json; charset=utf-8',
+        // headers: {"Authorization": "Bearer "+AuthService.token},
+         type: "GET",
+         async: false,
+         cache: false,
+         timeout: 30000,
+         crossDomain: true,
+         success: function (data) {
+           
+           $scope.userProfitandloss = data;
+         }
+        
+     });  
+				// $scope.showSaveBtn11=true;
+			};
+		 $scope.closeprj=function(){
+				$scope.showproject=false;
+				// $scope.showSaveBtn11=true;
+			}
+		 $scope.closePnl=function(){
+				$scope.showprofitandloss=false;
+				// $scope.showSaveBtn11=true;
+			}
+		 
+		 $scope.closeCapsum=function(){
+				$scope.showCapsum=false;
+				// $scope.showSaveBtn11=true;
+			}
+		 
+		 $scope.sort = function(keyname){
+		        $scope.sortKey = keyname;   // set the sortKey to the param passed
+		        $scope.reverse = !$scope.reverse; // if true make it false and vice
+                                              // versa
+		    }
+		 
+		 $scope.showProgress=function(){
+		   alert(123454321)
+		   $scope.loaderds =true;
+       // $scope.showSaveBtn11=true;
+     }
+		 
+		 $scope.hideProgress=function(){
+		  $scope.loaderds =false;
+       // $scope.showSaveBtn11=true;
+     }
+
+		 $scope.goHome=function(){
+		      
+		    $rootScope.$broadcast('tesdtppon');
+      
+		   $state.go('home');
+		   
+     }
+        
+		 $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
+
+	    $scope.labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+	    $scope.data = [
+	      [65, -59, 80, 81, -56, 55, -40],
+	      [28, 48, -40, 19, 86, 27, 90]
+	    ];
+	    $scope.datasetOverride = [
+	      {
+	        label: "Bar chart",
+	        borderWidth: 1,
+	        type: 'bar'
+	      },
+	      {
+	        label: "Line chart",
+	        borderWidth: 3,
+	        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+	        hoverBorderColor: "rgba(255,99,132,1)",
+	        type: 'line'
+	      }
+	    ];
+	    
+	    $scope.labelspi = ["On-Shore", "Off-Shore", "Contractual"];
+	    $scope.datapi = [300, 500, 100];
+		 
+	    $scope.$on('makeShrink', function() {
+	      alert(878347438743)
+	      $scope.makeShrink= !$scope.makeShrink;
+    }); 
+	    
+	    $scope.getselectval = function (selData) {
+        //alert(1111);
+        alert(JSON.stringify(selData));
+
+         $scope.projects=[];
+         $scope.showdropdown=true; 
+         var managers = new Object();
+          managers.pid="allprj";
+          managers.pname="---All Projects---";
+          $scope.projects.push(managers);
+           angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) { 
+
+                   if(valueOut.pmId==selData.pid){
+
+                     var managers = new Object();
+                     managers.pid=valueIn.projectId;
+                     managers.pname=valueIn.projectDescription;
+                     $scope.projects.push(managers);
+      
+                   }           
+           }); 
+           $scope.selProject=$scope.projects[0];
+        };
+    
+        /*$scope.loadFiltersWithStatusData = function(selectedPmId,selectedPrjId){
+        
+        alert('insidefiltermet'+selectedPmId+"---"+selectedPrjId+"----"+$scope.manNames)
+                  
+        var activeNo = 0;
+        var inactiveNo = 0;
+        var techManCnt = 0;
+        var custManCnt = 0; 
+        var lastPgmId = 0;
+        var lastPgmName = '';
+        var lastPmId = 0;
+        var lastPmName = '';
+        var hCount = 0 ;
+        var tCount = 0 ;
+        var mCount = 0 ;
+       
+
+        if(selectedPmId=='' && selectedPrjId=='')
+          {
+            var managers = new Object();
+            managers.pid="allpm";
+            managers.pmname="---All PMs---";
+            $scope.manNames.push(managers);
+            $scope.pmData=$scope.manNames[0];
+            
+            var pgm = new Object();
+            pgm.id="allpgm";
+            pgm.name="---All PGMs---";
+            $scope.pgManagers.push(pgm);
+            
+            $scope.projects=[];
+            var projects = new Object();
+            projects.pid="allprj";
+            projects.pname="---All Projects---";
+            $scope.projects.push(projects);
+            $scope.selProject=$scope.projects[0];
+          }
+        
+      
+        if(selectedPmId!='')
+          {
+            angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
+              if(selectedPmId==valueOut.pmId) {
+                if(valueOut.status == 'ACTIVE')
+                {
+                  activeNo ++;
+                  
+                }else{
+                  
+                  inactiveNo++;
+                }
+                if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
+                {
+                
+                  techManCnt++;
+                  
+                }else{
+                  
+                  custManCnt++;
+                }
+              }    
+            }); 
+          }
+        else if(selectedPrjId!='')
+        {
+          angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
+             
+            if(selectedPrjId==valueOut.projectId) {
+              if(valueOut.status == 'ACTIVE')
+                {
+                  activeNo ++;
+                  
+                }else{
+                  
+                  inactiveNo++;
+                }
+              if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
+                {
+                
+                  techManCnt++;
+                  
+                }else{
+                  
+                  custManCnt++;
+                }
+
+            }         
+          }); 
+        }
+        else {
+        
+          angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
+           
+              if(valueOut.status == 'ACTIVE')
+              {
+                activeNo ++;
+                
+              }else{
+                
+                inactiveNo++;
+              }
+              if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
+              {
+              
+                techManCnt++;
+                
+              }else{
+                
+                custManCnt++;
+              }
+              
+              if(valueOut.pgmId!=lastPgmId)
+              {
+                var pgm = new Object();
+                pgm.id=valueOut.pgmId;
+                pgm.name=valueOut.pgmName;
+                $scope.pgManagers.push(pgm);
+                $scope.pgmdata=$scope.pgManagers[0];
+                
+                lastPgmId = valueOut.pgmId;
+                lastPgmName = valueOut.pgmName;
+              }
+              
+              if(valueOut.pmId!=lastPmId)
+              {
+                var managers = new Object();
+                managers.pid=valueOut.pmId;
+                managers.pmname=valueOut.pmName;
+                $scope.manNames.push(managers);
+
+                lastPmId = valueOut.pmId;
+                lastPmName = valueOut.pmName;
+              } 
+              
+              var projects = new Object();
+              projects.pid=valueOut.projectId;
+              projects.pname=valueOut.projectDescription;
+              $scope.projects.push(projects);
+              
+              angular.forEach($scope.user.resourceMap, function (valueMap, keyMap) {
+              
+                if(valueOut.projectId==keyMap){
+                  
+                  if(valueMap.htrFlag == 'H')
+                  {
+                    hCount++;
+                    
+                  }else if(valueMap.htrFlag == 'T'){
+                    
+                    tCount++;
+                  }
+                  else{
+                    mCount++;
+                  }
+                  
+                }
+              }); 
+          }); 
+        }
+        
+        var seriestest =  ['Active', activeNo];
+        var seriesData = [];
+        $scope.series = [];
+        seriesData.push(seriestest);
+        seriestest =  ['Inactive', inactiveNo];
+        seriesData.push(seriestest);
+        $scope.series.push({data:seriesData});
+        $scope.chartOptionStat = {
+                chart: {
+                  type: 'pie',
+                  options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+              },
+              title: {
+                  text: 'Project Status',
+              },
+             credits: {
+                enabled: false
+              },
+              plotOptions: {
+                    pie: {
+                      dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.y}',
+                        distance: -60,
+                        style: {
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }
+                      },
+                      innerSize: 100,
+                      depth: 45
+                  }
+              },
+              colors: ['#006600','#800000'],
+              series: $scope.series
+            };
+         
+         var seriesMan =  ['TechM Managed', techManCnt];
+         var seriesDataMan = [];
+         $scope.seriesMang = [];
+         seriesDataMan.push(seriesMan);
+         seriesMan =  ['Customer Managed', custManCnt];
+         seriesDataMan.push(seriesMan);
+          $scope.seriesMang.push({data:seriesDataMan});
+    
+        $scope.chartOptionsMan = {
+                chart: {
+                  type: 'pie',
+                  options3d: {
+                      enabled: true,
+                      alpha: 45
+                  }
+              },
+              title: {
+                  text: 'Project Managed'
+              },
+              credits: {
+                enabled: false
+              },
+              plotOptions: {
+                  pie: {
+                    dataLabels: {
+                      enabled: true,
+                      format: '<b>{point.name}</b>: <br>{point.y}</br>',
+                      distance: -60,
+                      style: {
+                          fontWeight: 'bold',
+                          color: 'white'
+                      }
+                    },
+                      innerSize: 100,
+                      depth: 45
+                  }
+              },
+              series: $scope.seriesMang
+            };
+        
+        alert(hCount+'-----'+tCount+'---'+mCount)
+        
+        var seriesHtr =  ['H', hCount];
+        var seriesDataHtr = [];
+        $scope.seriesHtrg = [];
+        seriesDataHtr.push(seriesHtr);
+        seriesHtr =  ['T', tCount];
+        seriesDataHtr.push(seriesHtr);
+        seriesHtr =  ['M', mCount];
+        seriesDataHtr.push(seriesHtr);
+         $scope.seriesHtrg.push({data:seriesDataHtr});
+       
+       $scope.chartOptionsHtr = {
+               chart: {
+                 type: 'pie',
+                 options3d: {
+                     enabled: true,
+                     alpha: 45
+                 }
+             },
+             title: {
+                 text: 'Project Managed'
+             },
+             credits: {
+               enabled: false
+             },
+             plotOptions: {
+                 pie: {
+                     innerSize: 100,
+                     depth: 45,
+                     allowPointSelect: true,
+                     cursor: 'pointer',
+                     dataLabels: {
+                         enabled: true,
+                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                     }  
+                 }
+             },
+             colors: ['#006600','#800000','#3285a8'],
+             series: $scope.seriesHtrg
+           };
+      }*/
+        
+    });

@@ -1,0 +1,530 @@
+<script>
+
+var el = document.getElementById('section11');
+
+if(el){
+	var btns = el.getElementsByClassName("bg-threedface");
+	
+	for (var i = 0; i < btns.length; i++) {
+		  btns[i].addEventListener("click", function() {
+		    var current = document.getElementsByClassName("gradient-primary");
+
+		    // If there's no active class
+		    if (current.length > 0) {
+		    	
+		      current[0].className = current[0].className.replace(" gradient-primary", "");
+		    }
+
+		    // Add the active class to the current/clicked button
+		    this.className += " gradient-primary";
+		   
+		  });
+		}
+}
+
+</script>
+
+<style>
+
+.table-wrapper {
+  max-height: 100px;
+  overflow: auto;
+  display:inline-block;
+  width: 100px;
+}
+
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: right;        /* adjust as needed */
+    color: grey;         /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+
+
+.tablescroll {
+	display: block;
+	overflow-x: auto;
+	overflow-y: auto;
+	white-space: nowrap;
+	width: 1100px;
+}
+
+.tablescroll1 {
+	display: block;
+	overflow-x: auto;
+	overflow-y: 700px;
+	white-space: nowrap;
+
+	width: 1100px;
+}
+
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	border: 1px solid #ddd;
+}
+
+th, td {
+	text-align: left;
+	padding: 16px;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 99999;
+  display: none;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+
+}
+
+.bg-maroon {
+  background-color: maroon; !important;
+}
+
+.bg-threedface {
+  background-color: threedface; !important;
+}
+.btn-5:hover {
+
+  background:#E8E8E8;
+}
+.btn-6:hover {
+  border: #282828 solid 1px;
+  background:#F5F5F5;
+}
+
+</style>
+<div class="d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="HomeController" >
+
+	<div class="page-holder w-100 d-flex flex-wrap">
+		<div class="container-fluid px-xl-5">
+		<div class="spinner-border text-primary">
+    			<span class="sr-only">Loading...</span>
+			</div>
+			<section class="py-2" id="section11">
+			
+			 			<div class="row">
+			 				<div class="col-xl-3 col-md-6">
+				 				<ul class="list-group">
+								  <li class="list-group-item gradient-primary text-white rounded"><div class="row">
+								                <div class="col-lg-2">
+								                    <div class="icon text-white bg-violet">
+														<i class="fas fa-server"></i>
+													</div>
+								                </div>
+								                <div class="col-lg-5">
+								                    <div class="text-white"><a ng-click="showProjectChrt()"><b>Projects</b></a></div>
+								                </div>
+								                <div class="col-lg-5">    
+								                </div>
+								            </div>
+								   </li>
+								  <li class="list-group-item gradient-primary text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-8">
+								                    <div class="samll text-white">Total Projects :</div>
+								                </div>
+								                <div class="col-lg-4">
+								                    <div class="text-white"><b>{{totalProjectCount}}</b></div>
+								                </div>
+								            </div>
+								  </li>
+								</ul>
+							</div>
+			 				<div class="col-xl-3 col-md-6">
+			 					<ul class="list-group">
+								  <li class="list-group-item gradient-warning text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-2">
+								                    <div class="icon text-white bg-violet">
+														<i class="fas fa-users"></i>
+													</div>
+								                </div>
+								                <div class="col-lg-5">
+								                    <div class="text-white"><a ng-click="showAssociateChrt()"><b>Associates</b></a></div>
+								                </div>
+								                <div class="col-lg-5">    
+								                </div>
+								            </div>
+								   </li>
+								  <li class="list-group-item gradient-warning text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-6">
+								                    <div class="samll text-white"><b>Offshore: {{totalOffShoreCount}}</b></div>
+								                </div>
+								                <div class="col-lg-6">
+								                    <div class="text-white"><b>OnShore: {{totalOnShoreCount}}</b></div>
+								                </div>
+								            </div>
+								  </li>
+								</ul>
+			 				</div>
+			 				<div class="col-xl-3 col-md-6">
+			 					<ul class="list-group">
+								  <li class="list-group-item gradient-success text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-2">
+								                    <div class="icon text-white bg-violet">
+														<i class="fas fa-chart-bar"></i>
+													</div>
+								                </div>
+								                <div class="col-lg-5">
+								                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>Profit & Loss</b></a></div>
+								                </div>
+								                <div class="col-lg-5">    
+								                </div>
+								            </div>
+								   </li>
+								  <li class="list-group-item gradient-success text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-6">
+								                    <div class="text-white">Rev: {{totalRevenue}}</div>
+								                </div>
+								                <div class="col-lg-6">
+								                    <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div>
+								                </div>
+								            </div>
+								  </li>
+								</ul>
+			 				</div>              
+                            <div class="col-xl-3 col-md-6">
+	                            <ul class="list-group">
+									  <li class="list-group-item gradient-danger text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-2">
+									                    <div class="icon text-white bg-violet">
+															<i class="fas fa-book"></i>
+														</div>
+									                </div>
+									                <div class="col-lg-5">
+									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>Order Book</b></a></div>
+									                </div>
+									                <div class="col-lg-5">    
+									                </div>
+									            </div>
+									   </li>
+									  <li class="list-group-item gradient-danger text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-6">
+									                     <div class="text-white">Order:</div> 
+									                </div>
+									                <div class="col-lg-6">
+									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                </div>
+									            </div>
+									  </li>
+								</ul>
+                            </div>
+                        </div>
+					</section>
+					<section class="py-2" id="section22">
+						<div class="row">
+                            <div class="col-xl-3 col-md-6">
+                            	<ul class="list-group">
+									  <li class="list-group-item gradient-red text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-2">
+									                    <div class="icon text-white bg-violet">
+															<i class="fas fa-book"></i>
+														</div>
+									                </div>
+									                <div class="col-lg-5">
+									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>AQT</b></a></div>
+									                </div>
+									                <div class="col-lg-5">    
+									                </div>
+									            </div>
+									   </li>
+									  <li class="list-group-item gradient-red text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-6">
+									                     <div class="text-white">Order:</div> 
+									                </div>
+									                <div class="col-lg-6">
+									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                </div>
+									            </div>
+									  </li>
+								</ul>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                   <ul class="list-group">
+									  <li class="list-group-item gradient-info text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-2">
+									                    <div class="icon text-white bg-violet">
+															<i class="fas fa-book"></i>
+														</div>
+									                </div>
+									                <div class="col-lg-5">
+									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>NAD</b></a></div>
+									                </div>
+									                <div class="col-lg-5">    
+									                </div>
+									            </div>
+									   </li>
+									  <li class="list-group-item gradient-info text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-6">
+									                     <div class="text-white">Order:</div> 
+									                </div>
+									                <div class="col-lg-6">
+									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                </div>
+									            </div>
+									  </li>
+								</ul>     
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                            	 <ul class="list-group">
+									  <li class="list-group-item gradient-violet text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-2">
+									                    <div class="icon text-white bg-violet">
+															<i class="fas fa-book"></i>
+														</div>
+									                </div>
+									                <div class="col-lg-5">
+									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>DLG</b></a></div>
+									                </div>
+									                <div class="col-lg-5">    
+									                </div>
+									            </div>
+									   </li>
+									  <li class="list-group-item gradient-violet text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-6">
+									                     <div class="text-white">Order:</div> 
+									                </div>
+									                <div class="col-lg-6">
+									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                </div>
+									            </div>
+									  </li>
+								</ul>
+                                
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                            	<ul class="list-group">
+									  <li class="list-group-item gradient-secondary text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-2">
+									                    <div class="icon text-white bg-violet">
+															<i class="fas fa-book"></i>
+														</div>
+									                </div>
+									                <div class="col-lg-5">
+									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>CaaS:</b></a></div>
+									                </div>
+									                <div class="col-lg-5">    
+									                </div>
+									            </div>
+									   </li>
+									  <li class="list-group-item gradient-secondary text-white rounded">
+									  			<div class="row">
+									                <div class="col-lg-6">
+									                     <div class="text-white">CaaS:</div> 
+									                </div>
+									                <div class="col-lg-6">
+									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                </div>
+									            </div>
+									  </li>
+								</ul>
+                            </div>
+                        </div>
+			</section>
+			<section class="py-2" id="section33">
+				<div class="row mb-5 bg-faded rounded align-items-center" style="border-top-width: 10px;padding-top: 0px;">
+					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
+						<h4><span class="text-muted "><b>Apply Filter </b></span></h4>
+					</div>
+					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
+						<select class="btn btn-secondary" name="pgm" ng-options="programManager as programManager.name for programManager in pgManagers" ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+						</select>
+					</div>
+					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
+						<select name="pm" class="btn btn-secondary" ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+						</select>
+					</div>
+					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0" >
+						<select name="prj" class="btn btn-secondary" ng-options="project as project.pname for project in projects" ng-model="selProject" ng-change="getDetailsDataPrj(selProject)" >
+						</select>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section44" ng-show="showProjects">
+            <div class="row shadow-lg mb-4">
+				<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-3">
+                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
+                      	  <hc-pie-chart title="Project Technology" data="pieData"></hc-pie-chart>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-5">
+                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
+						  <hc-chart options="chartOptionStat"></hc-chart>                    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-3">
+                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+                        <hc-pie-chart title="Project Type" data="pieFrPtch"></hc-pie-chart>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body ">
+                    <div class="row align-items-center flex-row">
+                     <!--  <div class="col-lg-5">
+                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
+                      	 <hc-chart options="chartOptionsMan"></hc-chart>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </section>
+            <section class="py-2" id="section55" ng-show="showAssociates">
+            <div class="row shadow-lg mb-4">
+				<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-3">
+                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
+                      	 <hc-pie-chart title="Resource Locations" data="pieFrCntry"></hc-pie-chart>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-5">
+                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
+						   <hc-chart options="chartOptionsHtr"></hc-chart>                  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center flex-row">
+                      <!-- <div class="col-lg-3">
+                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+                       <hc-pie-chart title="Band Wise Allocation" data="pieFrBand"></hc-pie-chart>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card shadow-lg mb-3">
+                  <div class="card-body ">
+                    <div class="row align-items-center flex-row">
+                     <!--  <div class="col-lg-5">
+                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+                      </div> -->
+                      <div class="col-lg-12">
+                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
+                      	 <!-- <hc-chart options="chartOptionsMan"></hc-chart> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </section>
+		</div>
+		<footer
+			class="footer shadow-lg bg-maroon align-self-end py-3 px-xl-5 w-100">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-6 text-center text-md-left text-primary">
+						<p class="mb-2 mb-md-0">Tech Mahindra &copy;</p>
+					</div>
+					<div class="col-md-6 text-center text-md-right text-gray-400">
+						<p class="mb-0">
+							Design by <a href="https://Tech Mahindra.com/admin-templates"
+								class="external text-gray-400">Techmahindra</a>
+						</p>
+						<!-- Please do not remove the backlink to us unless you support further theme's development at https://Tech Mahindra.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+</div>
+
