@@ -57,19 +57,20 @@
 								zclass="custom-control-label">Remember Me</label>
 						</div>
 					</div> -->
-					<div ng-if="showdropdown">
-						Select a Role 
-						<br/>
-						<br/>
-						<select name="users" ng-options="roles as roles.id for roles in roleList" ng-model="MyData" ng-change="getselectval(MyData)">
-						</select>
-					</div>
+					<div ng-show="showdropdown">
+					
+							
+				                     <div ><b>Select a Role:</b></div> 
+				             
+				                   <div><select name="users" ng-options="roles as roles.id for roles in roleList" ng-model="MyData" ng-change="getselectval(MyData)">
+									</select></div>
+						</div>
 					<div ng-show="showlogin">
 
 						<button ng-click="login()" class="btn btn-primary shadow px-5">Log
 							in</button>
 					</div>
-					<div ng-if="showenter">
+					<div ng-show="showenter">
 					    <br/>
 						<br/>
 						<button ng-click="enterApp()" class="btn btn-primary shadow px-5">Enter</button>

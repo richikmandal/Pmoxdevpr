@@ -13,16 +13,16 @@ angular.module('PmoxApp')
             $state.go('login');
         };
         $scope.scrollTo = function (scrn) {
-          alert(scrn);
+         // alert(scrn);
           $state.go(scrn);
       };
       
       $scope.clickNavBar = function ()
       {
-        alert(6458937349)
+        //alert(6458937349)
         AuthService.makeShrink = 'shrink';
         $rootScope.$broadcast('makeShrink');
-        alert(645893734900000)
+        //alert(645893734900000)
         //$state.go(scrn);
       };
       

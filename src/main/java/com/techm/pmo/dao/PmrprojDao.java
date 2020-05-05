@@ -5,12 +5,12 @@ import java.util.List;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
 import com.techm.pmo.model.PrjmasterData;
-import com.techm.pmo.model.Profit_Loss;
+import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.User;
 
 public interface PmrprojDao {
   
-  public List<Profit_Loss> getP_L(String user);
+  public List<ProfitAndLossData> getP_L(String user);
   
   public User getPmrDataFrUser(User user);
 

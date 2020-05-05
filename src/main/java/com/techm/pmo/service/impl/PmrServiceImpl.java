@@ -9,7 +9,7 @@ import com.techm.pmo.dao.PmrprojDao;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
 import com.techm.pmo.model.PrjmasterData;
-import com.techm.pmo.model.Profit_Loss;
+import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.User;
 import com.techm.pmo.service.PmrService;
 
@@ -27,10 +27,10 @@ public class PmrServiceImpl implements PmrService {
 	    // TODO Auto-generated method stub
 	  
 	  user = pmrprojdao.getPmrDataFrUser(user);
-	  if(user.getRoleName().equals("PGM")||user.getRoleName().equals("PM")) {
+	 // if(user.getRoleName().equals("PGM")||user.getRoleName().equals("PM")) {
 	    user = pmrprojdao.getProjectMasterDataForPGM(user);
 	    user = pmrprojdao.getResourceDataForPGM(user);
-	  }
+	  //}
 	  
 	    return user;
 	  }
@@ -42,7 +42,7 @@ public class PmrServiceImpl implements PmrService {
 	  }
 	  
       @Override
-      public List<Profit_Loss> getP_L(String user) {
+      public List<ProfitAndLossData> getP_L(String user) {
       	// TODO Auto-generated method stub
       	return pmrprojdao.getP_L(user);
       }

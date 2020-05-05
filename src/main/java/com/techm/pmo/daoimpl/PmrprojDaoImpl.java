@@ -21,7 +21,7 @@ import com.techm.pmo.dao.PmrprojDao;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
 import com.techm.pmo.model.PrjmasterData;
-import com.techm.pmo.model.Profit_Loss;
+import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.ResourceBaseData;
 import com.techm.pmo.model.User;
 
@@ -57,12 +57,13 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
           
   String getPrjAssoctData = " with rws as ( " + 
-        "  select ON_OFF,PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS from PMOX.T_RESOURCE_BASE REBS JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = REBS.PROJECT_ID " + 
+        "  select ON_OFF,PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,PJM.IBU_HEAD_ID from PMOX.T_RESOURCE_BASE REBS JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = REBS.PROJECT_ID " + 
         ") select * from rws  pivot ( count(*) for ON_OFF in ('OFFSHORE' AS OFFSHORE, 'ONSITE' AS ONSITE ) ) " ;
            
-  String getPrjRevEbidta = "SELECT ROUND(SUM(REV_TOTAL)*100000,2) AS REV_TOTAL,ROUND((SUM(EBIDTA)*100)/SUM(REV_TOTAL),2) AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  "+
+  String getPrjRevEbidta = "SELECT ROUND((NVL(REV_TOTAL,0)/1000000),2) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL)*100000,2) AS REV_TOTAL," +
+                            " CASE when SUM(REV_TOTAL) <> 0 THEN (SUM(EBIDTA)*100)/SUM(REV_TOTAL) END  AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  "+
                              " ON PJM.PROJECT_ID = pnl.PROJECT_ID ";
-  String getPrjRevEbidta1 =  " GROUP BY FY ";
+  String getPrjRevEbidta1 =  " GROUP BY FY ) A";
   String getPrjRevEbidta2 =  " AND UPPER(\"MONTH\") = TRIM(to_char(add_months( sysdate, -1 ), 'MONTH')) GROUP BY FY ";
 
   String getPrjResourcData = "SELECT EMPLID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.IBU, RSB.IBG, \"CLUSTER\", EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC, REGULAR_CONTRACT "+
@@ -85,46 +86,51 @@ public class PmrprojDaoImpl implements PmrprojDao {
     User usrRev = new User();
     
     List<User> usrData = new ArrayList<User>();
+    
+    try {
    
     if(user.getProjectSelected()!=null && !user.getProjectSelected().equals("")) {
       
         getPrjCntFrUserFinal = getPrjCntFrUser+ "WHERE PROJECT_ID IN (?) ";
         user.setTotalProjectCount(jdbcMysql.queryForObject(getPrjCntFrUserFinal,new Object[] { user.getProjectSelected() }, Integer.class));
-        
-        getPrjAssoct = getPrjAssoctData + "WHERE PROJECT_ID IN (?) AND STATUS = 'ACTIVE' ";
-        usrData = (List<User>) jdbcMysql.query(
-            getPrjAssoct, new Object[] { user.getProjectSelected() }, mapper);
-      
-        getPrjRevEbidtaFinal = getPrjRevEbidta + "WHERE PJM.PROJECT_ID IN (?) "+ getPrjRevEbidta1;
-        usrRev = (User)jdbcMysql.queryForObject(getPrjRevEbidtaFinal,new Object[] { user.getProjectSelected() }, (rs, rowNum) ->
-        new User(
-            rs.getString("REV_TOTAL"),
-            rs.getString("EBIDTA")
-      ));
+        if(user.getTotalProjectCount()>0)
+        {
+            getPrjAssoct = getPrjAssoctData + "WHERE PROJECT_ID IN (?) AND STATUS = 'ACTIVE' ";
+            usrData = (List<User>) jdbcMysql.query(
+                getPrjAssoct, new Object[] { user.getProjectSelected() }, mapper);
+          
+            getPrjRevEbidtaFinal = getPrjRevEbidta + "WHERE PJM.PROJECT_ID IN (?) "+ getPrjRevEbidta1;
+            usrRev = (User)jdbcMysql.queryForObject(getPrjRevEbidtaFinal,new Object[] { user.getProjectSelected() }, (rs, rowNum) ->
+            new User(
+                rs.getString("REV_TOTAL"),
+                rs.getString("EBIDTA")
+          ));
+        }
     }
     else {
       
         getPrjCntFrUserFinal = getPrjCntFrUser+ "WHERE "+ user.getRoleName()+"_ID = ? ";
         user.setTotalProjectCount(jdbcMysql.queryForObject(getPrjCntFrUserFinal,new Object[] { user.getUsername() }, Integer.class));
-        
-        getPrjAssoct = getPrjAssoctData + "WHERE "+ user.getRoleName()+"_ID = ? AND STATUS = 'ACTIVE' ";
-        usrData = (List<User>) jdbcMysql.query(
-            getPrjAssoct, new PreparedStatementSetter() {
-              
-              public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                 preparedStatement.setString(1, user.getUsername());
-              }
-           }, mapper);
-      
-        getPrjRevEbidtaFinal = getPrjRevEbidta + "WHERE "+ user.getRoleName()+"_ID = ? "+ getPrjRevEbidta1;
-        usrRev = (User)jdbcMysql.queryForObject(getPrjRevEbidtaFinal,new Object[] { user.getUsername() }, (rs, rowNum) ->
-        new User(
-            rs.getString("REV_TOTAL"),
-            rs.getString("EBIDTA")
-      ));
+        if(user.getTotalProjectCount()>0)
+        {
+            getPrjAssoct = getPrjAssoctData + "WHERE "+ user.getRoleName()+"_ID = ? AND STATUS = 'ACTIVE' ";
+            usrData = (List<User>) jdbcMysql.query(
+                getPrjAssoct, new PreparedStatementSetter() {
+                  
+                  public void setValues(PreparedStatement preparedStatement) throws SQLException {
+                     preparedStatement.setString(1, user.getUsername());
+                  }
+               }, mapper);
+          
+            getPrjRevEbidtaFinal = getPrjRevEbidta + "WHERE "+ user.getRoleName()+"_ID = ? "+ getPrjRevEbidta1;
+            usrRev = (User)jdbcMysql.queryForObject(getPrjRevEbidtaFinal,new Object[] { user.getUsername() }, (rs, rowNum) ->
+            new User(
+                rs.getFloat("REV_TOTAL")+"",
+                rs.getFloat("EBIDTA")+""
+          ));
+        }
     }
    
-    
     user.setTotalRevenue(usrRev.getTotalRevenue());
     user.setTotalEbidta(usrRev.getTotalEbidta());
 
@@ -138,6 +144,11 @@ public class PmrprojDaoImpl implements PmrprojDao {
     
     user.setTotalOffShoreCount(offShoreCount);
     user.setTotalOnShoreCount(onShoreCount);
+    }
+    catch(Exception ex)
+    {
+      //throw ex.printStackTrace();;
+    }
    
     return user;
 
@@ -148,8 +159,8 @@ public class ProjectRowMapper implements RowMapper {
       User usr = new User();
         // SELECT tcid, tcname,tcqryone,tcqrytwo,tcdsone,tcdstwo,active FROM
         // USER_TESTCASES
-      usr.setTotalOffShoreCount(rs.getInt(5));
-      usr.setTotalOnShoreCount(rs.getInt(6));
+      usr.setTotalOffShoreCount(rs.getInt("OFFSHORE"));
+      usr.setTotalOnShoreCount(rs.getInt("ONSITE"));
      // usr.setOnAscCount(rs.getInt(2));
      // usr.setOffAscCount(rs.getInt(3));
         return usr;
@@ -229,10 +240,10 @@ public static class PrjmasterRowMapper implements RowMapper<PrjmasterData> {
 }
 
 @Override
-public List<Profit_Loss> getP_L(String userId) {
+public List<ProfitAndLossData> getP_L(String userId) {
     // TODO Auto-generated method stub
-      final RowMapper<Profit_Loss> mapper = new P_LRowMapper();
-      List<Profit_Loss> result = (List<Profit_Loss>) jdbcMysql.query(
+      final RowMapper<ProfitAndLossData> mapper = new P_LRowMapper();
+      List<ProfitAndLossData> result = (List<ProfitAndLossData>) jdbcMysql.query(
               p_ldata, new PreparedStatementSetter() {
                    
                   public void setValues(PreparedStatement preparedStatement) throws SQLException {
@@ -243,9 +254,9 @@ public List<Profit_Loss> getP_L(String userId) {
    
     return result;
 }
-public static class P_LRowMapper implements RowMapper<Profit_Loss> {
-    public Profit_Loss mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Profit_Loss p_l = new Profit_Loss();
+public static class P_LRowMapper implements RowMapper<ProfitAndLossData> {
+    public ProfitAndLossData mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ProfitAndLossData p_l = new ProfitAndLossData();
         p_l.setProject_Description(rs.getString("Project_Description"));
         p_l.setCustomer_Name(rs.getString("Customer_Name"));
         p_l.setCustomer_Group_Description(rs.getString("Customer_Group_Description"));
@@ -484,14 +495,14 @@ public static class ResourceBaseMapRowMapper implements RowMapper<ResourceBaseDa
    public Map<String, List<ResourceBaseData>> extractData(ResultSet rs) throws SQLException {
    Map<String, List<ResourceBaseData>> projectMap = new HashMap<String, List<ResourceBaseData>>();
    List<ResourceBaseData> prjMasterList = null;
-   int lastPrjId = 0;
+   String lastPrjId = "";
    while (rs.next()) {
      
-     int prjId = rs.getInt("PROJECT_ID");
+     String prjId = rs.getString("PROJECT_ID");
         
-       if(prjId!=lastPrjId)
+       if(!prjId.equals(lastPrjId))
        {
-         if(lastPrjId!=0)
+         if(lastPrjId!=null && !lastPrjId.equals(""))
          {
            projectMap.put(lastPrjId+"",prjMasterList);
          }
@@ -501,7 +512,7 @@ public static class ResourceBaseMapRowMapper implements RowMapper<ResourceBaseDa
    
        ResourceBaseData rsData = new ResourceBaseData();
          
-       rsData.setProjectId(prjId+"");
+       rsData.setProjectId(prjId);
        rsData.setProjectDescription(rs.getString("PROJECT_DESC"));
        rsData.setIbg(rs.getString("IBG"));
        rsData.setIbu(rs.getString("IBU"));

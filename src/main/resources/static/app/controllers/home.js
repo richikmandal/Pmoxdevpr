@@ -16,7 +16,7 @@ angular.module('PmoxApp')
         $scope.prjType = [];
         $scope.prjTypeCnt = [];
           $scope.init = function () {
-            
+                       
              $scope.disableTabs=true;           
              $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
              
@@ -42,7 +42,8 @@ angular.module('PmoxApp')
            $.ajax({
              url: "api/projects/getprojectsfruser",
              error: function (e) {
-               // alert(JSON.stringify(e))
+               alert('Invalid Result set for the request.'+JSON.stringify(e))
+               //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
@@ -73,62 +74,73 @@ angular.module('PmoxApp')
            var lastPgmName = '';
            var lastPmId = 0;
            var lastPmName = '';
+                      
+           if(selectedPmId==='' && selectedPrjId==='' )
+           {
+             $scope.projects=[];
+             var managers = new Object();
+             managers.pid="allpm";
+             managers.pmname="---All PMs---";
+             $scope.manNames.push(managers);
+             $scope.pmData=$scope.manNames[0];
+             
+             var pgm = new Object();
+             pgm.id="allpgm";
+             pgm.name="---All PGMs---";
+             $scope.pgManagers.push(pgm);
+             
+             var projects = new Object();
+             projects.pid="allprj";
+             projects.pname="---All Projects---";
+             $scope.projects.push(projects);
+             $scope.selProject=$scope.projects[0];
+          
+             var distinctPgm = [...new Set(projMasterData.map(pgm => pgm.pgmId+':'+pgm.pgmName))];
            
-           
-
-           if((selectedPmId==='' || selectedPmId==='allpm') && (selectedPrjId==='' || selectedPmId==='allprj'))
-             {
-               var managers = new Object();
-               managers.pid="allpm";
-               managers.pmname="---All PMs---";
-               $scope.manNames.push(managers);
-               $scope.pmData=$scope.manNames[0];
-               
-               var pgm = new Object();
-               pgm.id="allpgm";
-               pgm.name="---All PGMs---";
-               $scope.pgManagers.push(pgm);
-               
-               $scope.projects=[];
-               var projects = new Object();
-               projects.pid="allprj";
-               projects.pname="---All Projects---";
-               $scope.projects.push(projects);
-               $scope.selProject=$scope.projects[0];
-            
-             angular.forEach(projMasterData, function (valueOut, keyOut) {
-                              
-                 if(valueOut.pgmId!=lastPgmId)
-                 {
+               angular.forEach(distinctPgm, function (valueOut, keyOut) {
+                 
+                   var pgmArr = valueOut.split(':');
                    var pgm = new Object();
-                   pgm.id=valueOut.pgmId;
-                   pgm.name=valueOut.pgmName;
+                   pgm.id=pgmArr[0];
+                   pgm.name=pgmArr[1];
                    $scope.pgManagers.push(pgm);
                    $scope.pgmdata=$scope.pgManagers[0];
                    
                    lastPgmId = valueOut.pgmId;
                    lastPgmName = valueOut.pgmName;
-                 }
                  
-                 if(valueOut.pmId!=lastPmId)
-                 {
+                 
+               });  
+              
+               var distinctPm = [...new Set(projMasterData.map(pm => pm.pmId+':'+pm.pmName))];
+                          
+               angular.forEach(distinctPm, function (valueOut, keyOut) {
+                 
+                   var pmArr = valueOut.split(':');
                    var managers = new Object();
-                   managers.pid=valueOut.pmId;
-                   managers.pmname=valueOut.pmName;
+                   managers.pid=pmArr[0];
+                   managers.pmname=pmArr[1];
                    $scope.manNames.push(managers);
-
-                   lastPmId = valueOut.pmId;
-                   lastPmName = valueOut.pmName;
-                 } 
                  
-                 var projects = new Object();
-                 projects.pid=valueOut.projectId;
-                 projects.pname=valueOut.projectDescription;
-                 $scope.projects.push(projects);
-     
-             }); 
-            }
+                 
+               });  
+                        
+               var distinctProject = [...new Set(projMasterData.map(project => project.projectId+':'+project.projectDescription))];
+                         
+               angular.forEach(distinctProject, function (valueOut, keyOut) {
+                 
+                   var projectArr = valueOut.split(':');
+                   var projects = new Object();
+                   projects.pid=projectArr[0];
+                   projects.pname=projectArr[1];
+                   $scope.projects.push(projects);
+                 
+                 
+               });  
            
+           }
+          // alert('manNames----'+JSON.stringify($scope.projects));
+                      
          }
          
          $scope.getDetailsDataPgm=function(pgm){
@@ -207,9 +219,7 @@ angular.module('PmoxApp')
          }; 
          
          $scope.getDetailsDataPm=function(pm){
-           
-          // alert('inside the getDetailsData ')
-           
+                     
            $scope.projects=[];
            var userDataPrj =[];
            $scope.showdropdown=true; 
@@ -217,6 +227,7 @@ angular.module('PmoxApp')
            projs.pid="allprj";
            projs.pname="---All Projects---";
             $scope.projects.push(projs);
+            $scope.selProject=$scope.projects[0];
             //alert('$scope.pgmdata.id--'+$scope.pgmdata.id)
             if(pm.pid==='allpm'){
               //alert('pm.pid--'+pm.pid)
@@ -253,22 +264,32 @@ angular.module('PmoxApp')
             $scope.loadProjTech(userDataPrj.projMasterData);
             $scope.loadProjType(userDataPrj.projMasterData);
             $scope.loadProjLocChrt(userDataPrj.resourceMap);
+            
+           // alert(userDataPrj.projMasterData.length)
            
             angular.forEach(userDataPrj.projMasterData, function (valueOut, keyOut) { 
                        
-                     if(valueOut.pmId==pm.pid){
-                    
+                    if(pm.pid==='allpm') {
+                      
+                        var managers = new Object();
+                        managers.pid=valueOut.projectId;
+                        managers.pname=valueOut.projectDescription;
+                        $scope.projects.push(managers);
+                      
+                    }else{
+                      
+                        if(valueOut.pmId==pm.pid){
+                          
                           var managers = new Object();
-                               managers.pid=valueOut.projectId;
-                               managers.pname=valueOut.projectDescription;
-                            $scope.projects.push(managers);
-
+                          managers.pid=valueOut.projectId;
+                          managers.pname=valueOut.projectDescription;
+                          $scope.projects.push(managers);
+  
                       } 
+                      
+                    }
+
             }); 
-            
-          //  alert('$scope.projects----'+JSON.stringify($scope.projects))
-            
-            $scope.selProject=$scope.projects[0];
             
          }; 
          
@@ -277,8 +298,6 @@ angular.module('PmoxApp')
            var user = new Object();
            user.username = $scope.pmData.pid;
            user.name = $scope.pmData.pmname;
-           alert(selProject.pid==='allprj')
-           alert('-selProject.pid---'+selProject.pid)
            if(selProject.pid==='allprj'){
              user.projectSelected = '';
            }
@@ -288,9 +307,7 @@ angular.module('PmoxApp')
            //user.projectSelected = selProject.pid;
            user.roleName = 'PM';
           var userDataPrj = $scope.loadProjectMasterData(user)[0];
-          
-         alert('getDetailsDataPrj---'+JSON.stringify(userDataPrj))
-                   
+
           $scope.totalProjectCount = userDataPrj.totalProjectCount;
           $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
           $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
@@ -325,8 +342,7 @@ angular.module('PmoxApp')
             });
             
             statusSeriesData.push({data:statusFlagData});
-          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
-            
+
             $scope.chartOptionStat = {
                     chart: {
                       type: 'pie',
@@ -346,17 +362,12 @@ angular.module('PmoxApp')
                           dataLabels: {
                             enabled: true,
                             format: '<b>{point.name}</b>: {point.y}',
-                            distance: -60,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            }
                           },
                           innerSize: 100,
                           depth: 45
                       }
                   },
-                  colors: ['#79d279','#ffb84d'],
+                  colors: ['#79d279','#ffb84d','#00bfff'],
                   series: statusSeriesData
                 };
 
@@ -364,7 +375,7 @@ angular.module('PmoxApp')
          
          $scope.loadProjManaged = function(projMasterData) {
            
-           alert(JSON.stringify(projMasterData))
+           //alert(JSON.stringify(projMasterData))
            
            var uniqsStatus = projMasterData.reduce((acc, val) => {
              acc[val.deliveryOwnership] = acc[val.deliveryOwnership] === undefined ? 1 : acc[val.deliveryOwnership] += 1;
@@ -406,17 +417,12 @@ angular.module('PmoxApp')
                           dataLabels: {
                             enabled: true,
                             format: '<b>{point.name}</b>: {point.y}',
-                            distance: -60,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white'
-                            }
                           },
                           innerSize: 100,
                           depth: 45
                       }
                   },
-                  colors: ['#b3e0ff','#bf80ff'],
+                  colors: ['#b3e0ff','#bf80ff','#e6e600','#ff8c66'],
                   series: managedSeriesData
                 };
 
@@ -476,6 +482,7 @@ angular.module('PmoxApp')
            var pieDataPtypBand = [];
            var resMapData = [];
            $scope.seriesHtrg = [];
+           $scope.seriesOnOff =[];
 
            angular.forEach(resourceMap, function (valueOut, keyOut) {
 
@@ -485,6 +492,7 @@ angular.module('PmoxApp')
                  pieData.country = valueIn.country;
                  pieData.band= valueIn.band;
                  pieData.htrFlag= valueIn.htrFlag;
+                 pieData.onOff= valueIn.onOff;
                  resMapData.push(pieData);
              });
            });
@@ -508,32 +516,78 @@ angular.module('PmoxApp')
 
           $scope.chartOptionsHtr = {
                   chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45
-                    }
+                    type: 'pyramid',
+                    
                 },
                 title: {
-                    text: 'Project Managed'
+                    text: 'HTR Distribution'
                 },
                 credits: {
                   enabled: false
                 },
                 plotOptions: {
-                    pie: {
-                        innerSize: 100,
-                        depth: 45,
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.y}'
-                        }  
-                    }
+                    series: {
+                      dataLabels: {
+                          enabled: true,
+                          format: '<b>{point.name}</b> ({point.y:,.0f})',
+                          softConnector: true
+                      },
+                      innerSize: 100,
+                      depth: 45
+                  }
                 },
-                colors: ['#006600','#800000','#3285a8'],
+                // colors: ['#006600','#800000','#3285a8'],
                 series: $scope.seriesHtrg
+              };
+          
+         // alert('resMapData--'+JSON.stringify(resMapData))
+          
+          var uniqsOnOff = resMapData.reduce((acc, val) => {
+            acc[val.onOff] = acc[val.onOff] === undefined ? 1 : acc[val.onOff] += 1;
+            return acc;
+          }, {});
+          
+          //alert('uniqsOnOff--'+JSON.stringify(uniqsOnOff))
+          
+          var onOffFlag = [];
+          var onOffFlagData = [];
+         
+            angular.forEach(uniqsOnOff, function (value, key) {
+              
+              onOffFlag =  [key, value];
+              onOffFlagData.push(onOffFlag);
+            
+            });
+            
+           $scope.seriesOnOff.push({data:onOffFlagData});
+
+           $scope.chartOptionsOnOff = {
+                  chart: {
+                    type: 'pie',
+                    options3d: {
+                      enabled: true,
+                      alpha: 45
+                  }
+                },
+                title: {
+                    text: 'On/Off Distribution'
+                },
+                credits: {
+                  enabled: false
+                },
+                plotOptions: {
+                    series: {
+                      dataLabels: {
+                          enabled: true,
+                          format: '<b>{point.name}</b> ({point.percentage:,.0f}%)',
+                          softConnector: true
+                      },
+                      innerSize: 100,
+                      depth: 45
+                  }
+                },
+                 colors: ['#99CC00','#CC6666'],
+                series: $scope.seriesOnOff
               };
            
          //  alert(resMapData+'---resMapData--'+JSON.stringify(resMapData))
@@ -600,7 +654,7 @@ angular.module('PmoxApp')
           $.ajax({
             url: "api/projects/getPmrSmryDataFrUser/" + AuthService.user.username,
             error: function(e) {
-              alert(656565)
+              alert(JSON.stringify('error occured----'+e))
             },
             dataType: "json",
             contentType: 'application/json; charset=utf-8',
@@ -628,7 +682,7 @@ angular.module('PmoxApp')
             $.ajax({
               url: "api/projects/getPrjMasterDataFrUser/" + AuthService.user.username,
               error: function(e) {
-                alert(656565)
+                alert(JSON.stringify('error occured----'+e))
               },
               dataType: "json",
               contentType: 'application/json; charset=utf-8',
@@ -656,7 +710,7 @@ angular.module('PmoxApp')
             $.ajax({
               url: "api/projects/getCasum/" + AuthService.user.username,
               error: function(e) {
-                alert(656565)
+                alert(JSON.stringify('error occured----'+e))
               },
               dataType: "json",
               contentType: 'application/json; charset=utf-8',
@@ -680,7 +734,7 @@ angular.module('PmoxApp')
        $.ajax({
          url: "api/projects/getprofitandloss/"+$scope.user.username,
          error: function (e) {
-          console.log(e)
+           alert(JSON.stringify('error occured----'+e))
          },
          dataType: "json",
          contentType: 'application/json; charset=utf-8',
@@ -719,7 +773,7 @@ angular.module('PmoxApp')
 		    }
 		 
 		 $scope.showProgress=function(){
-		   alert(123454321)
+		   //alert(123454321)
 		   $scope.loaderds =true;
        // $scope.showSaveBtn11=true;
      }
@@ -763,13 +817,13 @@ angular.module('PmoxApp')
 	    $scope.datapi = [300, 500, 100];
 		 
 	    $scope.$on('makeShrink', function() {
-	      alert(878347438743)
+	      //alert(878347438743)
 	      $scope.makeShrink= !$scope.makeShrink;
     }); 
 	    
 	    $scope.getselectval = function (selData) {
         //alert(1111);
-        alert(JSON.stringify(selData));
+        //alert(JSON.stringify(selData));
 
          $scope.projects=[];
          $scope.showdropdown=true; 

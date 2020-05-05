@@ -212,10 +212,10 @@ tr:nth-child(even) {
 								  <li class="list-group-item gradient-success text-white rounded">
 								  			<div class="row">
 								                <div class="col-lg-6">
-								                    <div class="text-white">Rev: {{totalRevenue}}</div>
+								                    <div class="text-white"><b> Rev: $ {{totalRevenue}} M</b></div>
 								                </div>
 								                <div class="col-lg-6">
-								                    <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div>
+								                    <div class="text-white"><b>EBIDTA(%): {{totalEbidta}}</b></div>
 								                </div>
 								            </div>
 								  </li>
@@ -369,7 +369,26 @@ tr:nth-child(even) {
                         </div>
 			</section>
 			<section class="py-2" id="section33">
-				<div class="row mb-5 bg-faded rounded align-items-center" style="border-top-width: 10px;padding-top: 0px;">
+			
+				<div class="row">
+                       <div class="col-xl-3 col-md-6">
+                       		<h4><span class="text-muted "><b>Apply Filter </b></span></h4>
+                       </div>
+                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
+                       		<select class="btn btn-secondary" name="pgm" ng-options="programManager as programManager.name for programManager in pgManagers" ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+						</select>
+                       </div>
+                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
+                       		<select name="pm" class="btn btn-secondary" ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+						</select>
+                       </div>
+                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
+                       		<select name="prj" class="btn btn-secondary" ng-options="project as project.pname for project in projects" ng-model="selProject" ng-change="getDetailsDataPrj(selProject)" >
+						</select>
+                       </div>
+                  </div>
+		
+	<!-- 			<div class="row mb-5 bg-faded rounded align-items-center" style="border-top-width: 10px;padding-top: 0px;">
 					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
 						<h4><span class="text-muted "><b>Apply Filter </b></span></h4>
 					</div>
@@ -385,7 +404,7 @@ tr:nth-child(even) {
 						<select name="prj" class="btn btn-secondary" ng-options="project as project.pname for project in projects" ng-model="selProject" ng-change="getDetailsDataPrj(selProject)" >
 						</select>
 					</div>
-				</div>
+				</div> -->
 			</section>
 			<section class="py-2" id="section44" ng-show="showProjects">
             <div class="row shadow-lg mb-4">
@@ -458,7 +477,7 @@ tr:nth-child(even) {
                       </div> -->
                       <div class="col-lg-12">
                         <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
-                      	 <hc-pie-chart title="Resource Locations" data="pieFrCntry"></hc-pie-chart>
+                      	 <hc-pie-chart title="Geographic Distribution" data="pieFrCntry"></hc-pie-chart>
                       </div>
                     </div>
                   </div>
@@ -486,7 +505,7 @@ tr:nth-child(even) {
                       </div> -->
                       <div class="col-lg-12">
                         <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
-                       <hc-pie-chart title="Band Wise Allocation" data="pieFrBand"></hc-pie-chart>
+                       	<hc-chart options="chartOptionsOnOff"></hc-chart> 
                       </div>
                     </div>
                   </div>
@@ -499,7 +518,7 @@ tr:nth-child(even) {
                       </div> -->
                       <div class="col-lg-12">
                         <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
-                      	 <!-- <hc-chart options="chartOptionsMan"></hc-chart> -->
+                      	 <hc-pie-chart title="Band Distribution" data="pieFrBand"></hc-pie-chart>
                       </div>
                     </div>
                   </div>

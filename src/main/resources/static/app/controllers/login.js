@@ -38,8 +38,6 @@ angular.module('PmoxApp')
                
                   $scope.message = '';
                   var user={};
-                  //user= $scope.fetchUserDetails(res.username);
-                 // user=$scope.fetchUserDetails(res.user.username);
                   var roles=[];
                   $scope.roleList=[]; 
                   roles=res.user.roleName.split(",");
@@ -85,71 +83,7 @@ angular.module('PmoxApp')
             
           });
         };
-        
-         /*   $http({
-                url: 'api/authenticate',
-                method: "POST",
-                crossDomain: true,
-                async: false,
-                cache: false,
-                timeout: 30000,
-                data: JSON.stringify(authenticationRequest)
-               
-            }).success(function (res) {
-                $scope.password = null;
-                
-                alert(JSON.stringify(res))
- 
-                if (res.user.username!="IncorrectUsernamePassword") {
-                 
-                    $scope.message = '';
-                    var user={};
-                    //user= $scope.fetchUserDetails(res.username);
-                   // user=$scope.fetchUserDetails(res.user.username);
-                    var roles=[];
-                    $scope.roleList=[]; 
-                    roles=res.user.roleName.split(",");
-                    
-                   
-                    $scope.roleList=[];
-                    var arrayLength = roles.length;
-                    for (var i = 0; i < arrayLength; i++) {
-                       
-                       var user = new Object();
-                       user.id=roles[i];
-                       user.role=roles[i];
-                       $scope.roleList.push(user);
-                        //Do something
-                    }
-                    //alert(JSON.stringify($scope.roleList));
-                    var user = new Object();
-                    user.id="Selct role";
-                    user.role="Selct role";
-                    $scope.roleList.push(user);
-                    arrayLength = roles.length;
-                    $scope.MyData=$scope.roleList[$scope.roleList.length -1];
-                    //alert(JSON.stringify($scope.MyData));
-                    $scope.showdropdown=true;
-                    $scope.showlogin=false;
-                    $scope.showenter=true;
-                    loginuser=res.user;
-                    
-                    //$rootScope.$broadcast('LoginSuccessful');
-                   // $state.go('home');
-                    
-                } else {
-           
-                    $scope.message = 'Authetication Failed !';
-                    alert("Authentication failed \n"+
-                    	"Please enter correct username password");
-                }
-            }).error(function (error) {
-                            
-                $scope.message = 'Authetication Failed !';
-                alert("failure whie loging in")
-            });
-        };*/
-        
+
         $scope.fetchUserDetails = function (username){
           
           $scope.loaderds = true;
@@ -180,32 +114,19 @@ angular.module('PmoxApp')
         $scope.enterApp = function(){
         	
         	AuthService.user = loginuser;
-        	//$scope.getselectval();
-        	//alert(333);
         	AuthService.user.roleName=$scope.selectedvalues;
-        	alert(JSON.stringify(AuthService.user));
         	$rootScope.$broadcast('LoginSuccessful');
-        	//alert("1111"+AuthService.user.roleName);
-        	
+     
         	var routehtml="";
         	routehtml=$scope.selectedvalues;
         	routehtml=routehtml.trim();
-        	//alert(routehtml);
-        	var compare="PMM";
-        	
-        	
-        		//alert("inside home_PMM");
-        		 $state.go('home');
+          $state.go('home');
         	
         };
         $scope.getselectval = function (MyData) {
-        	//alert(1111);
-        	//alert(JSON.stringify(MyData));
+        
         	$scope.selectedvalues="";
         	$scope.selectedvalues= MyData.id;
-        	//alert($scope.selectedvalues);
-        	
-        	
-        	//alert($scope.selectedvalues);
+        
         	};
     });

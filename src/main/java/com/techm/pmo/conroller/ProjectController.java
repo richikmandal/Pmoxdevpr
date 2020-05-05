@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.techm.pmo.model.Casum;
-import com.techm.pmo.model.Profit_Loss;
+import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.User;
 import com.techm.pmo.service.PmrService;
 
@@ -61,7 +61,7 @@ public class ProjectController {
   }
 
   @GetMapping("/getprofitandloss/{user}")
-  public List<Profit_Loss> getP_L(@PathVariable String user) {
+  public List<ProfitAndLossData> getP_L(@PathVariable String user) {
     System.out.println("richik" + user);
     return pmrservice.getP_L(user);
   }
