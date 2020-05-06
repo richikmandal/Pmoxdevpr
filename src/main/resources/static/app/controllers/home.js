@@ -8,6 +8,7 @@ angular.module('PmoxApp')
         var selectedPrjId='';
         $scope.showProjects=true;
         $scope.showAssociates=false;
+        $scope.showPnL=false;
         $scope.makeShrink = false;  
         $scope.manNames=[];
         $scope.pgManagers=[];
@@ -19,6 +20,8 @@ angular.module('PmoxApp')
                        
              $scope.disableTabs=true;           
              $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
+             
+             alert(JSON.stringify($scope.user.pandlMap))
              
              $scope.totalProjectCount = $scope.user.totalProjectCount;
              $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
@@ -32,6 +35,7 @@ angular.module('PmoxApp')
              $scope.loadProjTech($scope.user.projMasterData);
              $scope.loadProjType($scope.user.projMasterData);
              $scope.loadProjLocChrt($scope.user.resourceMap);
+             $scope.loadProjRevEbidtaChrt($scope.user.pandlMap);
 
               
          };
@@ -56,6 +60,35 @@ angular.module('PmoxApp')
              crossDomain: true,
              success: function (data) {               
               
+               usr.push(data);
+             }
+             
+           });
+           
+           return usr;
+           
+         }
+         
+         $scope.loadPmSeriesData = function(userFrSearch){
+           
+           var usr = [];
+           $.ajax({
+             url: "api/projects/getPmSeriesData",
+             error: function (e) {
+               alert('Invalid Result set for the request.'+JSON.stringify(e))
+               //alert(JSON.stringify('error occured----'+e))
+             },
+             dataType: "json",
+             contentType: 'application/json; charset=utf-8',
+            // headers: {"Authorization": "Bearer "+AuthService.token},
+             type: "POST",
+             async: false,
+             cache: false,
+             data: JSON.stringify(userFrSearch),
+             timeout: 30000,
+             crossDomain: true,
+             success: function (data) {               
+              alert(JSON.stringify(data))
                usr.push(data);
              }
              
@@ -630,142 +663,157 @@ angular.module('PmoxApp')
                          
          }
          
-         $scope.showAssociateChrt = function() {
+         $scope.loadProjRevEbidtaChrt = function(pandlMap) {
            
-           $scope.showProjects=false;
-           $scope.showAssociates=true;
+           var pgmDataSet = [];
+           var pgmDataSeries = [];
+           var pgmDataSetObj = new Object();
+           pgmDataSetObj.name = 'PGMS';
+           pgmDataSetObj.colorByPoint=true;
+           alert(JSON.stringify(pandlMap));
            
+           angular.forEach($scope.pgManagers, function (valueOut, key) {
+             
+             var totalRevenue = 0.0;
+             
+             if(valueOut.id!='allpgm'){
+             
+             angular.forEach(pandlMap, function (valuePnl, keyPnl) {
+               
+              // alert(keyPnl);
+               var prjData = keyPnl.split(":");
+             //  alert(prjData[1]+'----'+valueOut.id+'----'+JSON.stringify(valuePnl));
+                 if(prjData[1]===valueOut.id)
+                   {
+                     angular.forEach(valuePnl, function (valueLst, keyLst) {
+                       
+                      // alert('valueLst.revTotal--'+valueLst.revTotal+'------'+parseFloat(valueLst.revTotal))
+                       
+                       totalRevenue = parseFloat(totalRevenue) + parseFloat(valueLst.revTotal);
+                     });   
+                   }
+             });
+             
+             //alert('totalRevenue---'+totalRevenue);
+             
+            
+               var pgmData = new Object();
+               pgmData.name = valueOut.name;
+               pgmData.y =parseFloat(totalRevenue.toFixed(2), 10);
+               pgmData.drilldown = valueOut.id;
+               pgmDataSet.push(pgmData);
+             }
+           
+           });
+           
+           pgmDataSetObj.data=pgmDataSet;
+           pgmDataSeries.push(pgmDataSetObj);
+           alert('pgmDataSetObj---'+JSON.stringify(pgmDataSeries))
+          
+           $scope.chartProjRevEbidta = {
+                   
+                   chart: {
+                     type: 'column',
+                     events: {
+                       drilldown: function (e) {
+                         
+                        // alert(e.point.drilldown)
+                        // alert(e.point.name)
+                           if (!e.seriesOptions) {
+                             var userDataPrj = [];
+                             var user = new Object();
+                             user.username = e.point.drilldown;
+                             user.name = e.point.name;
+                             user.roleName = 'PGM';
+                            userDataPrj = $scope.loadPmSeriesData(user)[0];
+                            var pmData = [];
+                            var pmDtlArr = [];
+                            var pmDtl = new Object();
+                            pmDtl.name = e.point.drilldown;
+                           //alert('userDataPrj----'+JSON.stringify(userDataPrj))
+                            angular.forEach(userDataPrj, function (value, key) {
+                              //alert('value----'+JSON.stringify(value))
+                             pmData =  [value.pmName,parseFloat(value.revTotal)];
+                             // statusFlagData.push(statusFlag);
+                             // alert(value.pmName+'-----'+value.revTotal)
+                              pmDtlArr.push(pmData)
+                              
+                            });
+                            pmDtl.data = pmDtlArr;
+                            //alert(JSON.stringify(pmDtl));
+                               var chart = this,
+                                 series = pmDtl;
+
+                               // Show the loading label
+                               chart.showLoading('Getting Data ...');
+
+                               setTimeout(function () {
+                                   chart.hideLoading();
+                                   chart.addSeriesAsDrilldown(e.point, series);
+                               }, 1000);
+                           }
+
+                       }
+                   }
+                  },
+                   title: {
+                     text: 'Basic drilldown'
+                   },
+                   xAxis: {
+                     type: 'category'
+                   },
+
+                   legend: {
+                     enabled: false
+                   },
+
+                   plotOptions: {
+                     series: {
+                       borderWidth: 0,
+                       dataLabels: {
+                         enabled: true,
+                       }
+                     }
+                   },
+                   series: pgmDataSeries,
+                   //series: pgmDataSetObj,
+                   drilldown: {
+                     series: []
+                   }
+                   
+               };
+
+         }
+         
+         $scope.getPmRevDtl = function(pandlMap) {
+           
+
          }
          
          $scope.showProjectChrt = function() {
            
            $scope.showProjects=true;
            $scope.showAssociates=false;
+           $scope.showPnL=false;
            
          }
-        
-        $scope.showprj = function() {
-               
-          $scope.showprofitandloss=false;
-          $scope.showproject=true;
-          $scope.showCapsum=false;
-          $scope.showresult = "Project Report";
-
-          $.ajax({
-            url: "api/projects/getPmrSmryDataFrUser/" + AuthService.user.username,
-            error: function(e) {
-              alert(JSON.stringify('error occured----'+e))
-            },
-            dataType: "json",
-            contentType: 'application/json; charset=utf-8',
-            type: "GET",
-            async: false,
-            cache: false,
-            timeout: 30000,
-            crossDomain: true,
-            success: function(data) {
-             
-             $scope.userPmrData=data;
-             
-            }
-
-          });
-        }
-        
-        $scope.showPrjMasterData = function() {
-            
-            $scope.showprofitandloss=false;
-            $scope.showproject=true;
-            $scope.showCapsum=false;
-            $scope.showresult = "Project Master Report";
          
-            $.ajax({
-              url: "api/projects/getPrjMasterDataFrUser/" + AuthService.user.username,
-              error: function(e) {
-                alert(JSON.stringify('error occured----'+e))
-              },
-              dataType: "json",
-              contentType: 'application/json; charset=utf-8',
-              type: "GET",
-              async: false,
-              cache: false,
-              timeout: 30000,
-              crossDomain: true,
-              success: function(data) {
-               
-               $scope.prjMasterDataFrUser=data;
-
-              }
-
-            });
-          }
-        
-        
-        $scope.showCasum = function() {
-            
-            $scope.showprofitandloss=false;
-            $scope.showproject=false;
-            $scope.showCapsum=true;
-            
-            $.ajax({
-              url: "api/projects/getCasum/" + AuthService.user.username,
-              error: function(e) {
-                alert(JSON.stringify('error occured----'+e))
-              },
-              dataType: "json",
-              contentType: 'application/json; charset=utf-8',
-              type: "GET",
-              async: false,
-              cache: false,
-              timeout: 30000,
-              crossDomain: true,
-              success: function(data) {
+         $scope.showAssociateChrt = function() {
            
-               $scope.userCasumData=data;
-              }
-
-            });            
-          }
-        
-       $scope.showP_l=function(){
-		   $scope.showprofitandloss=true;
-       $scope.showproject=false;
-       $scope.showCapsum=false;
-       $.ajax({
-         url: "api/projects/getprofitandloss/"+$scope.user.username,
-         error: function (e) {
-           alert(JSON.stringify('error occured----'+e))
-         },
-         dataType: "json",
-         contentType: 'application/json; charset=utf-8',
-        // headers: {"Authorization": "Bearer "+AuthService.token},
-         type: "GET",
-         async: false,
-         cache: false,
-         timeout: 30000,
-         crossDomain: true,
-         success: function (data) {
+           $scope.showAssociates=true;
+           $scope.showProjects=false;
+           $scope.showPnL=false;
            
-           $scope.userProfitandloss = data;
          }
-        
-     });  
-				// $scope.showSaveBtn11=true;
-			};
-		 $scope.closeprj=function(){
-				$scope.showproject=false;
-				// $scope.showSaveBtn11=true;
-			}
-		 $scope.closePnl=function(){
-				$scope.showprofitandloss=false;
-				// $scope.showSaveBtn11=true;
-			}
-		 
-		 $scope.closeCapsum=function(){
-				$scope.showCapsum=false;
-				// $scope.showSaveBtn11=true;
-			}
-		 
+         
+         $scope.showPnLChrt = function() {
+           
+           $scope.showPnL=true;
+           $scope.showProjects=false;
+           $scope.showAssociates=false;
+           
+         }
+         
 		 $scope.sort = function(keyname){
 		        $scope.sortKey = keyname;   // set the sortKey to the param passed
 		        $scope.reverse = !$scope.reverse; // if true make it false and vice
@@ -790,37 +838,7 @@ angular.module('PmoxApp')
 		   $state.go('home');
 		   
      }
-        
-		 $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
-
-	    $scope.labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-	    $scope.data = [
-	      [65, -59, 80, 81, -56, 55, -40],
-	      [28, 48, -40, 19, 86, 27, 90]
-	    ];
-	    $scope.datasetOverride = [
-	      {
-	        label: "Bar chart",
-	        borderWidth: 1,
-	        type: 'bar'
-	      },
-	      {
-	        label: "Line chart",
-	        borderWidth: 3,
-	        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-	        hoverBorderColor: "rgba(255,99,132,1)",
-	        type: 'line'
-	      }
-	    ];
-	    
-	    $scope.labelspi = ["On-Shore", "Off-Shore", "Contractual"];
-	    $scope.datapi = [300, 500, 100];
-		 
-	    $scope.$on('makeShrink', function() {
-	      //alert(878347438743)
-	      $scope.makeShrink= !$scope.makeShrink;
-    }); 
-	    
+        	    
 	    $scope.getselectval = function (selData) {
         //alert(1111);
         //alert(JSON.stringify(selData));

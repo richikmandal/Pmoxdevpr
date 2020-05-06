@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -60,7 +59,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
         "  select ON_OFF,PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,PJM.IBU_HEAD_ID from PMOX.T_RESOURCE_BASE REBS JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = REBS.PROJECT_ID " + 
         ") select * from rws  pivot ( count(*) for ON_OFF in ('OFFSHORE' AS OFFSHORE, 'ONSITE' AS ONSITE ) ) " ;
            
-  String getPrjRevEbidta = "SELECT ROUND((NVL(REV_TOTAL,0)/1000000),2) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL)*100000,2) AS REV_TOTAL," +
+  String getPrjRevEbidta = "SELECT ROUND((NVL(REV_TOTAL,0)/1000000),2) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL)*1000000,2) AS REV_TOTAL," +
                             " CASE when SUM(REV_TOTAL) <> 0 THEN (SUM(EBIDTA)*100)/SUM(REV_TOTAL) END  AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  "+
                              " ON PJM.PROJECT_ID = pnl.PROJECT_ID ";
   String getPrjRevEbidta1 =  " GROUP BY FY ) A";
@@ -68,7 +67,14 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
   String getPrjResourcData = "SELECT EMPLID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.IBU, RSB.IBG, \"CLUSTER\", EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC, REGULAR_CONTRACT "+
                             " FROM PMOX.T_RESOURCE_BASE RSB JOIN PMOX.T_PROJECT_MASTER PGM ON PGM.PROJECT_ID = RSB.PROJECT_ID WHERE ";
-
+  
+  String getPrjPnLData = "SELECT PNL.PROJECT_ID, PNL.PROJECT_DESC, \"MONTH\", QTR, FY, ON_HC, OF_HC, TOT_HC, E, H, M, T, P1, P2, U1, U2, U3, U4, UJ, REV_TOTAL, SAL_ON, SAL_OFF, SAL_TOTAL, VISA_WP, "+
+                         " TRAVEL_FOREIGN, TRAVEL_INLAND, SUBCON_EXPNS, SUBCON_EXPNS_ON, SUBCON_EXPNS_OFF, TOTAL_SUBCON_EXPNS, PROJECT_EXPNS, RING_FENCING, IBU_BUFFER_COST, IBG_BUFFER_COST, "+ 
+                         " SBU_BUFFER_COST, ALLOC_DIRECT_COST, OTHER_EXPNS, TOTAL_DIRECT_COST, CONTR, SGNA, EBIDTA, PGM_ID, PM_ID FROM PMOX.T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PGM ON PGM.PROJECT_ID = PNL.PROJECT_ID WHERE ";
+  String getPmSeriesData = "  with rws as ( " + 
+                           "  select PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,REV_TOTAL,PM_NAME from PMOX.T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID " + 
+                           " ) select PGM_ID,PM_NAME,PM_ID,ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL from rws " ;
+  String getPmSeriesData1 = " GROUP BY PM_ID,PM_NAME,PGM_ID" ;
 
 
   @Override
@@ -239,148 +245,7 @@ public static class PrjmasterRowMapper implements RowMapper<PrjmasterData> {
     }
 }
 
-@Override
-public List<ProfitAndLossData> getP_L(String userId) {
-    // TODO Auto-generated method stub
-      final RowMapper<ProfitAndLossData> mapper = new P_LRowMapper();
-      List<ProfitAndLossData> result = (List<ProfitAndLossData>) jdbcMysql.query(
-              p_ldata, new PreparedStatementSetter() {
-                   
-                  public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                     preparedStatement.setString(1, userId);
-                  }
-               },mapper);
-      System.out.println(result);
-   
-    return result;
-}
-public static class P_LRowMapper implements RowMapper<ProfitAndLossData> {
-    public ProfitAndLossData mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ProfitAndLossData p_l = new ProfitAndLossData();
-        p_l.setProject_Description(rs.getString("Project_Description"));
-        p_l.setCustomer_Name(rs.getString("Customer_Name"));
-        p_l.setCustomer_Group_Description(rs.getString("Customer_Group_Description"));
-        p_l.setParent_IBU_Description(rs.getString("Parent_IBU_Description"));
-        p_l.setParent_IBG_Description(rs.getString("Parent_IBG_Description"));
-        p_l.setParent_Cluster_Description(rs.getString("IBG_Description"));
-        p_l.setProject_Main_Type(rs.getString("Project_Main_Type"));
-        p_l.setAllocated_HC_Onsite(rs.getString("Allocated_HC_Onsite"));
-        p_l.setTotal_Allocated_HC(rs.getString("Total_Allocated_HC"));
-        p_l.setBilled_HC_Onsite(rs.getString("Billed_HC_Onsite"));
-        p_l.setBilled_HC_Offshore(rs.getString("Billed_HC_Offshore"));
-        p_l.setTotal_Billable(rs.getString("Total_Billable"));
-        p_l.setTotal_HC(rs.getString("Total_HC"));
-        p_l.setOnsite_Utilization(rs.getString("Onsite_Utilization"));
-        p_l.setOffshore_Utilization(rs.getString("Offshore_Utilization"));
-        p_l.setTotal_Utilization(rs.getString("Total_Utilization"));
-        p_l.setREVENUE_ONSITE(rs.getString("REVENUE_ONSITE"));
-        p_l.setREVENUE_OFFSHORE(rs.getString("REVENUE_OFFSHORE"));
-        p_l.setREVENUE_BOUGHT_OUT(rs.getString("REVENUE_BOUGHT_OUT"));
-        p_l.setREVENUE_TOTAL(rs.getString("REVENUE_TOTAL"));
-        p_l.setSALARY_COSTS__OFFSHORE(rs.getString("SALARY_COSTS_OFFSHORE"));
-        p_l.setSALARY_COSTS_ONSITE(rs.getString("SALARY_COSTS_ONSITE"));
-        p_l.setSalary_Total(rs.getString("Salary_Total"));
-        
-        return p_l;
-    }
-}
-@Override
-public List<Casum> getCasum(String userId) {
-    
-     final RowMapper<Casum> mapper = new CasumRowMapper();
-     List<Casum> result = (List<Casum>) jdbcMysql.query(
-             getCasumData,new PreparedStatementSetter() {
-                   
-                    public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                       preparedStatement.setString(1, userId);
-                    }
-                 }, mapper);
-     System.out.println(result);
-  
-   return result;
-}
-public static class CasumRowMapper implements RowMapper<Casum> {
-   public Casum mapRow(ResultSet rs, int rowNum) throws SQLException {
-       Casum casum = new Casum();
-      
-       casum.setBusiness_unit(rs.getString("BUSINESS_UNIT"));
-       casum.setSales_segment(rs.getString("SALES_SEGMENT"));
-       casum.setSold_to_customer_id(rs.getString("SOLD_TO_CUSTOMER_ID"));
-       casum.setSold_to_customer_id(rs.getString("SOLD_TO_CUSTOMER_NAME"));
-       casum.setL1_sales(rs.getString("L1_SALES"));
-       casum.setL1_sales(rs.getString("L2_SALES"));
-       casum.setContract_double(rs.getString("CONTRACT_double"));
-       casum.setQms_double(rs.getString("QMS_double"));
-       casum.setContract_p4_category(rs.getString("CONTRACT_P4_CATEGORY"));
-       casum.setCrm_opportunity_id(rs.getString("CRM_OPPORTUNITY_ID"));
-       casum.setOpportunity_description(rs.getString("OPPORTUNITY_DESCRIPTION"));
-       casum.setCurrency(rs.getString("CURRENCY"));
-       casum.setTotal_contract_amount(rs.getString("TOTAL_CONTRACT_AMOUNT"));
-       casum.setTotal_contract_amount_in_usd(rs.getString("TOTAL_CONTRACT_AMOUNT_IN_USD"));
-       casum.setOwning_ibu(rs.getString("OWNING_IBU"));
-       casum.setIbu_description(rs.getString("IBU_DESCRIPTION"));
-       casum.setIbg_id(rs.getString("IBG_ID"));
-       casum.setIbg_description(rs.getString("IBG_DESCRIPTION"));
-       casum.setCluster_id(rs.getString("CLUSTER_ID"));
-       casum.setCluster_description(rs.getString("CLUSTER_DESCRIPTION"));
-       casum.setPrpt_cont_amt_rept_prd(rs.getString("PRPT_CONT_AMT_REPT_PRD"));
-       casum.setPrpt_cont_amt_rept_prd_usd(rs.getString("PRPT_CONT_AMT_REPT_PRD_USD"));
-       casum.setP4_contract_creation_date(rs.getString("P4_CONTRACT_CREATION_DATE"));
-       casum.setP4_5_contract_date(rs.getString("P4_5_CONTRACT_DATE"));
-       casum.setP5_contract_date(rs.getString("P5_CONTRACT_DATE"));
-       casum.setDt_cont_clsd_suprcd(rs.getString("DT_CONT_CLSD_SUPRCD"));
-       casum.setContract_status(rs.getString("CONTRACT_STATUS"));
-       casum.setPo_double(rs.getString("PO_double"));
-       casum.setPo_received_date(rs.getString("PO_RECEIVED_DATE"));
-       casum.setStart_date(rs.getString("START_DATE"));
-       casum.setEnd_date(rs.getString("END_DATE"));
-       casum.setP4_non_transactable_category(rs.getString("P4_NON_TRANSACTABLE_CATEGORY"));
-       casum.setContract_type(rs.getString("CONTRACT_TYPE"));
-       casum.setRevenue_recognition_category(rs.getString("REVENUE_RECOGNITION_CATEGORY"));
-       casum.setSales_contact(rs.getString("SALES_CONTACT"));
-       casum.setCustomer_contact(rs.getString("CUSTOMER_CONTACT"));
-       casum.setCustomer_group_name(rs.getString("CUSTOMER_GROUP_NAME"));
-       casum.setPo_requestor_email(rs.getString("PO_REQUESTOR_EMAIL"));
-       casum.setRus_coordinator_id(rs.getString("RUS_COORDINATOR_ID"));
-       casum.setRus_coordinator_name(rs.getString("RUS_COORDINATOR_NAME"));
-       casum.setQuote_coordinator_id(rs.getString("QUOTE_COORDINATOR_ID"));
-       casum.setQuote_coordinator_name(rs.getString("QUOTE_COORDINATOR_NAME"));
-       casum.setCustomer_project_manager(rs.getString("CUSTOMER_PROJECT_MANAGER"));
-       casum.setPo_utilized_amount_(rs.getString("PO_UTILIZED_AMOUNT_"));
-       casum.setUnbilled_amount(rs.getString("UNBILLED_AMOUNT"));
-       casum.setPo_balance_including_unbilled(rs.getString("PO_BALANCE_INCLUDING_UNBILLED"));
-       casum.setQuoted_effrt_mndays_qts(rs.getString("QUOTED_EFFRT_MNDAYS_QTS"));
-       casum.setActual_efforts_in_mandays_rus(rs.getString("ACTUAL_EFFORTS_IN_MANDAYS_RUS"));
-       casum.setOffshore_percent_quotes(rs.getString("OFFSHORE_PERCENT_QUOTES"));
-       casum.setOffsite_onsite_percent_quotes(rs.getString("OFFSITE_ONSITE_PERCENT_QUOTES"));
-       casum.setOuc(rs.getString("OUC"));
-       casum.setAccount_type(rs.getString("ACCOUNT_TYPE"));
-       casum.setContract_signed_date(rs.getString("CONTRACT_SIGNED_DATE"));
-       casum.setBill_to_customer(rs.getString("BILL_TO_CUSTOMER"));
-       casum.setCustomer_programme(rs.getString("CUSTOMER_PROGRAMME"));
-       casum.setPlatform(rs.getString("PLATFORM"));
-       casum.setFunding_lob(rs.getString("FUNDING_LOB"));
-       casum.setCrgn(rs.getString("CRGN"));
-       casum.setFp_billing_type(rs.getString("FP_BILLING_TYPE"));
-       casum.setProject_id(rs.getString("PROJECT_ID"));
-       casum.setProject_manager(rs.getString("PROJECT_MANAGER"));
-       casum.setPm_delegate(rs.getString("PM_DELEGATE"));
-       casum.setProgram_manager(rs.getString("PROGRAM_MANAGER"));
-       casum.setIbu_head(rs.getString("IBU_HEAD"));
-       casum.setPrevious_quote_reference(rs.getString("PREVIOUS_QUOTE_REFERENCE"));
-       casum.setRelease(rs.getString("RELEASE"));
-       casum.setVersion_num(rs.getString("VERSION_NUM"));
-       casum.setPrimary_cdu(rs.getString("PRIMARY_CDU"));
-       casum.setDiv_comm_or_ent(rs.getString("DIV_COMM_OR_ENT"));
-       casum.setInvoice_consolidated_level(rs.getString("INVOICE_CONSOLIDATED_LEVEL"));
-       casum.setTax_type_thailand_bu(rs.getString("TAX_TYPE_THAILAND_BU"));
-       casum.setCat_detl_thailand_bu(rs.getString("CAT_DETL_THAILAND_BU"));
-       casum.setContract_number(rs.getString("CONTRACT_NUMBER"));
-       casum.setQms_number(rs.getString("qms_number"));
-       casum.setPo_number(rs.getString("po_number"));       
-       return casum;
-   }
-}
+
 @Override
 public User getProjectMasterDataForPGM(User user) {
  
@@ -537,5 +402,144 @@ public static class ResourceBaseMapRowMapper implements RowMapper<ResourceBaseDa
            return projectMap;
        }
    }
+ 
+ @SuppressWarnings("unchecked")
+ public User getPandLDataForPGM(User user) {
+  
+     String getPrjPnLDataFinal = "";
+     Map<String, List<ProfitAndLossData>> pandlMap =  new HashMap<String, List<ProfitAndLossData>>();
+     
+     if(user.getProjectSelected()!=null && !user.getProjectSelected().equals("")) {
+       getPrjPnLDataFinal = getPrjPnLData+ " PNL.PROJECT_ID IN (?) ORDER BY PROJECT_ID";
+       pandlMap = (Map<String, List<ProfitAndLossData>>) jdbcMysql.query(getPrjPnLDataFinal,new Object[]{user.getProjectSelected()},
+           new PandLMapExtractor());
+     }
+     else
+     {
+       getPrjPnLDataFinal = getPrjPnLData+ user.getRoleName()+"_ID = ? ORDER BY PROJECT_ID";
+       pandlMap = jdbcMysql.query(getPrjPnLDataFinal,new Object[]{user.getUsername()},
+           new PandLMapExtractor());
+     }
+     
+     user.setPandlMap(pandlMap);
+     
+     return user;
+   
+   }
+ 
+ @SuppressWarnings("unused")
+private static final class PandLMapExtractor implements ResultSetExtractor<Map<String, List<ProfitAndLossData>>> {
+   @Override
+   public Map<String, List<ProfitAndLossData>> extractData(ResultSet rs) throws SQLException {
+   Map<String, List<ProfitAndLossData>> projectMap = new HashMap<String, List<ProfitAndLossData>>();
+   List<ProfitAndLossData> pnlMasterList = null;
+   String lastPrjId = "";
+   while (rs.next()) {
+     
+     String prjId = rs.getString("PROJECT_ID");
+        
+       if(!prjId.equals(lastPrjId))
+       {
+         if(lastPrjId!=null && !lastPrjId.equals(""))
+         {
+           projectMap.put(lastPrjId+":"+rs.getString("PGM_ID")+":"+rs.getString("PM_ID"),pnlMasterList);
+         }
+         lastPrjId = prjId;
+         pnlMasterList = new ArrayList<ProfitAndLossData>();
+       }
+   
+       ProfitAndLossData rsData = new ProfitAndLossData();
+         
+       rsData.setProjectId(prjId);
+       rsData.setProjectDescription(rs.getString("PROJECT_DESC"));
+       rsData.setMonth(rs.getString("MONTH"));
+       rsData.setQuarter​(rs.getString("QTR"));
+       rsData.setFy(rs.getString("FY"));
+       rsData.setOnHc(rs.getString("ON_HC"));
+       rsData.setOffHc(rs.getString("OF_HC"));
+       rsData.setTotalHc(rs.getString("TOT_HC"));
+       rsData.seteBand(rs.getString("E"));
+       rsData.sethBand(rs.getString("H"));
+       rsData.setmBand(rs.getString("M"));
+       rsData.settBand(rs.getString("T"));
+       rsData.setP1Band(rs.getString("P1"));
+       rsData.setP2Band(rs.getString("P2"));
+       rsData.setU1Band(rs.getString("U1"));
+       rsData.setU2Band(rs.getString("U2"));
+       rsData.setU3Band(rs.getString("U3"));
+       rsData.setU4Band(rs.getString("U4"));
+       rsData.setuJBand(rs.getString("UJ"));
+       rsData.setRevTotal(rs.getString("REV_TOTAL"));
+       rsData.setSalOnsite(rs.getString("SAL_ON"));
+       rsData.setSalOffshore(rs.getString("SAL_OFF"));
+       rsData.setSalaryTotal(rs.getString("SAL_TOTAL"));
+       rsData.setVisaWP(rs.getString("VISA_WP"));
+       rsData.setTravelForeign(rs.getString("TRAVEL_FOREIGN"));
+       rsData.setTravelInland(rs.getString("TRAVEL_INLAND"));
+       
+       rsData.setSubconExpenses(rs.getString("SUBCON_EXPNS"));
+       rsData.setSubconExpOnsite(rs.getString("SUBCON_EXPNS_ON"));
+       rsData.setSubconExpOffshore(rs.getString("SUBCON_EXPNS_OFF"));
+       rsData.setTotalSubconExpenses(rs.getString("TOTAL_SUBCON_EXPNS"));
+       rsData.setProjectExpens(rs.getString("PROJECT_EXPNS"));
+       rsData.setRingFencing(rs.getString("RING_FENCING"));
+       rsData.setIbuBufferCost(rs.getString("IBU_BUFFER_COST"));
+       rsData.setIbgBufferCost(rs.getString("IBG_BUFFER_COST"));
+       rsData.setSbuBufferCost(rs.getString("SBU_BUFFER_COST"));
+       rsData.setAllocDirectCost(rs.getString("ALLOC_DIRECT_COST"));
+       rsData.setOtherExpense(rs.getString("OTHER_EXPNS"));
+       rsData.setTotalDirectCost(rs.getString("TOTAL_DIRECT_COST"));
+       rsData.setContr(rs.getString("CONTR"));
+       rsData.setSgna(rs.getString("SGNA"));
+       rsData.setEbidta(rs.getString("EBIDTA"));
+       
+
+       pnlMasterList.add(rsData);
+   
+        }
+           projectMap.put(lastPrjId+"", pnlMasterList);
+           return projectMap;
+       }
+ }
+ 
+ @Override
+ public List<PrjmasterData> getPmSeriesData(User user) {
+   // TODO Auto-generated method stub
+   String getPmSeriesQueryFinal = "";
+   List<PrjmasterData> lstPmSeriesData;
+   getPmSeriesQueryFinal = getPmSeriesData+ "WHERE "+ user.getRoleName()+"_ID = ? "+getPmSeriesData1;
+   lstPmSeriesData = jdbcMysql.query(getPmSeriesQueryFinal,new Object[]{user.getUsername()},
+       new PmSeriesMapRowMapper());
+   return lstPmSeriesData;
+ }
+ 
+ public static class PmSeriesMapRowMapper implements RowMapper<PrjmasterData> {
+   public PrjmasterData mapRow(ResultSet rs, int rowNum) throws SQLException {
+     PrjmasterData pmData = new PrjmasterData();
+
+     pmData.setPgmId(rs.getString("PGM_ID"));
+     pmData.setPmId(rs.getString("PM_ID"));
+     pmData.setPmName(rs.getString("PM_NAME"));
+     pmData.setRevTotal(rs.getString("REV_TOTAL"));
+     
+     return pmData;
+   }
+ }
+ 
+ 
+@Override
+public List<ProfitAndLossData> getP_L(String user) {
+  // TODO Auto-generated method stub
+  return null;
+}
+
+@Override
+public List<Casum> getCasum(String user) {
+  // TODO Auto-generated method stub
+  return null;
+}
+
+
+   
 
 }

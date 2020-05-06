@@ -54,6 +54,8 @@ public class PrjmasterData implements java.io.Serializable {
     private String  projectApplicationType    ;
     private String  digitalFlag    ;
     private String  digitalCategory    ;
+    private String revTotal;
+    private String ebidtaTotal;
     
     
     public String getBusinessUnit() {
@@ -223,6 +225,18 @@ public class PrjmasterData implements java.io.Serializable {
     }
     public void setDigitalCategory(String digitalCategory) {
       this.digitalCategory = digitalCategory;
+    }
+    public String getRevTotal() {
+      return revTotal;
+    }
+    public void setRevTotal(String revTotal) {
+      this.revTotal = revTotal;
+    }
+    public String getEbidtaTotal() {
+      return ebidtaTotal;
+    }
+    public void setEbidtaTotal(String ebidtaTotal) {
+      this.ebidtaTotal = ebidtaTotal;
     }
     	
 

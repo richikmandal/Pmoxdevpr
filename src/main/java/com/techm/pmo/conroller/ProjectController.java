@@ -71,6 +71,16 @@ public class ProjectController {
     System.out.println("Subrajit" + user);
     return pmrservice.getCasum(user);
   }
+  
+  @PostMapping("/getPmSeriesData")
+  public String getPmSeriesData(@RequestBody User user) {
+
+    Gson gsonRes = new Gson();
+    log.debug("REST request to get User : {}", user);
+
+    return gsonRes.toJson(pmrservice.getPmSeriesData(user));// ResponseEntity<>(userService.getUserWithRoleByUsername(username),
+                                                             // HttpStatus.OK);
+  }
 
 
 }

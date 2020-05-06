@@ -2,6 +2,7 @@ package com.techm.pmo.service;
 
 import java.util.List;
 
+import com.google.gson.JsonElement;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
 import com.techm.pmo.model.PrjmasterData;
@@ -19,5 +20,7 @@ public interface PmrService {
   public List<Casum> getCasum(String user);
   
   public List<PrjmasterData> getPrjMasterDataFrUser(String userId);
+
+  public List<PrjmasterData> getPmSeriesData(User user);
   
 }

@@ -46,6 +46,8 @@ public class ProfitAndLossData {
   private String contr;
   private String sgna;
   private String ebidta;
+  private String pgmId;
+  private String pmId;
 
   public String getProjectId() {
     return projectId;
@@ -375,6 +377,20 @@ public class ProfitAndLossData {
     this.ebidta = ebidta;
   }
 
+  public String getPgmId() {
+    return pgmId;
+  }
 
+  public void setPgmId(String pgmId) {
+    this.pgmId = pgmId;
+  }
 
+  public String getPmId() {
+    return pmId;
+  }
+
+  public void setPmId(String pmId) {
+    this.pmId = pmId;
+  }
+  
 }

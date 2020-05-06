@@ -24,4 +24,8 @@ public interface PmrprojDao {
   
   public User getResourceDataForPGM(User user);
 
+  public User getPandLDataForPGM(User user);
+
+  public List<PrjmasterData> getPmSeriesData(User user);
+
 }

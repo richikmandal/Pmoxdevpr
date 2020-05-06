@@ -2,7 +2,6 @@ package com.techm.pmo.model;
 // Generated Jul 29, 2019 8:35:46 PM by Hibernate Tools 4.3.5.Final
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,9 @@ import java.util.Map;
 
 public class User implements java.io.Serializable {
 
+
+  private static final long serialVersionUID = 6740709927694633749L;
+  
   private String    username;
   private String    password;
  // private boolean   enabled;
@@ -23,6 +25,7 @@ public class User implements java.io.Serializable {
  private String projectSelected;
  private List<PrjmasterData> projMasterData = new ArrayList<PrjmasterData>();
  private Map<String, List<ResourceBaseData>> resourceMap = new HashMap<String, List<ResourceBaseData>>();
+ private Map<String, List<ProfitAndLossData>> pandlMap = new HashMap<String, List<ProfitAndLossData>>();
 
   public User() {}
 
@@ -139,5 +142,14 @@ public class User implements java.io.Serializable {
   public void setResourceMap(Map<String, List<ResourceBaseData>> resourceMap) {
     this.resourceMap = resourceMap;
   }
+
+  public Map<String, List<ProfitAndLossData>> getPandlMap() {
+    return pandlMap;
+  }
+
+  public void setPandlMap(Map<String, List<ProfitAndLossData>> pandlMap) {
+    this.pandlMap = pandlMap;
+  }
+  
    
 }

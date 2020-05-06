@@ -30,6 +30,7 @@ public class PmrServiceImpl implements PmrService {
 	 // if(user.getRoleName().equals("PGM")||user.getRoleName().equals("PM")) {
 	    user = pmrprojdao.getProjectMasterDataForPGM(user);
 	    user = pmrprojdao.getResourceDataForPGM(user);
+	    user = pmrprojdao.getPandLDataForPGM(user);
 	  //}
 	  
 	    return user;
@@ -58,6 +59,12 @@ public class PmrServiceImpl implements PmrService {
 		// TODO Auto-generated method stub
 		return pmrprojdao.getPrjMasterDataFrUser(userId);
 	}
+
+  @Override
+  public List<PrjmasterData> getPmSeriesData(User user) {
+    // TODO Auto-generated method stub
+    return pmrprojdao.getPmSeriesData(user);
+  }
 
 
 
