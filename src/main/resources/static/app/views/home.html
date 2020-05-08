@@ -139,6 +139,33 @@ tr:nth-child(even) {
 			
 			 			<div class="row">
 			 				<div class="col-xl-3 col-md-6">
+			 					<ul class="list-group">
+								  <li class="list-group-item gradient-success text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-2">
+								                    <div class="icon text-white bg-violet">
+														<i class="fas fa-chart-bar"></i>
+													</div>
+								                </div>
+								                <div class="col-lg-10">
+								                    <div class="text-white"><a ng-click="showPnLChrt()"><b>Profit & Loss (YTD Mar'20)</b></a></div>
+								                </div>
+								                
+								            </div>
+								   </li>
+								  <li class="list-group-item gradient-success text-white rounded">
+								  			<div class="row">
+								                <div class="col-lg-6">
+								                    <div class="text-white"><b> Rev: $ {{totalRevenue}} M</b></div>
+								                </div>
+								                <div class="col-lg-6">
+								                    <div class="text-white"><b>EBIDTA(%): {{totalEbidta}}</b></div>
+								                </div>
+								            </div>
+								  </li>
+								</ul>
+			 				</div>        
+			 				<div class="col-xl-3 col-md-6">
 				 				<ul class="list-group">
 								  <li class="list-group-item gradient-primary text-white rounded"><div class="row">
 								                <div class="col-lg-2">
@@ -146,20 +173,23 @@ tr:nth-child(even) {
 														<i class="fas fa-server"></i>
 													</div>
 								                </div>
-								                <div class="col-lg-5">
-								                    <div class="text-white"><a ng-click="showProjectChrt()"><b>Projects</b></a></div>
+								                <div class="col-lg-10">
+								                    <div class="text-white"><a ng-click="showProjectChrt()"><b>Projects ({{totalProjectCount}}</b>)</a></div>
 								                </div>
-								                <div class="col-lg-5">    
-								                </div>
+								                <!-- <div class="col-lg-5">    
+								                </div> -->
 								            </div>
 								   </li>
 								  <li class="list-group-item gradient-primary text-white rounded">
 								  			<div class="row">
-								                <div class="col-lg-8">
-								                    <div class="samll text-white">Total Projects :</div>
+								                <div class="col-lg-4">
+								                    <div class="samll text-white"><b>FP: {{totalFp}}</b></div>
 								                </div>
 								                <div class="col-lg-4">
-								                    <div class="text-white"><b>{{totalProjectCount}}</b></div>
+								                    <div class="samll text-white"><b>T&M: {{totalTnM}}</b></div>
+								                </div>
+								                 <div class="col-lg-4">
+								                    <div class="samll text-white"><b>Others: {{totalOther}}</b></div>
 								                </div>
 								            </div>
 								  </li>
@@ -174,11 +204,11 @@ tr:nth-child(even) {
 														<i class="fas fa-users"></i>
 													</div>
 								                </div>
-								                <div class="col-lg-5">
-								                    <div class="text-white"><a ng-click="showAssociateChrt()"><b>Associates</b></a></div>
+								                <div class="col-lg-10">
+								                    <div class="text-white"><a ng-click="showAssociateChrt()"><b>Associates ({{totalOffShoreCount+totalOnShoreCount}})</b></a></div>
 								                </div>
-								                <div class="col-lg-5">    
-								                </div>
+								                <!-- <div class="col-lg-5">    
+								                </div> -->
 								            </div>
 								   </li>
 								  <li class="list-group-item gradient-warning text-white rounded">
@@ -192,35 +222,7 @@ tr:nth-child(even) {
 								            </div>
 								  </li>
 								</ul>
-			 				</div>
-			 				<div class="col-xl-3 col-md-6">
-			 					<ul class="list-group">
-								  <li class="list-group-item gradient-success text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-2">
-								                    <div class="icon text-white bg-violet">
-														<i class="fas fa-chart-bar"></i>
-													</div>
-								                </div>
-								                <div class="col-lg-5">
-								                    <div class="text-white"><a ng-click="showPnLChrt()"><b>Profit & Loss</b></a></div>
-								                </div>
-								                <div class="col-lg-5">    
-								                </div>
-								            </div>
-								   </li>
-								  <li class="list-group-item gradient-success text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-6">
-								                    <div class="text-white"><b> Rev: $ {{totalRevenue}} M</b></div>
-								                </div>
-								                <div class="col-lg-6">
-								                    <div class="text-white"><b>EBIDTA(%): {{totalEbidta}}</b></div>
-								                </div>
-								            </div>
-								  </li>
-								</ul>
-			 				</div>              
+			 				</div>      
                             <div class="col-xl-3 col-md-6">
 	                            <ul class="list-group">
 									  <li class="list-group-item gradient-danger text-white rounded">
@@ -230,20 +232,25 @@ tr:nth-child(even) {
 															<i class="fas fa-book"></i>
 														</div>
 									                </div>
-									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>Order Book</b></a></div>
+									                <div class="col-lg-10">
+									                    <div class="text-white"><a ng-click="showInProgress()"><b>Order Book</b></a></div>
 									                </div>
-									                <div class="col-lg-5">    
-									                </div>
+									                
 									            </div>
 									   </li>
 									  <li class="list-group-item gradient-danger text-white rounded">
 									  			<div class="row">
-									                <div class="col-lg-6">
-									                     <div class="text-white">Order:</div> 
+										            <div class="col-lg-3">
+									                    <div class="samll text-white"><b>Q1:</b></div>
 									                </div>
-									                <div class="col-lg-6">
-									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
+									                <div class="col-lg-3">
+									                    <div class="samll text-white"><b>Q2:</b></div>
+									                </div>
+									                 <div class="col-lg-3">
+									                    <div class="samll text-white"><b>Q3:</b></div>
+									                </div>
+									                <div class="col-lg-3">
+									                    <div class="samll text-white"><b>Q4:</b></div>
 									                </div>
 									            </div>
 									  </li>
@@ -263,7 +270,7 @@ tr:nth-child(even) {
 														</div>
 									                </div>
 									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>AQT</b></a></div>
+									                    <div class="text-white"><a ng-click="showInProgress()"><b>AQT</b></a></div>
 									                </div>
 									                <div class="col-lg-5">    
 									                </div>
@@ -272,7 +279,7 @@ tr:nth-child(even) {
 									  <li class="list-group-item gradient-red text-white rounded">
 									  			<div class="row">
 									                <div class="col-lg-6">
-									                     <div class="text-white">Order:</div> 
+									                     <div class="text-white">AQT:</div> 
 									                </div>
 									                <div class="col-lg-6">
 									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
@@ -291,7 +298,7 @@ tr:nth-child(even) {
 														</div>
 									                </div>
 									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>NAD</b></a></div>
+									                    <div class="text-white"><a ng-click="showInProgress()"><b>NAD</b></a></div>
 									                </div>
 									                <div class="col-lg-5">    
 									                </div>
@@ -300,7 +307,7 @@ tr:nth-child(even) {
 									  <li class="list-group-item gradient-info text-white rounded">
 									  			<div class="row">
 									                <div class="col-lg-6">
-									                     <div class="text-white">Order:</div> 
+									                     <div class="text-white">NAD:</div> 
 									                </div>
 									                <div class="col-lg-6">
 									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
@@ -319,7 +326,7 @@ tr:nth-child(even) {
 														</div>
 									                </div>
 									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>DLG</b></a></div>
+									                    <div class="text-white"><a ng-click="showInProgress()"><b>DLG</b></a></div>
 									                </div>
 									                <div class="col-lg-5">    
 									                </div>
@@ -328,7 +335,7 @@ tr:nth-child(even) {
 									  <li class="list-group-item gradient-violet text-white rounded">
 									  			<div class="row">
 									                <div class="col-lg-6">
-									                     <div class="text-white">Order:</div> 
+									                     <div class="text-white">DLG:</div> 
 									                </div>
 									                <div class="col-lg-6">
 									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
@@ -348,7 +355,7 @@ tr:nth-child(even) {
 														</div>
 									                </div>
 									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="alert('We are in Progress..')"><b>CaaS:</b></a></div>
+									                    <div class="text-white"><a ng-click="showInProgress()"><b>CaaS:</b></a></div>
 									                </div>
 									                <div class="col-lg-5">    
 									                </div>
@@ -496,7 +503,7 @@ tr:nth-child(even) {
 	                  </div>
 	                </div>
 	              </div>
-	                <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+	              <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 	                <div class="card shadow-lg mb-3">
 	                  <div class="card-body">
 	                    <div class="row align-items-center flex-row">
@@ -528,35 +535,35 @@ tr:nth-child(even) {
             </section>
             <section class="py-2" id="section66" ng-show="showPnL">
 	            <div class="row shadow-lg mb-4">
-				  <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-3">
-	                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
-	                      	 <hc-chart options="chartProjRevEbidta"></hc-chart>
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-5">
-	                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
-							   <!-- <hc-chart options="chartOptionsHtr"></hc-chart>  -->                 
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
-	                <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+	            	<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+		                <div class="card shadow-lg mb-3">
+		                  <div class="card-body">
+		                    <div class="row align-items-center flex-row">
+		                      <!-- <div class="col-lg-3">
+		                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+		                      </div> -->
+		                      <div class="col-lg-12">
+		                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
+		                      	 <hc-chart options="chartProjRevenue"></hc-chart> 
+		                      </div>
+		                    </div>
+		                  </div>
+		                </div>
+		                <div class="card shadow-lg mb-3">
+		                  <div class="card-body">
+		                    <div class="row align-items-center flex-row">
+		                      <!-- <div class="col-lg-5">
+		                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+		                      </div> -->
+		                      <div class="col-lg-12">
+		                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
+								   <!-- <hc-chart options="chartOptionsHtr"></hc-chart>  -->                 
+		                      </div>
+		                    </div>
+		                  </div>
+		                </div>
+	              	</div>
+	              <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 	                <div class="card shadow-lg mb-3">
 	                  <div class="card-body">
 	                    <div class="row align-items-center flex-row">
@@ -565,7 +572,7 @@ tr:nth-child(even) {
 	                      </div> -->
 	                      <div class="col-lg-12">
 	                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
-	                       	<!-- <hc-chart options="chartOptionsOnOff"></hc-chart>  -->
+	                       	 <hc-chart options="chartProjEbidta"></hc-chart>
 	                      </div>
 	                    </div>
 	                  </div>
@@ -578,13 +585,13 @@ tr:nth-child(even) {
 	                      </div> -->
 	                      <div class="col-lg-12">
 	                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
-	                      	 <!-- <hc-pie-chart title="Band Distribution" data="pieFrBand"></hc-pie-chart> -->
+	                      	
 	                      </div>
 	                    </div>
 	                  </div>
 	                </div>
 	              </div>
-	            </div>
+		        </div>
             </section>
 		</div>
 		<footer

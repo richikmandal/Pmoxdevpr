@@ -6,9 +6,9 @@ angular.module('PmoxApp')
         // $scope.userPrjData = '';
         var selectedPmId='';
         var selectedPrjId='';
-        $scope.showProjects=true;
+        $scope.showProjects=false;
         $scope.showAssociates=false;
-        $scope.showPnL=false;
+        $scope.showPnL=true;
         $scope.makeShrink = false;  
         $scope.manNames=[];
         $scope.pgManagers=[];
@@ -17,17 +17,20 @@ angular.module('PmoxApp')
         $scope.prjType = [];
         $scope.prjTypeCnt = [];
           $scope.init = function () {
+            
+          
                        
              $scope.disableTabs=true;           
              $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
              
-             alert(JSON.stringify($scope.user.pandlMap))
+             //alert(JSON.stringify($scope.user.pandlMap))
              
              $scope.totalProjectCount = $scope.user.totalProjectCount;
              $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
              $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
              $scope.totalRevenue = $scope.user.totalRevenue;
              $scope.totalEbidta = $scope.user.totalEbidta;
+             $scope.loadPricingMdlData($scope.user.projMasterData);
              
              $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
              $scope.loadProjStatus($scope.user.projMasterData);
@@ -35,7 +38,7 @@ angular.module('PmoxApp')
              $scope.loadProjTech($scope.user.projMasterData);
              $scope.loadProjType($scope.user.projMasterData);
              $scope.loadProjLocChrt($scope.user.resourceMap);
-             $scope.loadProjRevEbidtaChrt($scope.user.pandlMap);
+             $scope.loadProjRevEbidtaChrt($scope.user);
 
               
          };
@@ -69,6 +72,40 @@ angular.module('PmoxApp')
            
          }
          
+         $scope.loadPricingMdlData = function(projMasterData){
+           
+           $scope.totalFp=0;
+           $scope.totalTnM=0;
+           $scope.totalOther=0;
+           
+           var uniqsPricing = projMasterData.reduce((acc, val) => {
+             acc[val.pricingModel] = acc[val.pricingModel] === undefined ? 1 : acc[val.pricingModel] += 1;
+             return acc;
+           }, {});
+           
+          // alert(JSON.stringify(uniqsPricing))
+           
+           var fpVal = 0;
+           var tnmVal = 0;
+           var otherVal = 0
+           
+           Object.keys(uniqsPricing).forEach(function(key) {
+ 
+             if(key!='FP' && key!='T&M'){
+               otherVal = otherVal+parseInt(uniqsPricing[key])
+             }
+             else if(key==='FP')
+             {
+               $scope.totalFp = uniqsPricing[key];
+             }
+             else{
+               $scope.totalTnM = uniqsPricing[key];
+             }
+         });
+           
+           $scope.totalOther = otherVal;
+         }
+         
          $scope.loadPmSeriesData = function(userFrSearch){
            
            var usr = [];
@@ -88,7 +125,7 @@ angular.module('PmoxApp')
              timeout: 30000,
              crossDomain: true,
              success: function (data) {               
-              alert(JSON.stringify(data))
+              //alert(JSON.stringify(data))
                usr.push(data);
              }
              
@@ -190,12 +227,19 @@ angular.module('PmoxApp')
             
             if(pgm.id==='allpgm'){
               userDataPrj = $scope.user;
+              var user = new Object();
+              user.username = $scope.user.username;
+              user.name = $scope.user.name;
+              user.roleName = $scope.user.roleName;
+             // alert('allpgm--'+JSON.stringify(user))
+              $scope.loadProjRevEbidtaChrt(user);
             }else{
               var user = new Object();
               user.username = pgm.id;
               user.name = pgm.name;
               user.roleName = 'PGM';
               userDataPrj = $scope.loadProjectMasterData(user)[0];
+              $scope.loadProjRevEbidtaChrt(user);
             }
  
             $scope.totalProjectCount = userDataPrj.totalProjectCount;
@@ -203,6 +247,8 @@ angular.module('PmoxApp')
             $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
             $scope.totalRevenue = userDataPrj.totalRevenue;
             $scope.totalEbidta = userDataPrj.totalEbidta;
+            $scope.loadPricingMdlData(userDataPrj.projMasterData);
+            
             
            // $scope.loadFiltersWithStatusData('','',userDataPrj.projMasterData);
             $scope.loadProjStatus(userDataPrj.projMasterData);  
@@ -271,9 +317,11 @@ angular.module('PmoxApp')
               if($scope.pgmdata.id==='allpgm')
                 {
                   userDataPrj = $scope.user;
+                  $scope.loadProjRevEbidtaChrt($scope.user);
                 }
               else{
                  userDataPrj = $scope.loadProjectMasterData(user)[0];
+                 $scope.loadProjRevEbidtaChrt(user);
               }
              
             }else{
@@ -283,6 +331,8 @@ angular.module('PmoxApp')
               user.name = pm.pmname;
               user.roleName = 'PM';
               userDataPrj = $scope.loadProjectMasterData(user)[0];
+              
+              $scope.loadProjRevEbidtaChrt(user);
             }
             
             $scope.totalProjectCount = userDataPrj.totalProjectCount;
@@ -290,6 +340,7 @@ angular.module('PmoxApp')
             $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
             $scope.totalRevenue = userDataPrj.totalRevenue;
             $scope.totalEbidta = userDataPrj.totalEbidta;
+            $scope.loadPricingMdlData(userDataPrj.projMasterData);
             
             $scope.loadFiltersWithStatusData(pm.pid,'',userDataPrj.projMasterData);
             $scope.loadProjStatus(userDataPrj.projMasterData);  
@@ -339,13 +390,16 @@ angular.module('PmoxApp')
            }
            //user.projectSelected = selProject.pid;
            user.roleName = 'PM';
+           //alert('--project---'+JSON.stringify(user))
           var userDataPrj = $scope.loadProjectMasterData(user)[0];
+          $scope.loadProjRevEbidtaChrt(user);
 
           $scope.totalProjectCount = userDataPrj.totalProjectCount;
           $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
           $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
           $scope.totalRevenue = userDataPrj.totalRevenue;
           $scope.totalEbidta = userDataPrj.totalEbidta;
+          $scope.loadPricingMdlData(userDataPrj.projMasterData);
           
           $scope.loadFiltersWithStatusData('',selProject.pid,userDataPrj.projMasterData);         
           $scope.loadProjStatus(userDataPrj.projMasterData);         
@@ -535,21 +589,18 @@ angular.module('PmoxApp')
              return acc;
            }, {});
            
-          var htrFlag = [];
-          var htrFlagData = [];
+                 
+           var reversedArr = $scope.reverseByValue(uniqsHtr);
          
-            angular.forEach(uniqsHtr, function (value, key) {
-              
-              htrFlag =  [key, value];
-              htrFlagData.push(htrFlag);
-            
-            });
-            
-            $scope.seriesHtrg.push({data:htrFlagData});
-
-          $scope.chartOptionsHtr = {
+            $scope.seriesHtrg.push({data:reversedArr});
+     
+            $scope.chartOptionsHtr = {
                   chart: {
                     type: 'pyramid',
+                    spacingBottom: 10,
+                    spacingTop: 10,
+                    spacingLeft: 10,
+                    spacingRight: 10
                     
                 },
                 title: {
@@ -564,13 +615,32 @@ angular.module('PmoxApp')
                           enabled: true,
                           format: '<b>{point.name}</b> ({point.y:,.0f})',
                           softConnector: true
-                      },
-                      innerSize: 100,
-                      depth: 45
-                  }
+                      }
+                      
+                  },
+                  center: ['40%', '50%'],
+                  width: '80%'
                 },
                 // colors: ['#006600','#800000','#3285a8'],
-                series: $scope.seriesHtrg
+                series: $scope.seriesHtrg,
+                responsive: {
+                  rules: [{
+                      condition: {
+                          maxWidth: 500
+                      },
+                      chartOptions: {
+                          plotOptions: {
+                              series: {
+                                  dataLabels: {
+                                      inside: true
+                                  },
+                                  center: ['50%', '50%'],
+                                  width: '100%'
+                              }
+                          }
+                      }
+                  }]
+              }
               };
           
          // alert('resMapData--'+JSON.stringify(resMapData))
@@ -663,130 +733,241 @@ angular.module('PmoxApp')
                          
          }
          
-         $scope.loadProjRevEbidtaChrt = function(pandlMap) {
+         $scope.loadProjRevEbidtaChrt = function(user) {
            
-           var pgmDataSet = [];
-           var pgmDataSeries = [];
-           var pgmDataSetObj = new Object();
-           pgmDataSetObj.name = 'PGMS';
-           pgmDataSetObj.colorByPoint=true;
-           alert(JSON.stringify(pandlMap));
+           //alert($scope.sumArrays([[0, 1, 2], [1, 2, 3, 4], [1, 2]]));
+           var userDataPrj = [];
+          
+           var revData = [];
+           var revDataFinal = [];
+           var revDataLst = [];
            
-           angular.forEach($scope.pgManagers, function (valueOut, key) {
-             
-             var totalRevenue = 0.0;
-             
-             if(valueOut.id!='allpgm'){
-             
-             angular.forEach(pandlMap, function (valuePnl, keyPnl) {
-               
-              // alert(keyPnl);
-               var prjData = keyPnl.split(":");
-             //  alert(prjData[1]+'----'+valueOut.id+'----'+JSON.stringify(valuePnl));
-                 if(prjData[1]===valueOut.id)
-                   {
-                     angular.forEach(valuePnl, function (valueLst, keyLst) {
-                       
-                      // alert('valueLst.revTotal--'+valueLst.revTotal+'------'+parseFloat(valueLst.revTotal))
-                       
-                       totalRevenue = parseFloat(totalRevenue) + parseFloat(valueLst.revTotal);
-                     });   
-                   }
-             });
-             
-             //alert('totalRevenue---'+totalRevenue);
-             
-            
-               var pgmData = new Object();
-               pgmData.name = valueOut.name;
-               pgmData.y =parseFloat(totalRevenue.toFixed(2), 10);
-               pgmData.drilldown = valueOut.id;
-               pgmDataSet.push(pgmData);
-             }
+           var ebidtaData = [];
+           var ebidtaDataPerc = [];
+           var ebidtaDataFinal = [];
+           var ebidtaDataLst = [];
            
+           
+           userDataPrj = $scope.loadPmSeriesData(user)[0];
+          
+           angular.forEach(userDataPrj, function (value, key) {
+             
+              ebidtaData = [parseFloat(value.aprEbi),parseFloat(value.mayEbi),parseFloat(value.junEbi),parseFloat(value.julEbi),parseFloat(value.augEbi)
+               ,parseFloat(value.sepEbi),parseFloat(value.octEbi),parseFloat(value.novEbi),parseFloat(value.decEbi),parseFloat(value.janEbi),parseFloat(value.febEbi)
+               ,parseFloat(value.marEbi)];
+              ebidtaDataLst.push(ebidtaData);
+                   
+             revData = [parseFloat(value.aprRev),parseFloat(value.mayRev),parseFloat(value.junRev),parseFloat(value.julRev),parseFloat(value.augRev)
+               ,parseFloat(value.sepRev),parseFloat(value.octRev),parseFloat(value.novRev),parseFloat(value.decRev),parseFloat(value.janRev),parseFloat(value.febRev)
+               ,parseFloat(value.marRev)];
+             revDataLst.push(revData);
+             
+             
            });
            
-           pgmDataSetObj.data=pgmDataSet;
-           pgmDataSeries.push(pgmDataSetObj);
-           alert('pgmDataSetObj---'+JSON.stringify(pgmDataSeries))
-          
-           $scope.chartProjRevEbidta = {
+           ebidtaDataFinal= ebidtaData.map(function(ebitap, i) { return parseFloat(ebitap.toFixed(2)); });
+           
+           revDataFinal = revData.map(function(revap, i) { return parseFloat(revap.toFixed(2)); });
+           
+          // alert(JSON.stringify(ebidtaDataFinal)+'--ebidtaData'+JSON.stringify(revDataFinal));
+           
+          // ebidtaDataPerc = ebidtaDataFinal.map(function(n, i) { var ebitap = (n*100) / revDataFinal[i]; return parseFloat(ebitap.toFixed(2)); });
+                     
+                     
+           $scope.chartProjRevenue = {
                    
                    chart: {
+                     renderTo: 'container',
                      type: 'column',
-                     events: {
-                       drilldown: function (e) {
-                         
-                        // alert(e.point.drilldown)
-                        // alert(e.point.name)
-                           if (!e.seriesOptions) {
-                             var userDataPrj = [];
-                             var user = new Object();
-                             user.username = e.point.drilldown;
-                             user.name = e.point.name;
-                             user.roleName = 'PGM';
-                            userDataPrj = $scope.loadPmSeriesData(user)[0];
-                            var pmData = [];
-                            var pmDtlArr = [];
-                            var pmDtl = new Object();
-                            pmDtl.name = e.point.drilldown;
-                           //alert('userDataPrj----'+JSON.stringify(userDataPrj))
-                            angular.forEach(userDataPrj, function (value, key) {
-                              //alert('value----'+JSON.stringify(value))
-                             pmData =  [value.pmName,parseFloat(value.revTotal)];
-                             // statusFlagData.push(statusFlag);
-                             // alert(value.pmName+'-----'+value.revTotal)
-                              pmDtlArr.push(pmData)
-                              
-                            });
-                            pmDtl.data = pmDtlArr;
-                            //alert(JSON.stringify(pmDtl));
-                               var chart = this,
-                                 series = pmDtl;
-
-                               // Show the loading label
-                               chart.showLoading('Getting Data ...');
-
-                               setTimeout(function () {
-                                   chart.hideLoading();
-                                   chart.addSeriesAsDrilldown(e.point, series);
-                               }, 1000);
-                           }
-
-                       }
-                   }
-                  },
-                   title: {
-                     text: 'Basic drilldown'
-                   },
-                   xAxis: {
-                     type: 'category'
-                   },
-
-                   legend: {
-                     enabled: false
-                   },
-
-                   plotOptions: {
-                     series: {
-                       borderWidth: 0,
-                       dataLabels: {
+                     options3d: {
                          enabled: true,
-                       }
+                         alpha: 10,
+                         beta: 10,
+                         depth: 50,
+                         viewDistance: 25
                      }
+                 },
+                 title: {
+                     text: 'Revenue Chart'
+                 },credits: {
+                   enabled: false
+                 },
+                 yAxis: {
+                   title: {
+                       text: 'Revenue'
                    },
-                   series: pgmDataSeries,
-                   //series: pgmDataSetObj,
-                   drilldown: {
-                     series: []
-                   }
+                   labels: {
+                     format: '$ {value} M',
+                     style: {
+                         color: Highcharts.getOptions().colors[1]
+                     }
+                 },
+               },
+
+               xAxis: {
+                 categories: ['Apr', 'May', 'Jun',
+                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'],
+                   crosshair: true
+               },
+                 plotOptions: {
+                     column: {
+                         depth: 25
+                     }
+                 },
+                 series: [{
+                   name: 'Revenue(M)',
+                     data: revDataFinal
+                 }]
                    
-               };
+           }
+           
+           $scope.chartProjEbidta = {
+                   
+                   title: {
+                     text: 'EBIDTA Chart'
+                 },credits: {
+                   enabled: false
+                 },
+                 yAxis: {
+                     title: {
+                         text: 'EBIDTA(%)'
+                     },
+                     labels: {
+                       format: '{value} %',
+                       style: {
+                           color: Highcharts.getOptions().colors[1]
+                       }
+                   },
+                 },
+
+                 xAxis: {
+                   categories: ['Apr', 'May', 'Jun',
+                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'],
+                     crosshair: true
+                 },
+
+                 legend: {
+                     layout: 'vertical',
+                     align: 'right',
+                     verticalAlign: 'middle'
+                 },
+
+                 plotOptions: {
+                     series: {
+                         label: {
+                             connectorAllowed: false
+                         },
+                      },
+                    line: {
+                        dataLabels: {
+                            enabled: true
+                        },
+                        enableMouseTracking: false
+                    }
+                 },
+
+                 series: [{
+                     name: 'EBIDTA(%)',
+                     data: ebidtaDataFinal
+                 }],
+
+                 responsive: {
+                     rules: [{
+                         condition: {
+                             maxWidth: 500
+                         },
+                         chartOptions: {
+                             legend: {
+                                 layout: 'horizontal',
+                                 align: 'center',
+                                 verticalAlign: 'bottom'
+                             }
+                         }
+                     }]
+                 }
+                   
+           }
+           
+            $scope.chartProjRevEbidta = {
+                    
+                    chart: {
+                      zoomType: 'xy'
+                  },
+                  title: {
+                      text: 'Revenue Ebidta map'
+                  },
+                  xAxis: [{
+                      categories: ['Apr', 'May', 'Jun',
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'],
+                      crosshair: true
+                  }],
+                  yAxis: [{ // Primary yAxis
+                      labels: {
+                          format: '{value} %',
+                          style: {
+                              color: Highcharts.getOptions().colors[1]
+                          }
+                      },
+                      maxPadding: 0,
+                      minPadding: 0,
+                                floor: 0,
+                                ceiling: 100,
+                      title: {
+                          text: '<span style="font-size: 15px">EBIDTA(%)</span>',
+                          style: {
+                              color: Highcharts.getOptions().colors[1]
+                          }
+                      }
+                  }, { // Secondary yAxis
+                      title: {
+                          text: '<span style="font-size: 15px">Revenue</span>',
+                          style: {
+                              color: Highcharts.getOptions().colors[0]
+                          }
+                      },
+                      labels: {
+                          format: '{value} $',
+                          style: {
+                              color: Highcharts.getOptions().colors[0]
+                          }
+                      },
+                     
+                      opposite: true
+                  }],
+                  tooltip: {
+                      shared: true
+                  },
+                  
+                  series: [{
+                      name: 'Revenue',
+                      type: 'column',
+                      yAxis: 1,
+                      data: $scope.sumArrays(revDataLst),
+                      tooltip: {
+                          valueSuffix: ' $'
+                      }
+
+                  }, {
+                      name: 'EBIDTA',
+                      type: 'spline',
+                      data: ebidtaDataPerc,
+                      tooltip: {
+                          valueSuffix: '%'
+                      }
+                  }] 
+                    
+            }
 
          }
-         
-         $scope.getPmRevDtl = function(pandlMap) {
+
+         $scope.sortByMonth = function(monthArr) {
            
+           var months = ["April", "May", "June",
+             "July", "August", "September", "October", "November", "December","January", "February", "March"];
+             arr.sort(function(a, b){
+                 return months.indexOf(a.values.Month.displayValue)
+                      - months.indexOf(b.values.Month.displayValue);
+             });
 
          }
          
@@ -814,11 +995,45 @@ angular.module('PmoxApp')
            
          }
          
-		 $scope.sort = function(keyname){
-		        $scope.sortKey = keyname;   // set the sortKey to the param passed
-		        $scope.reverse = !$scope.reverse; // if true make it false and vice
-                                              // versa
-		    }
+         $scope.showInProgress = function() {
+           
+           alert("I am in progress...");
+           
+         }
+         
+		 $scope.sortByValue = function(jsObj){
+  		   
+		     var sortedArray = [];
+  		    for(var i in jsObj)
+  		    {
+  		        // Push each JSON Object entry in array by [value, key]
+  		      //alert(jsObj[i]);
+  		        sortedArray.push([jsObj[i],i]);
+  		    }
+  		    
+  		    //alert(JSON.stringify(sortedArray.sort()))
+  		     //alert(JSON.stringify(sortedArray.sort().reverse()))
+  		    
+  		    return sortedArray.sort();
+		 }
+		 
+		 $scope.reverseByValue = function(jsObj){
+       
+       var sortedArray = [];
+        for(var i in jsObj)
+        {
+            // Push each JSON Object entry in array by [value, key]
+            sortedArray.push([i,jsObj[i]]);
+        }
+        return sortedArray.sort().reverse();
+   }
+		 
+		 $scope.sumArrays = function(arrays) {
+		
+		   const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
+		   const result = Array.from({ length: n });
+		   return result.map((_, i) => arrays.map(xs => xs[i] || 0).reduce((sum, x) => { sum = sum + x ;return parseFloat(sum.toFixed(2))}));
+		 }
 		 
 		 $scope.showProgress=function(){
 		   //alert(123454321)
@@ -863,287 +1078,123 @@ angular.module('PmoxApp')
            $scope.selProject=$scope.projects[0];
         };
     
-        /*$scope.loadFiltersWithStatusData = function(selectedPmId,selectedPrjId){
-        
-        alert('insidefiltermet'+selectedPmId+"---"+selectedPrjId+"----"+$scope.manNames)
-                  
-        var activeNo = 0;
-        var inactiveNo = 0;
-        var techManCnt = 0;
-        var custManCnt = 0; 
-        var lastPgmId = 0;
-        var lastPgmName = '';
-        var lastPmId = 0;
-        var lastPmName = '';
-        var hCount = 0 ;
-        var tCount = 0 ;
-        var mCount = 0 ;
-       
-
-        if(selectedPmId=='' && selectedPrjId=='')
-          {
-            var managers = new Object();
-            managers.pid="allpm";
-            managers.pmname="---All PMs---";
-            $scope.manNames.push(managers);
-            $scope.pmData=$scope.manNames[0];
+      //example of drilldown chart 
+       /* angular.forEach($scope.pgManagers, function (valueOut, key) {
+          
+          var totalRevenue = 0.0;
+          
+          if(valueOut.id!='allpgm'){
+          
+          angular.forEach(pandlMap, function (valuePnl, keyPnl) {
             
-            var pgm = new Object();
-            pgm.id="allpgm";
-            pgm.name="---All PGMs---";
-            $scope.pgManagers.push(pgm);
-            
-            $scope.projects=[];
-            var projects = new Object();
-            projects.pid="allprj";
-            projects.pname="---All Projects---";
-            $scope.projects.push(projects);
-            $scope.selProject=$scope.projects[0];
-          }
-        
-      
-        if(selectedPmId!='')
-          {
-            angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
-              if(selectedPmId==valueOut.pmId) {
-                if(valueOut.status == 'ACTIVE')
+           // alert(keyPnl);
+            var prjData = keyPnl.split(":");
+          //  alert(prjData[1]+'----'+valueOut.id+'----'+JSON.stringify(valuePnl));
+              if(prjData[1]===valueOut.id)
                 {
-                  activeNo ++;
-                  
-                }else{
-                  
-                  inactiveNo++;
-                }
-                if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
-                {
-                
-                  techManCnt++;
-                  
-                }else{
-                  
-                  custManCnt++;
-                }
-              }    
-            }); 
-          }
-        else if(selectedPrjId!='')
-        {
-          angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
-             
-            if(selectedPrjId==valueOut.projectId) {
-              if(valueOut.status == 'ACTIVE')
-                {
-                  activeNo ++;
-                  
-                }else{
-                  
-                  inactiveNo++;
-                }
-              if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
-                {
-                
-                  techManCnt++;
-                  
-                }else{
-                  
-                  custManCnt++;
-                }
-
-            }         
-          }); 
-        }
-        else {
-        
-          angular.forEach($scope.user.projMasterData, function (valueOut, keyOut) {
-           
-              if(valueOut.status == 'ACTIVE')
-              {
-                activeNo ++;
-                
-              }else{
-                
-                inactiveNo++;
-              }
-              if(valueOut.deliveryOwnership.toUpperCase() === 'TechM managed'.toUpperCase())
-              {
-              
-                techManCnt++;
-                
-              }else{
-                
-                custManCnt++;
-              }
-              
-              if(valueOut.pgmId!=lastPgmId)
-              {
-                var pgm = new Object();
-                pgm.id=valueOut.pgmId;
-                pgm.name=valueOut.pgmName;
-                $scope.pgManagers.push(pgm);
-                $scope.pgmdata=$scope.pgManagers[0];
-                
-                lastPgmId = valueOut.pgmId;
-                lastPgmName = valueOut.pgmName;
-              }
-              
-              if(valueOut.pmId!=lastPmId)
-              {
-                var managers = new Object();
-                managers.pid=valueOut.pmId;
-                managers.pmname=valueOut.pmName;
-                $scope.manNames.push(managers);
-
-                lastPmId = valueOut.pmId;
-                lastPmName = valueOut.pmName;
-              } 
-              
-              var projects = new Object();
-              projects.pid=valueOut.projectId;
-              projects.pname=valueOut.projectDescription;
-              $scope.projects.push(projects);
-              
-              angular.forEach($scope.user.resourceMap, function (valueMap, keyMap) {
-              
-                if(valueOut.projectId==keyMap){
-                  
-                  if(valueMap.htrFlag == 'H')
-                  {
-                    hCount++;
+                  angular.forEach(valuePnl, function (valueLst, keyLst) {
                     
-                  }else if(valueMap.htrFlag == 'T'){
+                   // alert('valueLst.revTotal--'+valueLst.revTotal+'------'+parseFloat(valueLst.revTotal))
                     
-                    tCount++;
-                  }
-                  else{
-                    mCount++;
-                  }
-                  
+                    totalRevenue = parseFloat(totalRevenue) + parseFloat(valueLst.revTotal);
+                  });   
                 }
-              }); 
-          }); 
-        }
-        
-        var seriestest =  ['Active', activeNo];
-        var seriesData = [];
-        $scope.series = [];
-        seriesData.push(seriestest);
-        seriestest =  ['Inactive', inactiveNo];
-        seriesData.push(seriestest);
-        $scope.series.push({data:seriesData});
-        $scope.chartOptionStat = {
-                chart: {
-                  type: 'pie',
-                  options3d: {
-                    enabled: true,
-                    alpha: 45
-                }
-              },
-              title: {
-                  text: 'Project Status',
-              },
-             credits: {
-                enabled: false
-              },
-              plotOptions: {
-                    pie: {
-                      dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.y}',
-                        distance: -60,
-                        style: {
-                            fontWeight: 'bold',
-                            color: 'white'
-                        }
-                      },
-                      innerSize: 100,
-                      depth: 45
-                  }
-              },
-              colors: ['#006600','#800000'],
-              series: $scope.series
-            };
+          });
+          
+          //alert('totalRevenue---'+totalRevenue);
+          
          
-         var seriesMan =  ['TechM Managed', techManCnt];
-         var seriesDataMan = [];
-         $scope.seriesMang = [];
-         seriesDataMan.push(seriesMan);
-         seriesMan =  ['Customer Managed', custManCnt];
-         seriesDataMan.push(seriesMan);
-          $scope.seriesMang.push({data:seriesDataMan});
-    
-        $scope.chartOptionsMan = {
+            var pgmData = new Object();
+            pgmData.name = valueOut.name;
+            pgmData.y =parseFloat(totalRevenue.toFixed(2), 10);
+            pgmData.drilldown = valueOut.id;
+            pgmDataSet.push(pgmData);
+          }
+        
+        });
+        
+        pgmDataSetObj.data=pgmDataSet;
+        pgmDataSeries.push(pgmDataSetObj);
+        alert('pgmDataSetObj---'+JSON.stringify(pgmDataSeries))
+        $scope.chartProjRevEbidta = {
+                
                 chart: {
-                  type: 'pie',
-                  options3d: {
-                      enabled: true,
-                      alpha: 45
+                  type: 'column',
+                  events: {
+                    drilldown: function (e) {
+                      
+                     // alert(e.point.drilldown)
+                     // alert(e.point.name)
+                        if (!e.seriesOptions) {
+                          var userDataPrj = [];
+                          var user = new Object();
+                          user.username = e.point.drilldown;
+                          user.name = e.point.name;
+                          user.roleName = 'PGM';
+                         userDataPrj = $scope.loadPmSeriesData(user)[0];
+                         var pmData = [];
+                         var pmDtlArr = [];
+                         var pmDtl = new Object();
+                         pmDtl.name = e.point.drilldown;
+                        //alert('userDataPrj----'+JSON.stringify(userDataPrj))
+                         angular.forEach(userDataPrj, function (value, key) {
+                           //alert('value----'+JSON.stringify(value))
+                          pmData =  [value.pmName,parseFloat(value.revTotal)];
+                          // statusFlagData.push(statusFlag);
+                          // alert(value.pmName+'-----'+value.revTotal)
+                           pmDtlArr.push(pmData)
+                           
+                         });
+                         pmDtl.data = pmDtlArr;
+                         //alert(JSON.stringify(pmDtl));
+                            var chart = this,
+                              series = pmDtl;
+
+                            // Show the loading label
+                            chart.showLoading('Getting Data ...');
+
+                            setTimeout(function () {
+                                chart.hideLoading();
+                                chart.addSeriesAsDrilldown(e.point, series);
+                            }, 1000);
+                        }
+
+                    }
+                }
+               },
+                title: {
+                  text: 'Revenue Chart'
+                },
+                xAxis: {
+                  type: 'category'
+                },
+                yAxis: {
+                  title: {
+                    text: 'Revenue (millions)'
                   }
-              },
-              title: {
-                  text: 'Project Managed'
-              },
-              credits: {
-                enabled: false
-              },
-              plotOptions: {
-                  pie: {
+                },
+                credits: {
+                  enabled: false
+                },
+
+                legend: {
+                  enabled: false
+                },
+
+                plotOptions: {
+                  series: {
+                    borderWidth: 0,
                     dataLabels: {
                       enabled: true,
-                      format: '<b>{point.name}</b>: <br>{point.y}</br>',
-                      distance: -60,
-                      style: {
-                          fontWeight: 'bold',
-                          color: 'white'
-                      }
-                    },
-                      innerSize: 100,
-                      depth: 45
+                    }
                   }
-              },
-              series: $scope.seriesMang
-            };
-        
-        alert(hCount+'-----'+tCount+'---'+mCount)
-        
-        var seriesHtr =  ['H', hCount];
-        var seriesDataHtr = [];
-        $scope.seriesHtrg = [];
-        seriesDataHtr.push(seriesHtr);
-        seriesHtr =  ['T', tCount];
-        seriesDataHtr.push(seriesHtr);
-        seriesHtr =  ['M', mCount];
-        seriesDataHtr.push(seriesHtr);
-         $scope.seriesHtrg.push({data:seriesDataHtr});
-       
-       $scope.chartOptionsHtr = {
-               chart: {
-                 type: 'pie',
-                 options3d: {
-                     enabled: true,
-                     alpha: 45
-                 }
-             },
-             title: {
-                 text: 'Project Managed'
-             },
-             credits: {
-               enabled: false
-             },
-             plotOptions: {
-                 pie: {
-                     innerSize: 100,
-                     depth: 45,
-                     allowPointSelect: true,
-                     cursor: 'pointer',
-                     dataLabels: {
-                         enabled: true,
-                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                     }  
-                 }
-             },
-             colors: ['#006600','#800000','#3285a8'],
-             series: $scope.seriesHtrg
-           };
-      }*/
+                },
+                series: pgmDataSeries,
+                //series: pgmDataSetObj,
+                drilldown: {
+                  series: []
+                }
+                
+            };*/
         
     });

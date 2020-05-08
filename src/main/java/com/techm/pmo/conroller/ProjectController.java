@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.techm.pmo.model.Casum;
+import com.techm.pmo.model.Pmrdata;
 import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.User;
 import com.techm.pmo.service.PmrService;
@@ -77,6 +78,10 @@ public class ProjectController {
 
     Gson gsonRes = new Gson();
     log.debug("REST request to get User : {}", user);
+    
+    List<Pmrdata> listPmrServ = pmrservice.getPmSeriesData(user);
+    
+    
 
     return gsonRes.toJson(pmrservice.getPmSeriesData(user));// ResponseEntity<>(userService.getUserWithRoleByUsername(username),
                                                              // HttpStatus.OK);

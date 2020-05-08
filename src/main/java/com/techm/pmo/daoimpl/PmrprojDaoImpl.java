@@ -19,10 +19,12 @@ import org.springframework.stereotype.Service;
 import com.techm.pmo.dao.PmrprojDao;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
+import com.techm.pmo.model.Pmrdata;
 import com.techm.pmo.model.PrjmasterData;
 import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.ResourceBaseData;
 import com.techm.pmo.model.User;
+import com.techm.pmo.util.PmoxUtil;
 
 @Service
 public class PmrprojDaoImpl implements PmrprojDao {
@@ -75,6 +77,22 @@ public class PmrprojDaoImpl implements PmrprojDao {
                            "  select PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,REV_TOTAL,PM_NAME from PMOX.T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID " + 
                            " ) select PGM_ID,PM_NAME,PM_ID,ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL from rws " ;
   String getPmSeriesData1 = " GROUP BY PM_ID,PM_NAME,PGM_ID" ;
+  
+  String getRevEbidtaConsQry = "select SUM(JANUARY_EBIDTA)*100/SUM(JANUARY_REV_TOTAL) AS JANUARY_EBIDTA,SUM(FEBRUARY_EBIDTA)*100/SUM(FEBRUARY_REV_TOTAL) AS FEBRUARY_EBIDTA," + 
+                                " SUM(MARCH_EBIDTA)*100/SUM(MARCH_REV_TOTAL) AS MARCH_EBIDTA,SUM(APRIL_EBIDTA)*100/SUM(APRIL_REV_TOTAL) AS APRIL_EBIDTA," + 
+                                " SUM(MAY_EBIDTA)*100/SUM(MAY_REV_TOTAL) AS MAY_EBIDTA,SUM(JUNE_EBIDTA)*100/SUM(JUNE_REV_TOTAL) AS JUNE_EBIDTA," + 
+                                " SUM(JULY_EBIDTA)*100/SUM(JULY_REV_TOTAL) AS JULY_EBIDTA,SUM(AUGUST_EBIDTA)*100/SUM(AUGUST_REV_TOTAL) AS AUGUST_EBIDTA,\r\n" + 
+                                " SUM(SEPTEMBER_EBIDTA)*100/SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_EBIDTA,SUM(OCTOBER_EBIDTA)*100/SUM(OCTOBER_REV_TOTAL) AS OCTOBER_EBIDTA," + 
+                                " SUM(NOVEMBER_EBIDTA)*100/SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_EBIDTA,SUM(DECEMBER_EBIDTA)*100/SUM(DECEMBER_REV_TOTAL) AS DECEMBER_EBIDTA," + 
+                                " SUM(JANUARY_REV_TOTAL) AS JANUARY_REV_TOTAL,SUM(FEBRUARY_REV_TOTAL) AS FEBRUARY_REV_TOTAL,SUM(MARCH_REV_TOTAL) AS MARCH_REV_TOTAL,SUM(APRIL_REV_TOTAL) AS APRIL_REV_TOTAL,"+
+                                " SUM(MAY_REV_TOTAL) AS MAY_REV_TOTAL,SUM(JUNE_REV_TOTAL) AS JUNE_REV_TOTAL,SUM(JULY_REV_TOTAL) AS JULY_REV_TOTAL,SUM(AUGUST_REV_TOTAL) AS AUGUST_REV_TOTAL, "+
+                                " SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_REV_TOTAL,SUM(OCTOBER_REV_TOTAL) AS OCTOBER_REV_TOTAL,SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_REV_TOTAL,SUM(DECEMBER_REV_TOTAL) AS DECEMBER_REV_TOTAL"+
+                                " from ( select * from ( "+
+                                " select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PM_NAME,PJM.PGM_ID,PGM_NAME,PJM.STATUS,PJM.IBU_HEAD_ID,IBU_HEAD_NAME,REV_TOTAL,EBIDTA from PMOX.T_PNL_BASE PNL "+ 
+                                " JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "+
+                                " ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL, "+
+                                " 'MAY' AS MAY,'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER, "+
+                                " 'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER) ))  ";
 
 
   @Override
@@ -237,10 +255,6 @@ public static class PrjmasterRowMapper implements RowMapper<PrjmasterData> {
     public PrjmasterData mapRow(ResultSet rs, int rowNum) throws SQLException {
         PrjmasterData pmrdata = new PrjmasterData();
     
-    
-        
-
-        
         return pmrdata;
     }
 }
@@ -503,24 +517,47 @@ private static final class PandLMapExtractor implements ResultSetExtractor<Map<S
  }
  
  @Override
- public List<PrjmasterData> getPmSeriesData(User user) {
+ public List<Pmrdata> getPmSeriesData(User user) {
    // TODO Auto-generated method stub
    String getPmSeriesQueryFinal = "";
-   List<PrjmasterData> lstPmSeriesData;
-   getPmSeriesQueryFinal = getPmSeriesData+ "WHERE "+ user.getRoleName()+"_ID = ? "+getPmSeriesData1;
+   List<Pmrdata> lstPmSeriesData;
+   getPmSeriesQueryFinal = getRevEbidtaConsQry+ "WHERE "+ user.getRoleName()+"_ID = ? ";
    lstPmSeriesData = jdbcMysql.query(getPmSeriesQueryFinal,new Object[]{user.getUsername()},
        new PmSeriesMapRowMapper());
    return lstPmSeriesData;
  }
  
- public static class PmSeriesMapRowMapper implements RowMapper<PrjmasterData> {
-   public PrjmasterData mapRow(ResultSet rs, int rowNum) throws SQLException {
-     PrjmasterData pmData = new PrjmasterData();
+ public static class PmSeriesMapRowMapper implements RowMapper<Pmrdata> {
+   public Pmrdata mapRow(ResultSet rs, int rowNum) throws SQLException {
+     Pmrdata pmData = new Pmrdata();
 
-     pmData.setPgmId(rs.getString("PGM_ID"));
-     pmData.setPmId(rs.getString("PM_ID"));
-     pmData.setPmName(rs.getString("PM_NAME"));
-     pmData.setRevTotal(rs.getString("REV_TOTAL"));
+     
+    // pmData.setPmId(rs.getString("PM_ID"));
+     pmData.setJanRev(rs.getString("JANUARY_REV_TOTAL"));
+     pmData.setFebRev(rs.getString("FEBRUARY_REV_TOTAL"));
+     pmData.setMarRev(rs.getString("MARCH_REV_TOTAL"));
+     pmData.setAprRev(rs.getString("APRIL_REV_TOTAL"));
+     pmData.setMayRev(rs.getString("MAY_REV_TOTAL"));
+     pmData.setJunRev(rs.getString("JUNE_REV_TOTAL"));
+     pmData.setJulRev(rs.getString("JULY_REV_TOTAL"));
+     pmData.setAugRev(rs.getString("AUGUST_REV_TOTAL"));
+     pmData.setSepRev(rs.getString("SEPTEMBER_REV_TOTAL"));
+     pmData.setOctRev(rs.getString("OCTOBER_REV_TOTAL"));
+     pmData.setNovRev(rs.getString("NOVEMBER_REV_TOTAL"));
+     pmData.setDecRev(rs.getString("DECEMBER_REV_TOTAL"));
+
+     pmData.setJanEbi(rs.getString("JANUARY_EBIDTA"));
+     pmData.setFebEbi(rs.getString("FEBRUARY_EBIDTA"));
+     pmData.setMarEbi(rs.getString("MARCH_EBIDTA"));
+     pmData.setAprEbi(rs.getString("APRIL_EBIDTA"));
+     pmData.setMayEbi(rs.getString("MAY_EBIDTA"));
+     pmData.setJunEbi(rs.getString("JUNE_EBIDTA"));
+     pmData.setJulEbi(rs.getString("JULY_EBIDTA"));
+     pmData.setAugEbi(rs.getString("AUGUST_EBIDTA"));
+     pmData.setSepEbi(rs.getString("SEPTEMBER_EBIDTA"));
+     pmData.setOctEbi(rs.getString("OCTOBER_EBIDTA"));
+     pmData.setNovEbi(rs.getString("NOVEMBER_EBIDTA"));
+     pmData.setDecEbi(rs.getString("DECEMBER_EBIDTA"));
      
      return pmData;
    }
