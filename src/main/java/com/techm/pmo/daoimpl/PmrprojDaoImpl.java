@@ -92,7 +92,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
                                 " JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "+
                                 " ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL, "+
                                 " 'MAY' AS MAY,'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER, "+
-                                " 'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER) ))  ";
+                                " 'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER) )) WHERE  ";
 
 
   @Override
@@ -521,9 +521,24 @@ private static final class PandLMapExtractor implements ResultSetExtractor<Map<S
    // TODO Auto-generated method stub
    String getPmSeriesQueryFinal = "";
    List<Pmrdata> lstPmSeriesData;
-   getPmSeriesQueryFinal = getRevEbidtaConsQry+ "WHERE "+ user.getRoleName()+"_ID = ? ";
-   lstPmSeriesData = jdbcMysql.query(getPmSeriesQueryFinal,new Object[]{user.getUsername()},
-       new PmSeriesMapRowMapper());
+   
+   
+   if(user.getProjectSelected()!=null && !user.getProjectSelected().equals("")) {
+     
+     getPmSeriesQueryFinal = getRevEbidtaConsQry+ " PROJECT_ID IN (?) ORDER BY PROJECT_ID";
+     lstPmSeriesData = jdbcMysql.query(getPmSeriesQueryFinal,new Object[]{user.getProjectSelected()},
+         new PmSeriesMapRowMapper());
+     
+   }
+   else
+   {
+     getPmSeriesQueryFinal = getRevEbidtaConsQry+ user.getRoleName()+"_ID = ? ";
+     lstPmSeriesData = jdbcMysql.query(getPmSeriesQueryFinal,new Object[]{user.getUsername()},
+         new PmSeriesMapRowMapper());
+   }
+   
+   
+  
    return lstPmSeriesData;
  }
  

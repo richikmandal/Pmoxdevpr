@@ -379,26 +379,61 @@ angular.module('PmoxApp')
          
          $scope.getDetailsDataPrj=function(selProject){
               
-           var user = new Object();
-           user.username = $scope.pmData.pid;
-           user.name = $scope.pmData.pmname;
+          // 
            if(selProject.pid==='allprj'){
-             user.projectSelected = '';
+            // user.projectSelected = '';
+             
+             if($scope.pmData.pid==='allpm'){
+               //alert('pm.pid--'+pm.pid)
+               var user = new Object();
+               user.username =  $scope.pgmdata.id;
+               user.name = $scope.pgmdata.name;
+               user.roleName = 'PGM';
+               user.projectSelected = '';
+               if($scope.pgmdata.id==='allpgm')
+                 {
+                   userDataPrj = $scope.user;
+                   $scope.loadProjRevEbidtaChrt($scope.user);
+                 }
+               else{
+                  userDataPrj = $scope.loadProjectMasterData(user)[0];
+                  $scope.loadProjRevEbidtaChrt(user);
+               }
+              
+             }else{
+               
+               var user = new Object();
+               user.username = $scope.pmData.pid;
+               user.name = $scope.pmData.pmname;
+               user.roleName = 'PM';
+               user.projectSelected = '';
+               userDataPrj = $scope.loadProjectMasterData(user)[0];
+               
+               $scope.loadProjRevEbidtaChrt(user);
+             }
+             
            }
            else{
+             var user = new Object();
+             user.username = $scope.pmData.pid;
+             user.name = $scope.pmData.pmname;
+             user.roleName = 'PM';
              user.projectSelected = selProject.pid;
+             $scope.loadProjRevEbidtaChrt(user);
+             userDataPrj = $scope.loadProjectMasterData(user)[0];
            }
            //user.projectSelected = selProject.pid;
-           user.roleName = 'PM';
+         
            //alert('--project---'+JSON.stringify(user))
-          var userDataPrj = $scope.loadProjectMasterData(user)[0];
-          $scope.loadProjRevEbidtaChrt(user);
+        
+          
 
           $scope.totalProjectCount = userDataPrj.totalProjectCount;
           $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
           $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
           $scope.totalRevenue = userDataPrj.totalRevenue;
           $scope.totalEbidta = userDataPrj.totalEbidta;
+          
           $scope.loadPricingMdlData(userDataPrj.projMasterData);
           
           $scope.loadFiltersWithStatusData('',selProject.pid,userDataPrj.projMasterData);         
@@ -769,11 +804,7 @@ angular.module('PmoxApp')
            
            revDataFinal = revData.map(function(revap, i) { return parseFloat(revap.toFixed(2)); });
            
-          // alert(JSON.stringify(ebidtaDataFinal)+'--ebidtaData'+JSON.stringify(revDataFinal));
-           
-          // ebidtaDataPerc = ebidtaDataFinal.map(function(n, i) { var ebitap = (n*100) / revDataFinal[i]; return parseFloat(ebitap.toFixed(2)); });
-                     
-                     
+                            
            $scope.chartProjRevenue = {
                    
                    chart: {
