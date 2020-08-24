@@ -117,7 +117,7 @@ angular.module('PmoxApp')
                 $("#alertMsg").html("The required data is not available for the selected user.");                          
                 $('#alertModal').modal("show");
             
-               //alert(JSON.stringify('error occured----'+e))
+              //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
