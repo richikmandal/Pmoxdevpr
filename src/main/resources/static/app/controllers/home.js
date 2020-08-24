@@ -112,7 +112,11 @@ angular.module('PmoxApp')
            $.ajax({
              url: "api/projects/getPmSeriesData",
              error: function (e) {
-               alert('Invalid Result set for the request.'+JSON.stringify(e))
+               //alert('Invalid Result set.......'+JSON.stringify(e))
+               
+                $("#alertMsg").html("The required data is not available for the selected user.");                          
+                $('#alertModal').modal("show");
+            
                //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
@@ -1019,10 +1023,12 @@ angular.module('PmoxApp')
          }
          
          $scope.showPnLChrt = function() {
-           
+          
            $scope.showPnL=true;
            $scope.showProjects=false;
            $scope.showAssociates=false;
+           
+           
            
          }
          
