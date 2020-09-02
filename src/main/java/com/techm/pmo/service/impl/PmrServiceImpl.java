@@ -67,6 +67,12 @@ public class PmrServiceImpl implements PmrService {
     return pmrprojdao.getPmSeriesData(user);
   }
 
+  @Override
+  public List<ProfitAndLossData> getPnLSummary(User user) {
+    // TODO Auto-generated method stub
+    return pmrprojdao.getPnLSummary(user);
+  }
+
 
 
 

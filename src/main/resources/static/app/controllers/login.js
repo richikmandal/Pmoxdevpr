@@ -5,6 +5,7 @@ angular.module('PmoxApp')
     	 $scope.showdropdown=false;
          $scope.showlogin=true;
          $scope.showenter=false;
+         $scope.disablelogin=false;
          $scope.selectedvalues="";
          var loginuser={};
         $scope.login = function () {
@@ -64,6 +65,7 @@ angular.module('PmoxApp')
                   $scope.showdropdown=true;
                   $scope.showlogin=false;
                   $scope.showenter=true;
+                  $scope.disablelogin=true;
                   loginuser=res.user;
                   
                   //$rootScope.$broadcast('LoginSuccessful');

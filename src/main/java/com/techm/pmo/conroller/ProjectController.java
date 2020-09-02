@@ -25,7 +25,7 @@ public class ProjectController {
 
 
   @Autowired
-  private PmrService      pmrservice;
+  private PmrService  pmrservice;
 
 
   private final Logger    log = LoggerFactory.getLogger(ProjectController.class);
@@ -79,12 +79,22 @@ public class ProjectController {
     Gson gsonRes = new Gson();
     log.debug("REST request to get User : {}", user);
     
-    List<Pmrdata> listPmrServ = pmrservice.getPmSeriesData(user);
-    
-    
+    //List<Pmrdata> listPmrServ = pmrservice.getPmSeriesData(user);
 
     return gsonRes.toJson(pmrservice.getPmSeriesData(user));// ResponseEntity<>(userService.getUserWithRoleByUsername(username),
                                                              // HttpStatus.OK);
+  }
+  
+  @PostMapping("/getPnLSummary")
+  public List<ProfitAndLossData> getPnLSummary(@RequestBody User user) {
+   
+    return pmrservice.getPnLSummary(user);
+  }
+  
+  @GetMapping("/getOrderBookData")
+  public List<Casum> getOrderBookData(@PathVariable String user) {
+   
+    return pmrservice.getCasum(user);
   }
 
 

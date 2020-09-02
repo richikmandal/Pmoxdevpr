@@ -22,5 +22,7 @@ public interface PmrService {
   public List<PrjmasterData> getPrjMasterDataFrUser(String userId);
 
   public List<Pmrdata> getPmSeriesData(User user);
+
+  public List<ProfitAndLossData> getPnLSummary(User user);
   
 }

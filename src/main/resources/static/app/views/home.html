@@ -1,598 +1,733 @@
 <script>
+  $(document).ready(function() {
+    var table = $('#example').DataTable({
+      scrollY: "300px",
+      scrollX: true,
+      scrollCollapse: true,
+      paging: false,
+      fixedColumns: {
+        leftColumns: 2
+      }
+    });
+  });
 
-var el = document.getElementById('section11');
+  var el = document.getElementById('section11');
 
-if(el){
-	var btns = el.getElementsByClassName("bg-threedface");
-	
-	for (var i = 0; i < btns.length; i++) {
-		  btns[i].addEventListener("click", function() {
-		    var current = document.getElementsByClassName("gradient-primary");
+  if (el) {
+    var btns = el.getElementsByClassName("bg-threedface");
 
-		    // If there's no active class
-		    if (current.length > 0) {
-		    	
-		      current[0].className = current[0].className.replace(" gradient-primary", "");
-		    }
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("gradient-primary");
 
-		    // Add the active class to the current/clicked button
-		    this.className += " gradient-primary";
-		   
-		  });
-		}
-}
+        // If there's no active class
+        if (current.length > 0) {
 
+          current[0].className = current[0].className.replace(
+                  " gradient-primary", "");
+        }
+
+        // Add the active class to the current/clicked button
+        this.className += " gradient-primary";
+
+      });
+    }
+  }
 </script>
 
 <style>
-
-.table-wrapper {
-  max-height: 100px;
-  overflow: auto;
-  display:inline-block;
-  width: 100px;
-}
-
-.panel-heading .accordion-toggle:after {
-    /* symbol for "opening" panels */
-    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
-    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
-    float: right;        /* adjust as needed */
-    color: grey;         /* adjust as needed */
-}
-.panel-heading .accordion-toggle.collapsed:after {
-    /* symbol for "collapsed" panels */
-    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
-}
-
-
-.tablescroll {
-	display: block;
-	overflow-x: auto;
-	overflow-y: auto;
-	white-space: nowrap;
-	width: 1100px;
-}
-
-.tablescroll1 {
-	display: block;
-	overflow-x: auto;
-	overflow-y: 700px;
-	white-space: nowrap;
-
-	width: 1100px;
-}
-
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
-	border: 1px solid #ddd;
-}
-
-th, td {
-	text-align: left;
-	padding: 16px;
-}
-
-tr:nth-child(even) {
-	background-color: #f2f2f2;
-}
-
-#loader {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 99999;
-  display: none;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
-
-  animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-
-}
-
-.bg-maroon {
-  background-color: maroon; !important;
-}
-
-.bg-threedface {
-  background-color: threedface; !important;
-}
-.btn-5:hover {
-
-  background:#E8E8E8;
-}
-.btn-6:hover {
-  border: #282828 solid 1px;
-  background:#F5F5F5;
-}
-
+	.table-wrapper {
+		max-height: 100px;
+		overflow: auto;
+		display: inline-block;
+		width: 100px;
+	}
+	
+	.panel-heading .accordion-toggle:after {
+		/* symbol for "opening" panels */
+		font-family: 'Glyphicons Halflings';
+		/* essential for enabling glyphicon */
+		content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+		float: right; /* adjust as needed */
+		color: grey; /* adjust as needed */
+	}
+	
+	.panel-heading .accordion-toggle.collapsed:after {
+		/* symbol for "collapsed" panels */
+		content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+	}
+	
+	.tablescroll {
+		display: block;
+		overflow-x: auto;
+		overflow-y: auto;
+		white-space: nowrap;
+		width: 1100px;
+	}
+	
+	.tablescroll1 {
+		display: block;
+		overflow-x: auto;
+		overflow-y: 700px;
+		white-space: nowrap;
+		width: 1100px;
+	}
+	
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+		border: 1px solid #ddd;
+	}
+	
+	th, td {
+		text-align: left;
+		padding: 16px;
+	}
+	
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+	
+	#loader {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		z-index: 99999;
+		display: none;
+		width: 150px;
+		height: 150px;
+		margin: -75px 0 0 -75px;
+		border: 16px solid #f3f3f3;
+		border-radius: 50%;
+		border-top: 16px solid #3498db;
+		width: 120px;
+		height: 120px;
+		-webkit-animation: spin 2s linear infinite;
+		animation: spin 2s linear infinite;
+	}
+	
+	@
+	-webkit-keyframes spin { 0% {
+		-webkit-transform: rotate(0deg);
+	}
+	
+	100%
+	{
+	-webkit-transform
+	:
+	 
+	rotate
+	(360deg);
+	 
+	}
+	}
+	@
+	keyframes spin { 0% {
+		transform: rotate(0deg);
+	}
+	
+	100%
+	{
+	transform
+	:
+	 
+	rotate
+	(360deg);
+	 
+	}
+	}
+	.bg-maroon {
+		background-color: maroon;
+		!
+		important;
+	}
+	
+	.bg-threedface {
+		background-color: threedface;
+		!
+		important;
+	}
+	
+	.btn-5:hover {
+		background: #E8E8E8;
+	}
+	
+	.btn-6:hover {
+		border: #282828 solid 1px;
+		background: #F5F5F5;
+	}
 </style>
-<div class="d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="HomeController" >
+<div class="d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="HomeController">
 
 	<div class="page-holder w-100 d-flex flex-wrap">
 		<div class="container-fluid px-xl-5">
-		<div class="spinner-border text-primary">
-    			<span class="sr-only">Loading...</span>
+			<div class="spinner-border text-primary">
+				<span class="sr-only">Loading...</span>
 			</div>
-			<section class="py-2" id="section11">
-			
-			 			<div class="row">
-			 				<div class="col-xl-3 col-md-6">
-			 					<ul class="list-group">
-								  <li class="list-group-item gradient-success text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-2">
-								                    <div class="icon text-white bg-violet">
-														<i class="fas fa-chart-bar"></i>
-													</div>
-								                </div>
-								                <div class="col-lg-10">
-								                    <div class="text-white"><a ng-click="showPnLChrt()"><b>Profit & Loss (YTD Mar'20)</b></a></div>
-								                </div>
-								                
-								            </div>
-								   </li>
-								  <li class="list-group-item gradient-success text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-6">
-								                    <div class="text-white"><b> Rev: $ {{totalRevenue}} M</b></div>
-								                </div>
-								                <div class="col-lg-6">
-								                    <div class="text-white"><b>EBIDTA(%): {{totalEbidta}}</b></div>
-								                </div>
-								            </div>
-								  </li>
-								</ul>
-			 				</div>        
-			 				<div class="col-xl-3 col-md-6">
-				 				<ul class="list-group">
-								  <li class="list-group-item gradient-primary text-white rounded"><div class="row">
-								                <div class="col-lg-2">
-								                    <div class="icon text-white bg-violet">
-														<i class="fas fa-server"></i>
-													</div>
-								                </div>
-								                <div class="col-lg-10">
-								                    <div class="text-white"><a ng-click="showProjectChrt()"><b>Projects ({{totalProjectCount}}</b>)</a></div>
-								                </div>
-								                <!-- <div class="col-lg-5">    
+			<section class="py-2" id="section11" style="height: 108px;">
+				<div class="row">
+					<div class="col-xl-3 col-md-6">
+						<ul class="list-group">
+							<li class="list-group-item gradient-warning text-white rounded">
+								<div class="row">
+									<div class="col-lg-2">
+										<div class="icon text-white bg-violet">
+											<i class="fas fa-book"></i>
+										</div>
+									</div>
+									<div class="col-lg-5">
+										<div class="text-white" style="text-align: left">
+											<a ng-click="showOdBook()"><b>Order Book</b></a>
+										</div>
+									</div>
+									<div class="col-lg-5" style="text-align: right">
+										<div class="text-blue">
+											<a ng-click="goOrderBook()"><b>Edit Order Book</b></a>
+										</div>
+									</div>
+
+								</div>
+							</li>
+							<li class="list-group-item gradient-warning text-white rounded">
+								<div class="row">
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>Q1:</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>Q2:</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>Q3:</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>Q4:</b>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<ul class="list-group">
+							<li class="list-group-item gradient-success text-white rounded">
+								<div class="row">
+									<div class="col-lg-2">
+										<div class="icon text-white bg-violet">
+											<i class="fas fa-chart-bar"></i>
+										</div>
+									</div>
+									<div class="col-lg-10">
+										<div class="text-white">
+											<a ng-click="showPnLChrt()"><b>Profit & Loss </b></a>
+										</div>
+									</div>
+
+								</div>
+							</li>
+							<li class="list-group-item gradient-success text-white rounded">
+								<div class="row">
+									<div class="col-lg-6">
+										<div class="text-white">
+											<b> Rev: $ {{totalRevenue}} M</b>
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="text-white">
+											<b>EBIDTA(%): {{totalEbidta}}</b>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<ul class="list-group">
+							<li class="list-group-item gradient-primary text-white rounded"><div
+									class="row">
+									<div class="col-lg-2">
+										<div class="icon text-white bg-violet">
+											<i class="fas fa-server"></i>
+										</div>
+									</div>
+									<div class="col-lg-5">
+										<div class="text-white">
+											<a ng-click="showProjectChrt()"><b>Projects
+													({{totalProjectCount}})</b></a>
+										</div>
+									</div>
+									<div class="col-lg-5">
+										<div class="text-white">
+											<a ng-click="showAssociateChrt()"><b>Associates
+													({{totalOffShoreCount+totalOnShoreCount}})</b></a>
+										</div>
+									</div>
+									<!-- <div class="col-lg-5">    
 								                </div> -->
-								            </div>
-								   </li>
-								  <li class="list-group-item gradient-primary text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-4">
-								                    <div class="samll text-white"><b>FP: {{totalFp}}</b></div>
-								                </div>
-								                <div class="col-lg-4">
-								                    <div class="samll text-white"><b>T&M: {{totalTnM}}</b></div>
-								                </div>
-								                 <div class="col-lg-4">
-								                    <div class="samll text-white"><b>Others: {{totalOther}}</b></div>
-								                </div>
-								            </div>
-								  </li>
-								</ul>
-							</div>
-			 				<div class="col-xl-3 col-md-6">
-			 					<ul class="list-group">
-								  <li class="list-group-item gradient-warning text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-2">
-								                    <div class="icon text-white bg-violet">
-														<i class="fas fa-users"></i>
-													</div>
-								                </div>
-								                <div class="col-lg-10">
-								                    <div class="text-white"><a ng-click="showAssociateChrt()"><b>Associates ({{totalOffShoreCount+totalOnShoreCount}})</b></a></div>
-								                </div>
-								                <!-- <div class="col-lg-5">    
-								                </div> -->
-								            </div>
-								   </li>
-								  <li class="list-group-item gradient-warning text-white rounded">
-								  			<div class="row">
-								                <div class="col-lg-6">
-								                    <div class="samll text-white"><b>Offshore: {{totalOffShoreCount}}</b></div>
-								                </div>
-								                <div class="col-lg-6">
-								                    <div class="text-white"><b>OnShore: {{totalOnShoreCount}}</b></div>
-								                </div>
-								            </div>
-								  </li>
-								</ul>
-			 				</div>      
-                            <div class="col-xl-3 col-md-6">
-	                            <ul class="list-group">
-									  <li class="list-group-item gradient-danger text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-2">
-									                    <div class="icon text-white bg-violet">
-															<i class="fas fa-book"></i>
-														</div>
-									                </div>
-									                <div class="col-lg-10">
-									                    <div class="text-white"><a ng-click="showInProgress()"><b>Order Book</b></a></div>
-									                </div>
-									                
-									            </div>
-									   </li>
-									  <li class="list-group-item gradient-danger text-white rounded">
-									  			<div class="row">
-										            <div class="col-lg-3">
-									                    <div class="samll text-white"><b>Q1:</b></div>
-									                </div>
-									                <div class="col-lg-3">
-									                    <div class="samll text-white"><b>Q2:</b></div>
-									                </div>
-									                 <div class="col-lg-3">
-									                    <div class="samll text-white"><b>Q3:</b></div>
-									                </div>
-									                <div class="col-lg-3">
-									                    <div class="samll text-white"><b>Q4:</b></div>
-									                </div>
-									            </div>
-									  </li>
-								</ul>
-                            </div>
-                        </div>
-					</section>
-					<section class="py-2" id="section22">
-						<div class="row">
-                            <div class="col-xl-3 col-md-6">
-                            	<ul class="list-group">
-									  <li class="list-group-item gradient-red text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-2">
-									                    <div class="icon text-white bg-violet">
-															<i class="fas fa-book"></i>
-														</div>
-									                </div>
-									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="showInProgress()"><b>AQT</b></a></div>
-									                </div>
-									                <div class="col-lg-5">    
-									                </div>
-									            </div>
-									   </li>
-									  <li class="list-group-item gradient-red text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-6">
-									                     <div class="text-white">AQT:</div> 
-									                </div>
-									                <div class="col-lg-6">
-									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
-									                </div>
-									            </div>
-									  </li>
-								</ul>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                   <ul class="list-group">
-									  <li class="list-group-item gradient-info text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-2">
-									                    <div class="icon text-white bg-violet">
-															<i class="fas fa-book"></i>
-														</div>
-									                </div>
-									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="showInProgress()"><b>NAD</b></a></div>
-									                </div>
-									                <div class="col-lg-5">    
-									                </div>
-									            </div>
-									   </li>
-									  <li class="list-group-item gradient-info text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-6">
-									                     <div class="text-white">NAD:</div> 
-									                </div>
-									                <div class="col-lg-6">
-									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
-									                </div>
-									            </div>
-									  </li>
-								</ul>     
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                            	 <ul class="list-group">
-									  <li class="list-group-item gradient-violet text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-2">
-									                    <div class="icon text-white bg-violet">
-															<i class="fas fa-book"></i>
-														</div>
-									                </div>
-									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="showInProgress()"><b>DLG</b></a></div>
-									                </div>
-									                <div class="col-lg-5">    
-									                </div>
-									            </div>
-									   </li>
-									  <li class="list-group-item gradient-violet text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-6">
-									                     <div class="text-white">DLG:</div> 
-									                </div>
-									                <div class="col-lg-6">
-									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
-									                </div>
-									            </div>
-									  </li>
-								</ul>
-                                
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                            	<ul class="list-group">
-									  <li class="list-group-item gradient-secondary text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-2">
-									                    <div class="icon text-white bg-violet">
-															<i class="fas fa-book"></i>
-														</div>
-									                </div>
-									                <div class="col-lg-5">
-									                    <div class="text-white"><a ng-click="showInProgress()"><b>CaaS:</b></a></div>
-									                </div>
-									                <div class="col-lg-5">    
-									                </div>
-									            </div>
-									   </li>
-									  <li class="list-group-item gradient-secondary text-white rounded">
-									  			<div class="row">
-									                <div class="col-lg-6">
-									                     <div class="text-white">CaaS:</div> 
-									                </div>
-									                <div class="col-lg-6">
-									                    <!-- <div class="text-white"><b>EBIDTA%: {{totalEbidta}}</b></div> -->
-									                </div>
-									            </div>
-									  </li>
-								</ul>
-                            </div>
-                        </div>
+								</div></li>
+							<li class="list-group-item gradient-primary text-white rounded">
+								<div class="row">
+									<div class="col-lg-4">
+										<div class="samll text-white">
+											<b>FP: {{totalFp}}</b>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="samll text-white">
+											<b>T&M: {{totalTnM}}</b>
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="samll text-white">
+											<b>Others: {{totalOther}}</b>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="col-xl-3 col-md-6">
+						<ul class="list-group">
+							<li class="list-group-item gradient-danger text-white rounded">
+								<div class="row">
+									<div class="col-lg-2">
+										<div class="icon text-white bg-violet">
+											<i class="fas fa-book"></i>
+										</div>
+									</div>
+									<div class="col-lg-10">
+										<div class="text-white">
+											<a ng-click="showInProgress()"><b>Operational
+													Parameter</b></a>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="list-group-item gradient-danger text-white rounded">
+								<div class="row">
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>AQT</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>NAD</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>DLG</b>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="samll text-white">
+											<b>CaaS</b>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</section>
 			<section class="py-2" id="section33">
-			
 				<div class="row">
-                       <div class="col-xl-3 col-md-6">
-                       		<h4><span class="text-muted "><b>Apply Filter </b></span></h4>
-                       </div>
-                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
-                       		<select class="btn btn-secondary" name="pgm" ng-options="programManager as programManager.name for programManager in pgManagers" ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
-						</select>
-                       </div>
-                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
-                       		<select name="pm" class="btn btn-secondary" ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
-						</select>
-                       </div>
-                       <div class="col-xl-3 col-md-6" style="width:100px; overflow:hidden">
-                       		<select name="prj" class="btn btn-secondary" ng-options="project as project.pname for project in projects" ng-model="selProject" ng-change="getDetailsDataPrj(selProject)" >
-						</select>
-                       </div>
-                  </div>
-		
-	<!-- 			<div class="row mb-5 bg-faded rounded align-items-center" style="border-top-width: 10px;padding-top: 0px;">
-					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
-						<h4><span class="text-muted "><b>Apply Filter </b></span></h4>
-					</div>
-					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
-						<select class="btn btn-secondary" name="pgm" ng-options="programManager as programManager.name for programManager in pgManagers" ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select class="btn btn-secondary" name="pgm" ng-model="pgmdata1"
+							ng-change="getDetailsDataPgm(pgmdata1)">
 						</select>
 					</div>
-					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0">
-						<select name="pm" class="btn btn-secondary" ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select class="btn btn-secondary" name="pgm"
+							ng-options="programManager as programManager.name for programManager in pgManagers"
+							ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
 						</select>
 					</div>
-					<div class="col-xl-3 col-lg-6 mb-4 mb-xl-0" >
-						<select name="prj" class="btn btn-secondary" ng-options="project as project.pname for project in projects" ng-model="selProject" ng-change="getDetailsDataPrj(selProject)" >
+					<div class="col-xl-3 col-md-6"
+						style="width: 100px;">
+						<select name="pm" class="btn btn-secondary"
+							ng-options="name as name.pmname for name in manNames"
+							ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
 						</select>
 					</div>
-				</div> -->
+					<div class="col-xl-3 col-md-6"
+						style="width: 100px;">
+						<select name="prj" class="btn btn-secondary"
+							ng-options="project as project.pname for project in projects"
+							ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
+						</select>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section88" ng-show="showOB">
+				<div class="row shadow-lg mb-4">
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<div class="col-lg-12">
+										<table class="table-sm table-bordered"
+											style="border: 2px solid black; width: 100%;">
+											<thead>
+												<tr style="background-color: #a82a2a; color: #ffffff">
+													<th>Account Name</th>
+													<th>Q4FY20</th>
+													<th>Q1FY21</th>
+													<th>Q2FY21</th>
+													<th>Q3FY21</th>
+													<th>Q4FY21</th>
+													<th>FY21</th>
+													<th>Q1FY22</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Target (T)</td>
+													<td></td>
+													<td>$3.38</td>
+													<td>$3.38</td>
+													<td>$3.38</td>
+													<td>$3.38</td>
+													<td>$13.50</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Target (BHAG)</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Order Book (OB) & Pending PO</td>
+													<td></td>
+													<td>$1.69</td>
+													<td>$2.15</td>
+													<td>$2.32</td>
+													<td>$1.62</td>
+													<td>$7.79</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Renewal (R)</td>
+													<td></td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.40</td>
+													<td>$0.40</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Commit (P4) (C)</td>
+													<td></td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Strong Upside (P3.1) (SU)</td>
+													<td></td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td>$0.00</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Forecast (F) (=OB+R+C+SU)</td>
+													<td></td>
+													<td>$1.69</td>
+													<td>$2.15</td>
+													<td>$2.32</td>
+													<td>$2.02</td>
+													<td>$8.19</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Gap (=T-F)</td>
+													<td></td>
+													<td>$1.68</td>
+													<td>$1.22</td>
+													<td>$1.05</td>
+													<td>$1.35</td>
+													<td>$5.31</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Last Forecast</td>
+													<td></td>
+													<td>$0.22</td>
+													<td>$0.35</td>
+													<td>$0.41</td>
+													<td>$0.41</td>
+													<td>$1.39</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Change from Last Forecast</td>
+													<td></td>
+													<td>$1.47</td>
+													<td>$1.80</td>
+													<td>$1.92</td>
+													<td>$1.61</td>
+													<td>$6.80</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Upside(P3)</td>
+													<td></td>
+													<td>$0.00</td>
+													<td>$0.06</td>
+													<td>$0.18</td>
+													<td>$0.12</td>
+													<td>$0.36</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Pipeline(P0 to P3)</td>
+													<td></td>
+													<td>$0.00</td>
+													<td>$0.06</td>
+													<td>$0.18</td>
+													<td>$0.12</td>
+													<td>$0.36</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Achievement %</td>
+													<td>0.00%</td>
+													<td>50.16%</td>
+													<td>63.79%</td>
+													<td>68.87%</td>
+													<td>59.94%</td>
+													<td>60.69%</td>
+													<td></td>
+
+												</tr>
+												<tr>
+													<td>Forecasted Growth (QoQ)</td>
+													<td></td>
+													<td>0.0%</td>
+													<td>27.2%</td>
+													<td>8.0%</td>
+													<td>-13.0%</td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<div class="col-lg-12">
+										<!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+										<hc-chart options="chartOBForecast"></hc-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</section>
 			<section class="py-2" id="section44" ng-show="showProjects">
-            <div class="row shadow-lg mb-4">
-				<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-                <div class="card shadow-lg mb-3">
-                  <div class="card-body">
-                    <div class="row align-items-center flex-row">
-                      <!-- <div class="col-lg-3">
-                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-                      </div> -->
-                      <div class="col-lg-12">
-                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
-                      	  <hc-pie-chart title="Project Technology" data="pieData"></hc-pie-chart>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card shadow-lg mb-3">
-                  <div class="card-body">
-                    <div class="row align-items-center flex-row">
-                      <!-- <div class="col-lg-5">
-                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-                      </div> -->
-                      <div class="col-lg-12">
-                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
-						  <hc-chart options="chartOptionStat"></hc-chart>                    
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-                <div class="card shadow-lg mb-3">
-                  <div class="card-body">
-                    <div class="row align-items-center flex-row">
-                      <!-- <div class="col-lg-3">
-                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-                      </div> -->
-                      <div class="col-lg-12">
-                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
-                        <hc-pie-chart title="Project Type" data="pieFrPtch"></hc-pie-chart>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card shadow-lg mb-3">
-                  <div class="card-body ">
-                    <div class="row align-items-center flex-row">
-                     <!--  <div class="col-lg-5">
-                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-                      </div> -->
-                      <div class="col-lg-12">
-                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
-                      	 <hc-chart options="chartOptionsMan"></hc-chart>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </section>
-            <section class="py-2" id="section55" ng-show="showAssociates">
-	            <div class="row shadow-lg mb-4">
-				  <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-3">
-	                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
-	                      	 <hc-pie-chart title="Geographic Distribution" data="pieFrCntry"></hc-pie-chart>
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-5">
-	                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
-							   <hc-chart options="chartOptionsHtr"></hc-chart>                  
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
-	              <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-3">
-	                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
-	                       	<hc-chart options="chartOptionsOnOff"></hc-chart> 
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body ">
-	                    <div class="row align-items-center flex-row">
-	                     <!--  <div class="col-lg-5">
-	                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
-	                      	 <hc-pie-chart title="Band Distribution" data="pieFrBand"></hc-pie-chart>
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
-	            </div>
-            </section>
-            <section class="py-2" id="section66" ng-show="showPnL">
-	            <div class="row shadow-lg mb-4">
-	            	<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-		                <div class="card shadow-lg mb-3">
-		                  <div class="card-body">
-		                    <div class="row align-items-center flex-row">
-		                      <!-- <div class="col-lg-3">
-		                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-		                      </div> -->
-		                      <div class="col-lg-12">
-		                        <!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
-		                      	 <hc-chart options="chartProjRevenue"></hc-chart> 
-		                      </div>
-		                    </div>
-		                  </div>
-		                </div>
-		                <div class="card shadow-lg mb-3">
-		                  <div class="card-body">
-		                    <div class="row align-items-center flex-row">
-		                      <!-- <div class="col-lg-5">
-		                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-		                      </div> -->
-		                      <div class="col-lg-12">
-		                        <!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
-								   <!-- <hc-chart options="chartOptionsHtr"></hc-chart>  -->                 
-		                      </div>
-		                    </div>
-		                  </div>
-		                </div>
-	              	</div>
-	              <div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body">
-	                    <div class="row align-items-center flex-row">
-	                      <!-- <div class="col-lg-3">
-	                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
-	                       	 <hc-chart options="chartProjEbidta"></hc-chart>
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	                <div class="card shadow-lg mb-3">
-	                  <div class="card-body ">
-	                    <div class="row align-items-center flex-row">
-	                     <!--  <div class="col-lg-5">
-	                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
-	                      </div> -->
-	                      <div class="col-lg-12">
-	                        <!-- <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas>  -->
-	                      	
-	                      </div>
-	                    </div>
-	                  </div>
-	                </div>
-	              </div>
-		        </div>
-            </section>
+				<div class="row shadow-lg mb-4">
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<div class="col-lg-12">
+										<hc-pie-chart title="Project Technology" data="pieData"></hc-pie-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<div class="col-lg-12">
+										<!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+										<hc-pie-chart title="Project Type" data="pieFrPtch"></hc-pie-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section55" ng-show="showAssociates">
+				<div class="row shadow-lg mb-4">
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<!--       <div class="card shadow-lg mb-3">
+			                  <div class="card-body">
+			                    <div class="row align-items-center flex-row">
+			                      <div class="col-lg-3">
+			                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+			                      </div>
+			                      <div class="col-lg-12">
+			                        <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>  
+			                      	 <hc-pie-chart title="Geographic Distribution" data="pieFrCntry"></hc-pie-chart>
+			                      </div>
+			                    </div>
+			                  </div>
+			                </div> -->
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<!-- <div class="col-lg-5">
+			                        <span class="text-muted small"><b>Delivery Ownership</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+			                      </div> -->
+									<div class="col-lg-12">
+										<!-- <canvas id="doughnutown" class="chart chart-doughnut" chart-colors="piManColors"  chart-data="cManDataPi" chart-labels="tManLabelsPi"></canvas> -->
+										<hc-chart options="chartOptionsHtr"></hc-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<!-- <div class="col-lg-3">
+			                        <span class="text-muted small"><b>Project Type</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+			                      </div> -->
+									<div class="col-lg-12">
+										<!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+										<hc-chart options="chartOptionsOnOff"></hc-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="card shadow-lg mb-3">
+			                  <div class="card-body ">
+			                    <div class="row align-items-center flex-row">
+			                      <div class="col-lg-5">
+			                        <span class="text-muted small"><b>Project Status</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+			                      </div>
+			                      <div class="col-lg-12">
+			                        <canvas id="doughnutstatus" class="chart chart-doughnut" chart-colors ="piStatusColors" chart-data="statusDataPi" chart-labels="statusLabelsPi"></canvas> 
+			                      	 <hc-pie-chart title="Band Distribution" data="pieFrBand"></hc-pie-chart>
+			                      </div>
+			                    </div>
+			                  </div>
+			                </div> -->
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section66" ng-show="showPnL">
+				<div class="row shadow-lg mb-4">
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<!-- <div class="col-lg-3">
+				                        <span class="text-muted small"><b>Project Tech</b></span><span class="dot bg-green d-inline-block ml-3"></span>
+				                      </div> -->
+									<div class="col-lg-12">
+										<!-- <canvas id="base" class="chart chart-pie" style="max-height: 25rem !important;" chart-data="prjTechCnt" chart-labels="prjTech" ></canvas>   -->
+										<!-- <hc-chart options="chartProjRevenue"></hc-chart> -->
+										<table class="table-sm table-bordered" style="border:2px solid black; width:auto;" >
+										    <thead >
+											<tr style="text-align: center;background-color:#a82a2a; color: #ffffff;">
+										        <th style="width:15%;text-align: center;" rowspan="2"></th>
+										        <th colspan="3" style="text-align: center;">Q1</th>
+												<th colspan="3" style="text-align: center;">Q2</th>
+												<th colspan="3" style="text-align: center;">Q3</th>
+										        <th colspan="3" style="text-align: center;">Q4</th>
+												<th rowspan="2">Total</th>
+										      </tr>
+										      <tr style="background-color:#a82a2a; color: #ffffff;">
+										        	
+										        <th style="width:6.5%;text-align: center;">Apr</th>
+										        <th style="width:6.5%;text-align: center;">May</th>
+												<th style="width:6.5%;text-align: center;">Jun</th>
+												<th style="width:6.5%;text-align: center;">Jul</th>
+												<th style="width:6.5%;text-align: center;">Aug</th>
+												<th style="width:6.5%;text-align: center;">Sep</th>
+												<th style="width:6.5%;text-align: center;">Oct</th>
+												<th style="width:6.5%;text-align: center;">Nov</th>	
+										        <th style="width:6.5%;text-align: center;">Dec</th>
+										        <th style="width:6.5%;text-align: center;">Jan</th>
+												<th style="width:6.5%;text-align: center;">Feb</th>
+												<th style="width:6.5%;text-align: center;">Mar</th>
+										      </tr>
+										    </thead>
+										    <tbody>
+										      <tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData">
+										        <td>{{pnlData.attribute}}</td>
+										        <td>{{pnlData.monApr}}</td>
+										        <td>{{pnlData.monMay}}</td>
+										        <td>{{pnlData.monJun}}</td>
+										        <td>{{pnlData.monJul}}</td>
+										        <td>{{pnlData.monAug}}</td>
+										        <td>{{pnlData.monSep}}</td>
+										        <td>{{pnlData.monOct}}</td>
+										        <td>{{pnlData.monNov}}</td>
+										        <td>{{pnlData.monDec}}</td>
+										        <td>{{pnlData.monJan}}</td>
+										        <td>{{pnlData.monFeb}}</td>
+										        <td>{{pnlData.monMar}}</td>
+										        <td>{{pnlData.total}}</td>
+										      </tr>
+										    </tbody>
+										  </table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
+						<div class="card shadow-lg mb-3">
+							<div class="card-body">
+								<div class="row align-items-center flex-row">
+									<div class="col-lg-12">
+										<!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
+										<hc-chart options="chartProjRevenue"></hc-chart>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 		</div>
 		<footer
 			class="footer shadow-lg bg-maroon align-self-end py-3 px-xl-5 w-100">
@@ -614,19 +749,3 @@ tr:nth-child(even) {
 	</div>
 </div>
 
-<div class="modal fade" id="alertModal" role="dialog">
-
-		<!-- Change class .modal-sm to change the size of the modal -->
-		<div class="modal-dialog modal-sm" role="document" style="margin-top: 197px;margin-left: 543px;">
-			<div class="modal-content">
-
-				<div class="modal-body" style="height: 65px">
-					<h5><b><p id="alertMsg"></p></b></h5>
-				</div>
-				<div class="modal-footer" style="text-align: center;justify-content: center;padding-bottom: 4px;padding-top: 4px;">
-					<button type="button" class="btn btn-primary btn-sm"
-						data-dismiss="modal" ng-click="">Ok</button>
-				</div>
-			</div>
-		</div>
-	</div>

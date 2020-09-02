@@ -29,4 +29,6 @@ public interface PmrprojDao {
 
   public List<Pmrdata> getPmSeriesData(User user);
 
+  public List<ProfitAndLossData> getPnLSummary(User user);
+
 }

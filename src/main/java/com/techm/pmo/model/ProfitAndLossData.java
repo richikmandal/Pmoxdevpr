@@ -48,6 +48,21 @@ public class ProfitAndLossData {
   private String ebidta;
   private String pgmId;
   private String pmId;
+  
+  private String attribute;
+  private String monJan;
+  private String monFeb;
+  private String monMar;
+  private String monApr;
+  private String monMay;
+  private String monJun;
+  private String monJul;
+  private String monAug;
+  private String monSep;
+  private String monOct;
+  private String monNov;
+  private String monDec;
+  private String total;
 
   public String getProjectId() {
     return projectId;
@@ -391,6 +406,118 @@ public class ProfitAndLossData {
 
   public void setPmId(String pmId) {
     this.pmId = pmId;
+  }
+
+  public String getAttribute() {
+    return attribute;
+  }
+
+  public void setAttribute(String attribute) {
+    this.attribute = attribute;
+  }
+
+  public String getMonJan() {
+    return monJan;
+  }
+
+  public void setMonJan(String monJan) {
+    this.monJan = monJan;
+  }
+
+  public String getMonFeb() {
+    return monFeb;
+  }
+
+  public void setMonFeb(String monFeb) {
+    this.monFeb = monFeb;
+  }
+
+  public String getMonMar() {
+    return monMar;
+  }
+
+  public void setMonMar(String monMar) {
+    this.monMar = monMar;
+  }
+
+  public String getMonApr() {
+    return monApr;
+  }
+
+  public void setMonApr(String monApr) {
+    this.monApr = monApr;
+  }
+
+  public String getMonMay() {
+    return monMay;
+  }
+
+  public void setMonMay(String monMay) {
+    this.monMay = monMay;
+  }
+
+  public String getMonJun() {
+    return monJun;
+  }
+
+  public void setMonJun(String monJun) {
+    this.monJun = monJun;
+  }
+
+  public String getMonJul() {
+    return monJul;
+  }
+
+  public void setMonJul(String monJul) {
+    this.monJul = monJul;
+  }
+
+  public String getMonAug() {
+    return monAug;
+  }
+
+  public void setMonAug(String monAug) {
+    this.monAug = monAug;
+  }
+
+  public String getMonSep() {
+    return monSep;
+  }
+
+  public void setMonSep(String monSep) {
+    this.monSep = monSep;
+  }
+
+  public String getMonOct() {
+    return monOct;
+  }
+
+  public void setMonOct(String monOct) {
+    this.monOct = monOct;
+  }
+
+  public String getMonNov() {
+    return monNov;
+  }
+
+  public void setMonNov(String monNov) {
+    this.monNov = monNov;
+  }
+
+  public String getMonDec() {
+    return monDec;
+  }
+
+  public void setMonDec(String monDec) {
+    this.monDec = monDec;
+  }
+
+  public String getTotal() {
+    return total;
+  }
+
+  public void setTotal(String total) {
+    this.total = total;
   }
   
 }

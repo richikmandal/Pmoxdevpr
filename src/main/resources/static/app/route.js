@@ -42,7 +42,16 @@ angular.module('PmoxApp').config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'HomeController'
             }
         }
-    }).state('page-not-found', {
+    }).state('odbook', {
+      parent: 'nav',
+      url: '/',
+      views: {
+          'content@': {
+              templateUrl: 'app/views/odbook.html',
+              controller: 'OdBookController'
+          }
+      }
+     }).state('page-not-found', {
         parent: 'nav',
         url: '/page-not-found',
         views: {
