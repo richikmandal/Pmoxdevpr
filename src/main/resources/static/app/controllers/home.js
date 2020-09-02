@@ -18,7 +18,6 @@ angular.module('PmoxApp')
         $scope.prjTypeCnt = [];
         $scope.pnlSummaryData = [];
         $scope.init = function () {
-
              $scope.disableTabs=true;           
              $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
              

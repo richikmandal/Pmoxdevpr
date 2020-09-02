@@ -41,6 +41,7 @@ angular.module('PmoxApp').config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: 'app/views/home.html',
                 controller: 'HomeController'
             }
+            
         }
     }).state('odbook', {
       parent: 'nav',

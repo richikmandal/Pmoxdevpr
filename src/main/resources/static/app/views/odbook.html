@@ -1,0 +1,1494 @@
+<script>
+
+$(document).ready(function() {
+  var table = $('#example').DataTable( {
+      scrollY:        "300px",
+      scrollX:        true,
+      scrollCollapse: true,
+      paging:         false,
+      fixedColumns:   {
+          leftColumns: 4
+      }
+  } );
+} );
+
+$(function() {
+  //$('#datetimepicker1').datetimepicker();
+  $('#datetimepicker1').datetimepicker({
+    format: 'L'
+  });
+ 
+  
+});
+
+$(function() {
+  
+  $('#datetimepicker2').datetimepicker({
+    format: 'L'
+  });
+  
+});
+
+</script>
+
+
+<style>
+
+th, td { white-space: nowrap; }
+
+div.dataTables_wrapper {
+    width: 95%;
+    margin-left: 20px;
+    margin-right: 0px;
+}
+
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 99999;
+  display: none;
+  width: 150px;
+  height: 150px;
+  margin: -15px 0 0 -15px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+
+}
+
+.bg-maroon {
+  background-color: maroon; !important;
+}
+
+.bg-threedface {
+  background-color: threedface; !important;
+}
+.btn-5:hover {
+
+  background:#E8E8E8;
+}
+.btn-6:hover {
+  border: #282828 solid 1px;
+  background:#F5F5F5;
+}
+
+.form-control{
+
+	height: 27px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+</style>
+<div class="d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="OdBookController" >
+
+	<div class="page-holder w-100 d-flex flex-wrap">
+		<div class="container" style="margin-left: 20px;margin-right: 20px;">
+			<section class="py-2" id="section11" style="width: 1300px;" ng-show="!showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" ng-show="!showEditOb">
+							<div class="col-sm-2 col-md-2 col-lg-2" style="text-align: left;padding-top: 9px;" ng-click="goHome()">
+								<div class="text-blue" style="width:100%;"><i class="fa fa-arrow-left" style="padding-right: 5px;padding-left: 10px;"></i>Back</div>
+							</div>
+							<div class="col-sm-10 col-md-10 col-lg-10" style="text-align: center;padding-top: 9px;">
+								Order Book Management
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section22" style="width: 1300px;" ng-show="showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" ng-show="showEditOb">
+							<div class="col-sm-2 col-md-2 col-lg-2" style="text-align: left;padding-top: 9px;" ng-click="goOrderBook()">
+								<div class="text-blue" style="width:100%;"><i class="fa fa-arrow-left" style="padding-right: 5px;padding-left: 10px;"></i>Back</div>
+							</div>
+							<div class="col-sm-10 col-md-10 col-lg-10" style="text-align: center;padding-top: 9px;">
+								Add/Modify Order Book
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section99" style="width: 1300px;" ng-show="showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" ng-show="showEditOb">
+							<div class="col-sm-12 col-md-12 col-lg-12" style="text-align: center;padding-top: 9px;" >
+								<div class="form-check-inline">
+								  <label class="form-check-label" style="padding-right: 30px;">
+								    <input type="radio" class="form-check-input" name="optradio">PO Received
+								  </label>
+								</div>
+								<div class="form-check-inline">
+								  <label class="form-check-label" style="padding-right: 30px;">
+								    <input type="radio" class="form-check-input" name="optradio">PO Pending
+								  </label>
+								</div>
+								<div class="form-check-inline disabled">
+								  <label class="form-check-label" style="padding-right: 30px;">
+								    <input type="radio" class="form-check-input" name="optradio" >PO Forecast
+								  </label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-2" id="section33" style="width: 1300px;" ng-show="showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="width: 100%;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" style="width: 100%;padding-left: 20px;">	
+								<table class="stripe row-border order-column" style="width:100%;padding-left: 65px;padding-right: 5px;">
+							        <thead>
+							            <tr>
+							                <th style="text-align: center;width: 20%;">PO#</th>
+							                <th style="text-align: center;width: 20%;">Contract#</th>
+							                <th style="text-align: center;width: 20%;">PO Amount</th>
+							                <th style="text-align: center;width: 20%;">Start Date</th>
+							                <th style="text-align: center;width: 20%;">End Date</th>
+							                						           
+							             </tr>
+							             <tr>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" >
+											        <div class='input-group'>
+											          <select id="vertical" name="poNumber" class="form-control" style="height: 27px;width: 100%;">
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+							                </th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="padding-right: 2px">
+											        <div class='input-group'>
+											          <select id="vertical" name="contractNo" class="form-control" style="height: 27px;width: 100%;">
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" id="poValue" />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                 	<div class="form-group">
+											        <div class='input-group date' id='datetimepicker1'>
+											          <input type='text' class="form-control" id="startDate" ng-model="startDate" />
+											          <span class="input-group-addon" style="padding-bottom: 2px;height: 14px;padding-top: 4px;">
+											            <span class="glyphicon glyphicon-calendar">
+											            </span>
+											          </span>
+											        </div>
+										      	</div>
+										    </th>
+							                <th style="padding-right: 2px">
+								                <div class="form-group">
+											        <div class='input-group date' id='datetimepicker2'>
+											          <input type='text' class="form-control" id="endDate" ng-model="endDate" ng-blur="enableDateRange()"/>
+											          <span class="input-group-addon" style="padding-bottom: 2px;height: 14px;padding-top: 4px;">
+											            <span class="glyphicon glyphicon-calendar"></span>
+											          </span>
+											        </div>
+											    </div>
+										    </th>
+							            </tr>
+							        </thead>
+							     </table>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="py-2" id="section33" style="width: 1300px;" ng-show="showEditOb">
+					<div class="card" style="width: 100%;">
+					<div class="card-body" style="width: 100%;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" style="width: 100%;padding-left: 20px;">	
+								<table class="stripe row-border order-column" style="width:100%;padding-left: 65px;padding-right: 5px;">
+							        <thead>
+							            <tr>
+							                <th style="text-align: center;width: 16.6%;">Project ID</th>
+							                <th style="text-align: center;width: 16.6%;">Project Desc</th>
+							                <th style="text-align: center;width: 16.6%;">IBG_Head_D</th>
+							                <th style="text-align: center;width: 16.6%;">IBU_Head_D</th>
+							                <th style="text-align: center;width: 16.6%;">PGM</th>
+							                <th style="text-align: center;width: 16.6%;">PM</th>							           
+							             </tr>
+							             <tr>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" >
+											        <div class='input-group'>
+											          	<select id="vertical" name="vertical" class="form-control" style="height: 27px;width: 100%;">
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+							                </th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="padding-right: 2px">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                 	<div class="form-group">
+											        <div class='input-group date' id='datetimepicker1'>
+											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        </div>
+										      	</div>
+										    </th>
+							                <th style="padding-right: 2px">
+								                <div class="form-group">
+											        <div class='input-group date' id='datetimepicker2'>
+											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        </div>
+											    </div>
+										    </th>
+										    <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 28px;width: 225px;margin-bottom: 13px;">
+											        <div class='input-group'>
+											          	<input type='text' class="form-control" disabled id="contractNumber" />
+											        </div>
+										      	</div>
+											</th>
+							            </tr>
+							            <tr>
+							                <th style="text-align: center;width: 25%;">IBG_Head_S</th>
+							                <th style="text-align: center;width: 16.6%;">IBU_Head_S</th>
+							                <th style="text-align: center;width: 16.6%;">BRM</th>
+							                <th style="text-align: center;width: 16.6%;">CDM</th>
+							                <th style="text-align: center;width: 16.6%;">ENGMT_MODEL</th>
+							                <th style="text-align: center;width: 16.6%;">PROJ_TYPE</th>							           
+							             </tr>
+							             <tr>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+											          	<input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+											         <input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+												         <input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+												          <input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+										    <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 35px;width: 100%;">
+											        <div class='input-group'>
+												          <input type='text' class="form-control" disabled  />
+											        </div>
+										      	</div>
+											</th>
+							            </tr>
+							        </thead>
+							     </table>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="py-2" id="section44" style="width: 1300px;" ng-show="showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="width: 100%;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" style="width: 100%;padding-left: 20px;">	
+								<table class="stripe row-border order-column" style="width:100%;padding-left: 65px;padding-right: 5px;">
+							        <thead>
+							            <tr>
+							            	<th style="text-align: center;width: 14.28%;">Vertical</th>	
+							                <th style="text-align: center;width: 14.28%;">Super_Biz</th>
+							                <th style="text-align: center;width: 14.28%;">Biz</th>
+							                <th style="text-align: center;width: 14.28%;">Sub_Biz</th>
+							                <th style="text-align: center;width: 14.28%;">Competency</th>
+							                <th style="text-align: center;width: 14.28%;">Proj_Anny</th>
+							                <th style="text-align: center;width: 14.28%;">HW_TW</th>							           
+							             </tr>
+							             <tr>
+							             <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+											          	<select id="vertical" name="vertical" class="form-control">
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+											          	<select id="vertical" name="vertical" class="form-control" >
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+											          <select id="vertical" name="vertical" class="form-control" >
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+											          <select id="vertical" name="vertical" class="form-control" >
+														  <option value="Select">Select</option>
+														</select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+												          <select id="vertical" name="vertical" class="form-control" >
+															  <option value="Select">Select</option>
+														  </select>
+											        </div>
+										      	</div>
+											</th>
+							                <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+												          <select id="vertical" name="vertical" class="form-control" >
+															  <option value="Select">Select</option>
+														  </select>
+											        </div>
+										      	</div>
+											</th>
+										    <th style="padding-right: 2px">
+							                	<div class="form-group" style="height: 27px;width: 100%;">
+											        <div class='input-group'>
+												          <select id="vertical" name="vertical" class="form-control" >
+															  <option value="Select">Select</option>
+														  </select>
+											        </div>
+										      	</div>
+											</th>
+							            </tr>
+							        </thead>
+							     </table>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="py-2" id="section55" style="width: 1300px;" ng-show="!showEditOb">
+					<div class="card" style="width: 100%;">
+						<div class="card-body" style="padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12" style="text-align: center;padding-top: 3px;padding-bottom: 3px;">
+									<button type="button" class="btn btn-primary btn-icon-primary" style="height: 24px;padding-top: 3px;" ng-click="addOrderBook()">
+										Add
+									</button>
+									<button type="button" class="btn btn-primary btn-icon-primary" style="height: 24px;padding-top: 3px;" ng-click="modifyOrderBook()">
+										Modify
+									</button>
+									<button type="button" class="btn btn-primary btn-icon-primary" style="height: 24px;padding-top: 3px;" ng-click="deleteOrderBook()">
+										Delete
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="py-2" id="section66" style="width: 1300px;" ng-show="!showEditOb">
+					<div class="card" style="width: 100%;">
+						<div class="card-body" style="width: 100%;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+							<div class="row" style="width: 100%;"">	
+									<table id="example" class="stripe row-border order-column" style="width:100%">
+								        <thead>
+								            <tr>
+								            	<th>Select</th>
+								                <th>PO#</th>
+								                <th>PO Value</th>
+								                <th>Contract#</th>
+								                <th>Start date</th>
+								                <th>End Date</th>
+								                <th>Start date</th>
+								                <th>Vertical</th>
+								                <th>Apr</th>
+								                <th>May</th>
+								                <th>Jun</th>
+								                <th>Q1</th>
+								                <th>Jul</th>
+								                <th>Aug</th>
+								                <th>Sep</th>
+								                <th>Q2</th>
+								                <th>Oct</th>
+								                <th>Nov</th>
+								                <th>Dec</th>
+								                 <th>Q3</th>
+								                <th>Jan</th>
+								                <th>Feb</th>
+								                <th>Mar</th>
+								                <th>Q4</th>
+								            </tr>
+								        </thead>
+								        <tbody>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								               	<td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								               <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								               <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								               <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            <td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								            <tr>
+								            	<td><label><input type="radio" name="optradio"></label></td>
+								                <td>PO#</td>
+								                <td>PO Value</td>
+								                <td>Contract#</td>
+								                <td>Start date</td>
+								                <td>End Date</td>
+								                <td>Start date</td>
+								                <td>Vertical</td>
+								                <td>Apr</td>
+								                <td>May</td>
+								                <td>Jun</td>
+								                <td>Q1</td>
+								                <td>Jul</td>
+								                <td>Aug</td>
+								                <td>Sep</td>
+								                <td>Q2</td>
+								                <td>Oct</td>
+								                <td>Nov</td>
+								                <td>Dec</td>
+								                <td>Q3</td>
+								                <td>Jan</td>
+								                <td>Feb</td>
+								                <td>Mar</td>
+								                <td>Q4</td>
+								            </tr>
+								        </tbody>
+								    </table>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section class="py-2" id="section33" style="width: 1300px;" ng-show="showEditOb">
+				<div class="card" style="width: 100%;">
+					<div class="card-body" style="width: 100%;padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
+						<div class="row" style="width: 100%;padding-left: 20px;">	
+								<table class="stripe row-border order-column" style="width:100%;padding-left: 65px;padding-right: 5px;">
+							        <thead>
+							            <tr>
+							                <th style="text-align: center;width: 10%;">Month</th>
+							                <th style="text-align: center;width: 7.5%;">Apr</th>
+							                <th style="text-align: center;width: 7.5%;">May</th>
+							                <th style="text-align: center;width: 7.5%;">Jun</th>
+							                <th style="text-align: center;width: 7.5%;">Jul</th>
+							                <th style="text-align: center;width: 7.5%;">Aug</th>
+							                <th style="text-align: center;width: 7.5%;">Sep</th>
+							                <th style="text-align: center;width: 7.5%;">Oct</th>
+							                <th style="text-align: center;width: 7.5%;">Nov</th>
+							                <th style="text-align: center;width: 7.5%;">Dec</th>
+							                <th style="text-align: center;width: 7.5%;">Jan</th>
+							                <th style="text-align: center;width: 7.5%;">Feb</th>
+							                <th style="text-align: center;width: 7.5%;">Mar</th>
+							     
+							                						           
+							             </tr>
+							             <tr>
+							                <th style="text-align: center;width: 10%;">FY 19-20</th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							            </tr>
+							            <tr>
+							                <th style="text-align: center;width: 10%;">FY 20-21</th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							            </tr>
+							            <tr>
+							                <th style="text-align: center;width: 10%;">FY 21-22</th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							            </tr>
+							        </thead>
+							     </table>
+							</div>
+						</div>
+					</div>
+				</section>
+				</div>
+				<footer
+					class="footer shadow-lg bg-maroon align-self-end py-3 px-xl-5 w-100">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6 text-center text-md-left text-primary">
+								<p class="mb-2 mb-md-0">Tech Mahindra &copy;</p>
+							</div>
+							<div class="col-md-6 text-center text-md-right text-gray-400">
+								<p class="mb-0">
+									Design by <a href="https://Tech Mahindra.com/admin-templates"
+										class="external text-gray-400">Techmahindra</a>
+								</p>
+								<!-- Please do not remove the backlink to us unless you support further theme's development at https://Tech Mahindra.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+							</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+</div>
+

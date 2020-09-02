@@ -20,7 +20,6 @@ import com.techm.pmo.service.PmrService;
 @Service("pmrService")
 public class PmrServiceImpl implements PmrService {
   
-  
 	@Autowired
 	private PmrprojDao pmrprojdao;
 	@Override

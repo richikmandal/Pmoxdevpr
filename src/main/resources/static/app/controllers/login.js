@@ -1,7 +1,7 @@
 angular.module('PmoxApp')
 // Creating the Angular Controller
     .controller('LoginController', function ($http, $scope, $state, AuthService, $rootScope) {
-        // method for login
+    
     	 $scope.showdropdown=false;
          $scope.showlogin=true;
          $scope.showenter=false;

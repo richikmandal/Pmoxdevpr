@@ -33,7 +33,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   @Qualifier("jdbcMysql")
   private JdbcTemplate jdbcMysql;
 
-  private String       getPrjCntFrUser     = "SELECT COUNT(*) FROM PMOX.T_PROJECT_MASTER ";
+  private String      getPrjCntFrUser     = "SELECT COUNT(*) FROM PMOX.T_PROJECT_MASTER ";
 
   private String       getPmrDatafrUser    =
       "SELECT Business_Unit, projectId, projectDesc, custId, IBU, IBUDescription,  IbuHeadName, Status, IBG_Description, Project_Main_Type, Project_Type, Project_Start_Date, "

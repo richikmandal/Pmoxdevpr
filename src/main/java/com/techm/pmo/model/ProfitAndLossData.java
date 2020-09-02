@@ -63,6 +63,7 @@ public class ProfitAndLossData {
   private String monNov;
   private String monDec;
   private String total;
+  
 
   public String getProjectId() {
     return projectId;

@@ -14,7 +14,6 @@ public interface PmrService {
   public User getPmrDataFrUser(User user);
 
   public List<PmrData> getPmrSmryDataFrUser(String userId);
-
   public List<ProfitAndLossData> getP_L(String user);
   
   public List<Casum> getCasum(String user);
