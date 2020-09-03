@@ -174,8 +174,9 @@ div.dataTables_wrapper {
 							                <th style="padding-right: 2px">
 							                	<div class="form-group" >
 											        <div class='input-group'>
-											          <select id="vertical" name="poNumber" class="form-control" style="height: 27px;width: 100%;">
-														  <option value="Select">Select</option>
+											          	<select class="form-control" style="height: 27px;width: 100%;" name="poNum"
+															ng-options="poNum as poNum for poNum in poNumList"
+															ng-model="poNum" ng-change="getContrctNPidForPo(poNum)">
 														</select>
 											        </div>
 										      	</div>
@@ -183,8 +184,9 @@ div.dataTables_wrapper {
 							                <th style="padding-right: 2px">
 							                	<div class="form-group" style="padding-right: 2px">
 											        <div class='input-group'>
-											          <select id="vertical" name="contractNo" class="form-control" style="height: 27px;width: 100%;">
-														  <option value="Select">Select</option>
+											          <select class="form-control" style="height: 27px;width: 100%;" name="contrctNum"
+															ng-options="contrct as contrct.contrctNum for contrct in contractList"
+															ng-model="contrctNum" >
 														</select>
 											        </div>
 										      	</div>
@@ -242,8 +244,9 @@ div.dataTables_wrapper {
 							                <th style="padding-right: 2px">
 							                	<div class="form-group" >
 											        <div class='input-group'>
-											          	<select id="vertical" name="vertical" class="form-control" style="height: 27px;width: 100%;">
-														  <option value="Select">Select</option>
+											          	<select class="form-control" style="height: 27px;width: 100%;" name="projectId"
+															ng-options="project as project.projectId for project in contractList"
+															ng-model="projectId" >
 														</select>
 											        </div>
 										      	</div>
