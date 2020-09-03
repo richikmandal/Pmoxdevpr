@@ -7,6 +7,10 @@ angular.module('PmoxApp')
       $scope.showAssociates=false;
       $scope.startDate='';
       $scope.endDate='';
+      $scope.poDtlsList= [];
+      $scope.poNumList= [];
+      $scope.contractList= [];
+      $scope.prjList= [];
       $scope.init = function () {
 
         $scope.showEditOb=false; 
@@ -23,6 +27,52 @@ angular.module('PmoxApp')
       $scope.addOrderBook=function(){
             
         $scope.showEditOb=true;
+        
+        $scope.loadOdMasterData($scope.user);
+       
+     }
+      
+      $scope.loadOdMasterData = function(userFrSearch){
+        
+        alert(JSON.stringify(userFrSearch))
+        
+        var usr = [];
+        $.ajax({
+          url: "api/ob/getPos",
+          error: function (e) {
+            alert('Invalid Result set for the request.'+JSON.stringify(e))
+            //alert(JSON.stringify('error occured----'+e))
+          },
+          dataType: "json",
+          contentType: 'application/json; charset=utf-8',
+         // headers: {"Authorization": "Bearer "+AuthService.token},
+          type: "POST",
+          async: false,
+          cache: false,
+          data: JSON.stringify(userFrSearch),
+          timeout: 30000,
+          crossDomain: true,
+          success: function (data) {               
+           
+            $scope.poDtlsList  = data;
+          }
+          
+        });
+        
+        alert(JSON.stringify($scope.poDtlsList))
+        
+       $scope.poNumList = $scope.poDtlsList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
+        alert(JSON.stringify($scope.poNumList))
+        return $scope.poDtlsList;
+        
+      }
+      
+      $scope.getContrctNPidForPo=function(poNum){ 
+        alert(23232323)
+        
+        $scope.contractList =  $scope.poDtlsList.filter(x => x.poNum === poNum);
+        
+        alert(JSON.stringify($scope.contractList));
        
      }
       
@@ -34,9 +84,6 @@ angular.module('PmoxApp')
       
       $scope.enableDateRange=function(){   
         
-        alert(111111);
-        alert('$scope.startDate--'+$scope.startDate);
-        alert('$scope.endDate----'+$scope.endDate);
         const sample = getMonths(new Date($scope.startDate), new Date($scope.endDate));
         alert(JSON.stringify(sample));
         const sample1 = getMonths(new Date('2019-07-28'), new Date('2020-12-20'));

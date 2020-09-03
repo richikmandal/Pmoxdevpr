@@ -19,12 +19,12 @@ import org.springframework.stereotype.Service;
 import com.techm.pmo.dao.PmrprojDao;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
+import com.techm.pmo.model.CasumData;
 import com.techm.pmo.model.Pmrdata;
 import com.techm.pmo.model.PrjmasterData;
 import com.techm.pmo.model.ProfitAndLossData;
 import com.techm.pmo.model.ResourceBaseData;
 import com.techm.pmo.model.User;
-import com.techm.pmo.util.PmoxUtil;
 
 @Service
 public class PmrprojDaoImpl implements PmrprojDao {
@@ -36,7 +36,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   private String      getPrjCntFrUser     = "SELECT COUNT(*) FROM PMOX.T_PROJECT_MASTER ";
 
   private String       getPmrDatafrUser    =
-      "SELECT Business_Unit, projectId, projectDesc, custId, IBU, IBUDescription,  IbuHeadName, Status, IBG_Description, Project_Main_Type, Project_Type, Project_Start_Date, "
+      "SELECT Business_Unit, projectId, projectDesc, custId, D_IBU, IBUDescription,  IbuHeadName, Status, IBG_Description, Project_Main_Type, Project_Type, Project_Start_Date, "
           + " Project_End_Date, Program_Manager_Name,  PM_Delegate_Name,  Project_Manager_Name,  Active_Head_Count, Onsite_Active_Head_Count, Offshore_Active_Head_Count FROM pmox.t_pmr "
           + "  where PM_Delegate_ID= ? ";
 
@@ -57,12 +57,12 @@ public class PmrprojDaoImpl implements PmrprojDao {
           + " CAT_DETL_THAILAND_BU, CONTRACT_NUMBER, qms_number, po_number FROM pmox.t_casum  where UPPER(PM_DELEGATE) = (Select distinct UPPER(PM_Delegate_Name) from t_pmr where PM_Delegate_ID= ? ) ";
 
   String               getPrjMasterData    =
-      " SELECT PROJECT_ID, PROJECT_DESC, STATUS, PROJECT_START_DATE, PROJECT_END_DATE, CLOSURE_DATE, SBU, IBG, IBU, PROJECT_IBU_HEAD_ID, PROJECT_IBU_HEAD_NAME, PGM_ID, PGM_NAME, PM_ID, PM_NAME,PROJECT_TYPE, DELIVERY_OWNERSHIP, "
+      " SELECT PROJECT_ID, PROJECT_DESC, STATUS, PROJECT_START_DATE, PROJECT_END_DATE, CLOSURE_DATE, D_SBU, D_IBG, D_IBU, D_IBU_HEAD_ID, D_IBU_HEAD_NAME, PGM_ID, PGM_NAME, PM_ID, PM_NAME,PROJECT_TYPE, DELIVERY_OWNERSHIP, "
           + " PRICING_MODEL FROM PMOX.T_PROJECT_MASTER ";
 
 
   String               getPrjAssoctData    = " with rws as ( "
-      + "  select ON_OFF,PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,PJM.PROJECT_IBU_HEAD_ID from PMOX.T_RESOURCE_BASE REBS JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = REBS.PROJECT_ID "
+      + "  select ON_OFF,PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,PJM.D_IBU_HEAD_ID from PMOX.T_RESOURCE_BASE REBS JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = REBS.PROJECT_ID "
       + ") select * from rws  pivot ( count(*) for ON_OFF in ('OFFSHORE' AS OFFSHORE, 'ONSITE' AS ONSITE ) ) ";
 
   String               getPrjRevEbidta     =
@@ -74,7 +74,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       " AND UPPER(\"MONTH\") = TRIM(to_char(add_months( sysdate, -1 ), 'MONTH')) GROUP BY FY ";
 
   String               getPrjResourcData   =
-      "SELECT EMP_ID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.IBU, RSB.IBG, \"CLUSTER\", EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC, REGULAR_CONTRACT "
+      "SELECT EMP_ID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.D_IBU, EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC, REGULAR_CONTRACT "
           + " FROM PMOX.T_RESOURCE_BASE RSB JOIN PMOX.T_PROJECT_MASTER PGM ON PGM.PROJECT_ID = RSB.PROJECT_ID WHERE ";
 
   String               getPrjPnLData       =
@@ -97,7 +97,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
           + " SUM(MAY_REV_TOTAL) AS MAY_REV_TOTAL,SUM(JUNE_REV_TOTAL) AS JUNE_REV_TOTAL,SUM(JULY_REV_TOTAL) AS JULY_REV_TOTAL,SUM(AUGUST_REV_TOTAL) AS AUGUST_REV_TOTAL, "
           + " SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_REV_TOTAL,SUM(OCTOBER_REV_TOTAL) AS OCTOBER_REV_TOTAL,SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_REV_TOTAL,SUM(DECEMBER_REV_TOTAL) AS DECEMBER_REV_TOTAL"
           + " from ( select * from ( "
-          + " select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PM_NAME,PJM.PGM_ID,PGM_NAME,PJM.STATUS,PJM.PROJECT_IBU_HEAD_ID,PROJECT_IBU_HEAD_NAME,REV_TOTAL,EBIDTA from PMOX.T_PNL_BASE PNL "
+          + " select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PM_NAME,PJM.PGM_ID,PGM_NAME,PJM.STATUS,PJM.D_IBU_HEAD_ID,D_IBU_HEAD_NAME,REV_TOTAL,EBIDTA from PMOX.T_PNL_BASE PNL "
           + " JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "
           + " ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL, "
           + " 'MAY' AS MAY,'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER, "
@@ -105,7 +105,10 @@ public class PmrprojDaoImpl implements PmrprojDao {
   String getPnLData1 = "SELECT category,SUM(APRIL) APRIL ,SUM(MAY) MAY,SUM(JUNE) JUNE,SUM(JULY) JULY,SUM(AUGUST) AUGUST,SUM(SEPTEMBER) SEPTEMBER,SUM(OCTOBER) OCTOBER, " + 
       " SUM(NOVEMBER) NOVEMBER,SUM(DECEMBER) DECEMBER,SUM(JANUARY) JANUARY,SUM(FEBRUARY) FEBRUARY,SUM(MARCH) MARCH FROM PMOX.V_PNL_PROJECT WHERE ";
   String getPnLData2 = " GROUP BY category ORDER BY category";
-
+  
+  String getPoReceivedDtl = "SELECT * FROM (SELECT PGM_ID,PM_ID,D_IBU_HEAD_ID,PO_NUM,CUST_ID,CUST_NAME,OPTY_ID,OPTY_DESC,CNTRCT_NUM,CNTRCT_AMT,CRNCY,CNTRCT_AMT_USD," + 
+      " CNTRCT_STATUS,CNTRCT_START_DATE,CNTRCT_END_DATE,CAS.PROJECT_ID, PROJECT_DESC FROM T_CASUM CAS JOIN T_PROJECT_MASTER PJM ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
+  String getPoReceivedDtl1 =  " AND PO_NUM IS NOT NULL ORDER BY PO_NUM ";
   @Override
   public User getPmrDataFrUser(User user) {
 
@@ -222,7 +225,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pmrdata.setProjectId(rs.getString("projectId"));
       pmrdata.setProjectDesc(rs.getString("projectDesc"));
       // pmrdata.setCustId(rs.getInt("custId"));
-      pmrdata.setIbuName(rs.getString("IBU"));
+      pmrdata.setIbuName(rs.getString("D_IBU"));
       // pmrdata.setIbuDesc(rs.getString("IBUDescription"));
       pmrdata.setIbuHeadName(rs.getString("IbuHeadName"));
       pmrdata.setStatus(rs.getString("Status"));
@@ -302,11 +305,11 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pmData.setProjectStartDate(rs.getString("PROJECT_START_DATE"));
       pmData.setProjectEndDate(rs.getString("PROJECT_END_DATE"));
       pmData.setClosureDate(rs.getString("CLOSURE_DATE"));
-      pmData.setSbu(rs.getString("SBU"));
-      pmData.setIbg(rs.getString("IBG"));
-      pmData.setIbu(rs.getString("IBU"));
-      pmData.setIbuHeadId(rs.getString("PROJECT_IBU_HEAD_ID"));
-      pmData.setIbuHeadName(rs.getString("PROJECT_IBU_HEAD_NAME"));
+      pmData.setSbu(rs.getString("D_SBU"));
+      pmData.setIbg(rs.getString("D_IBG"));
+      pmData.setIbu(rs.getString("D_IBU"));
+      pmData.setIbuHeadId(rs.getString("D_IBU_HEAD_ID"));
+      pmData.setIbuHeadName(rs.getString("D_IBU_HEAD_NAME"));
       pmData.setPgmId(rs.getString("PGM_ID"));
       pmData.setPgmName(rs.getString("PGM_NAME"));
       pmData.setPmId(rs.getString("PM_ID"));
@@ -328,13 +331,13 @@ public class PmrprojDaoImpl implements PmrprojDao {
     Map<String, List<ResourceBaseData>> resourceMap = new HashMap<String, List<ResourceBaseData>>();
 
     if (user.getProjectSelected() != null && !user.getProjectSelected().equals("")) {
-      getPrjResourcDataFinal = getPrjResourcData + " RSB.PROJECT_ID IN (?) ORDER BY PROJECT_ID";
+      getPrjResourcDataFinal = getPrjResourcData + " RSB.PROJECT_ID IN (?) ORDER BY RSB.PROJECT_ID";
       resourceMap = (Map<String, List<ResourceBaseData>>) jdbcMysql.query(getPrjResourcDataFinal,
           new Object[] {user.getProjectSelected()}, new ResourceMapExtractor());
     }
     else {
       getPrjResourcDataFinal =
-          getPrjResourcData + user.getRoleName() + "_ID = ? ORDER BY PROJECT_ID";
+          getPrjResourcData + "RSB."+user.getRoleName() + "_ID = ? ORDER BY RSB.PROJECT_ID";
       resourceMap = jdbcMysql.query(getPrjResourcDataFinal, new Object[] {user.getUsername()},
           new ResourceMapExtractor());
     }
@@ -351,14 +354,14 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
       rsData.setProjectId(rs.getString("PROJECT_ID"));
       rsData.setProjectDescription(rs.getString("PROJECT_DESC"));
-      rsData.setIbg(rs.getString("IBG"));
-      rsData.setIbu(rs.getString("IBU"));
+      rsData.setIbg(rs.getString("D_IBG"));
+      rsData.setIbu(rs.getString("D_IBU"));
       rsData.setEmpId(rs.getString("EMP_ID"));
       rsData.setEmpName(rs.getString("EMP_NAME"));
       rsData.setGender(rs.getString("GENDER"));
       rsData.setCatCode(rs.getString("CATEGORY_CODE"));
       rsData.setHtrFlag(rs.getString("HTR_FLAG"));
-      rsData.setCluster(rs.getString("CLUSTER"));
+     // rsData.setCluster(rs.getString("CLUSTER"));
       rsData.setEmail(rs.getString("EMAIL_ID"));
       rsData.setBand(rs.getString("BAND"));
       rsData.setExperience(rs.getString("EXPERIENCE"));
@@ -396,14 +399,14 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
         rsData.setProjectId(prjId);
         rsData.setProjectDescription(rs.getString("PROJECT_DESC"));
-        rsData.setIbg(rs.getString("IBG"));
-        rsData.setIbu(rs.getString("IBU"));
+        //rsData.setIbg(rs.getString("D_IBG"));
+        rsData.setIbu(rs.getString("D_IBU"));
         rsData.setEmpId(rs.getString("EMP_ID"));
         rsData.setEmpName(rs.getString("EMP_NAME"));
         rsData.setGender(rs.getString("GENDER"));
         rsData.setCatCode(rs.getString("CATEGORY_CODE"));
         rsData.setHtrFlag(rs.getString("HTR_FLAG"));
-        rsData.setCluster(rs.getString("CLUSTER"));
+        //rsData.setCluster(rs.getString("CLUSTER"));
         rsData.setEmail(rs.getString("EMAIL_ID"));
         rsData.setBand(rs.getString("BAND"));
         rsData.setExperience(rs.getString("EXPERIENCE"));
@@ -583,12 +586,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
   }
 
   @Override
-  public List<Casum> getCasum(String user) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public List<ProfitAndLossData> getPnLSummary(User user) {
 
     String getPmSeriesQueryFinal = "";
@@ -633,6 +630,50 @@ public class PmrprojDaoImpl implements PmrprojDao {
      
       return pnlData;
     }
+  }
+
+  @Override
+  public List<CasumData> getPoReceived(User user) {
+    String getCasumQueryFinal = "";
+    List<CasumData> lstCasumData;
+    
+    if (user.getProjectSelected() != null && !user.getProjectSelected().equals("")) {
+
+      getCasumQueryFinal = getPoReceivedDtl + " PROJECT_ID IN (?) " + getPoReceivedDtl1;
+      lstCasumData = jdbcMysql.query(getCasumQueryFinal,
+          new Object[] {user.getProjectSelected()}, new CasumRowMapper());
+
+    }
+    else {
+      getCasumQueryFinal = getPoReceivedDtl + user.getRoleName() + "_ID = ? "+getPoReceivedDtl1 ;
+      lstCasumData = jdbcMysql.query(getCasumQueryFinal, new Object[] {user.getUsername()},
+          new CasumRowMapper());
+    }
+    return lstCasumData;
+  }
+  
+  public static class CasumRowMapper implements RowMapper<CasumData> {
+    public CasumData mapRow(ResultSet rs, int rowNum) throws SQLException {
+      CasumData casumData = new CasumData();
+      casumData.setPoNum(rs.getString("PO_NUM"));
+      casumData.setContrctNum(rs.getString("CNTRCT_NUM"));
+      casumData.setContrctAmnt(rs.getString("CNTRCT_AMT"));
+      casumData.setContrctStatus(rs.getString("CNTRCT_STATUS"));
+      casumData.setContrctStartDt(rs.getString("CNTRCT_START_DATE"));
+      casumData.setContrctEndDt(rs.getString("CNTRCT_END_DATE"));
+      casumData.setProjectId(rs.getString("PROJECT_ID"));
+      casumData.setProjectDesc(rs.getString("PROJECT_DESC"));
+      casumData.setCustomerName(rs.getString("CUST_NAME"));
+      //.casumData.casumData.setContrctDesc(-rs.getString(""));
+      
+      return casumData;
+    }
+  }
+
+  @Override
+  public List<Casum> getCasum(String user) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 

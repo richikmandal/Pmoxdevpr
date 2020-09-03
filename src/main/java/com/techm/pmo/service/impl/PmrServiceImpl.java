@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.techm.pmo.dao.PmrprojDao;
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
+import com.techm.pmo.model.CasumData;
 import com.techm.pmo.model.Pmrdata;
 import com.techm.pmo.model.PrjmasterData;
 import com.techm.pmo.model.ProfitAndLossData;
@@ -70,6 +71,12 @@ public class PmrServiceImpl implements PmrService {
   public List<ProfitAndLossData> getPnLSummary(User user) {
     // TODO Auto-generated method stub
     return pmrprojdao.getPnLSummary(user);
+  }
+
+  @Override
+  public List<CasumData> getPoReceived(User user) {
+    // TODO Auto-generated method stub
+    return pmrprojdao.getPoReceived(user);
   }
 
 

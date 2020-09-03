@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.techm.pmo.dto.PmrData;
 import com.techm.pmo.model.Casum;
+import com.techm.pmo.model.CasumData;
 import com.techm.pmo.model.Pmrdata;
 import com.techm.pmo.model.PrjmasterData;
 import com.techm.pmo.model.ProfitAndLossData;
@@ -30,5 +31,7 @@ public interface PmrprojDao {
   public List<Pmrdata> getPmSeriesData(User user);
  
   public List<ProfitAndLossData> getPnLSummary(User user);
+
+  public List<CasumData> getPoReceived(User user);
 
 }
