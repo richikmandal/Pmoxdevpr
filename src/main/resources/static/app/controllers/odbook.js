@@ -37,10 +37,19 @@ angular.module('PmoxApp')
         $scope.loadOdMasterData($scope.user);
         var projs = new Object();
         //projs.pid="allIbuHead";
-        projs.pname="---All IBU Head---";
-        $scope.ibuHeadList.push("---All IBU Head---");
+        
+       
         $scope.ibuHeadList.push($scope.poDtlsList.map(item => item.ibuHeadName).filter((value, index, self) => self.indexOf(value) === index));
-        selIbuHead
+  
+       
+        $scope.ibuHeadList.push('---All IBU Head---');
+        $scope.selIbuHead = '---All IBU Head---';
+        
+        if($scope.ibuHeadList.length==1){
+          $scope.selIbuHead = $scope.ibuHeadList[0][0];
+          $scope.getDetailsDataPgm($scope.selIbuHead);
+          
+        }
     
       };
       
@@ -95,11 +104,25 @@ angular.module('PmoxApp')
       
         $scope.getDetailsDataPgm=function(ibuHeadId){ 
           
-          var poTempList =  $scope.poDtlsList.filter(x => x.ibuHeadName === ibuHeadId);
+         // alert('ibuHeadId--'+ibuHeadId)
+          
+         // alert(JSON.stringify($scope.poDtlsList));
+          
+          var poTempList =  $scope.poDtlsList.filter(x => x.ibuHeadName == ibuHeadId);
+         // alert(JSON.stringify(poTempList));
           
           $scope.pgmList = poTempList.map(item => item.pgmName).filter((value, index, self) => self.indexOf(value) === index);
+         // alert('77777---'+JSON.stringify($scope.pgmList));
+          $scope.pgmList.push('---All PGMs---');
+          $scope.selPgm = '---All PGMs---';
+          
+          $scope.pmList = poTempList.map(item => item.pmName).filter((value, index, self) => self.indexOf(value) === index);
+         // alert(JSON.stringify($scope.pgmList));
+          $scope.pmList.push('---All PMs---');
+          $scope.selPm = '---All PMs---';
           
           $scope.poNumList = poTempList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
+         // alert(JSON.stringify($scope.poNumList));
                  
        }
       

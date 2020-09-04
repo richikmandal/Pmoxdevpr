@@ -122,25 +122,25 @@ div.dataTables_wrapper {
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
 						<select class="btn btn-secondary" name="pgm" ng-model="selIbuHead"  style="width: 100%;"
-							ng-options="ibuHead as ibuHead for ibuHead in ibuHeadList" ng-change="getDetailsDataPgm(selIbuHead)">
+							ng-options="selIbuHead as selIbuHead for selIbuHead in ibuHeadList" ng-change="getDetailsDataPgm(selIbuHead)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
 						<select class="btn btn-secondary" name="selPgm" style="width: 100%;"
-							ng-options="pgm as pgm for pgm in pgmList"	ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+							ng-options="selPgm as selPgm for selPgm in pgmList"	ng-model="selPgm" ng-change="getDetailsDataPgm(selPgm)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
 						<select name="selPm" class="btn btn-secondary" style="width: 100%;"
-							ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+							ng-options="selPm as selPm for selPm in pmList" ng-model="selPm" ng-change="getDetailsDataPm(pmData)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
-						<select name="selPrj" class="btn btn-secondary" style="width: 100%;"
-							ng-options="project as project.pname for project in projects"	ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
+						<select name="selProject" class="btn btn-secondary" style="width: 100%;"
+							ng-options="selProject as selProject.pname for selProject in projects"	ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
 						</select>
 					</div>
 				</div>
