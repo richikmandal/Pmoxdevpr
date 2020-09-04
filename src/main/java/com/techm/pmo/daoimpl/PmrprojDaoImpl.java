@@ -106,9 +106,12 @@ public class PmrprojDaoImpl implements PmrprojDao {
       " SUM(NOVEMBER) NOVEMBER,SUM(DECEMBER) DECEMBER,SUM(JANUARY) JANUARY,SUM(FEBRUARY) FEBRUARY,SUM(MARCH) MARCH FROM PMOX.V_PNL_PROJECT WHERE ";
   String getPnLData2 = " GROUP BY category ORDER BY category";
   
-  String getPoReceivedDtl = "SELECT * FROM (SELECT PGM_ID,PM_ID,D_IBU_HEAD_ID,PO_NUM,CUST_ID,CUST_NAME,OPTY_ID,OPTY_DESC,CNTRCT_NUM,CNTRCT_AMT,CRNCY,CNTRCT_AMT_USD," + 
-      " CNTRCT_STATUS,CNTRCT_START_DATE,CNTRCT_END_DATE,CAS.PROJECT_ID, PROJECT_DESC ,D_IBU_HEAD_NAME,PGM_NAME,PM_NAME,PROJECT_TYPE  FROM T_CASUM CAS JOIN T_PROJECT_MASTER PJM ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
-  String getPoReceivedDtl1 =  " AND PO_NUM IS NOT NULL ORDER BY PO_NUM ";
+  String getPoReceivedDtl = "SELECT * FROM (SELECT PJM.PGM_ID,PJM.PM_ID,PJM.D_IBU_HEAD_ID,CAS.PO_NUM,CAS.CUST_ID,CAS.CUST_NAME,CAS.OPTY_ID,CAS.OPTY_DESC, " + 
+      " CAS.CNTRCT_NUM,CAS.CNTRCT_AMT,CAS.CRNCY,CAS.CNTRCT_AMT_USD, CAS.CNTRCT_STATUS,CAS.CNTRCT_START_DATE,CAS.CNTRCT_END_DATE, " + 
+      " CAS.PROJECT_ID, PJM.PROJECT_DESC ,PJM.D_IBU_HEAD_NAME,PJM.PGM_NAME,PJM.PM_NAME,PJM.PROJECT_TYPE  FROM T_CASUM CAS JOIN T_PROJECT_MASTER PJM " + 
+     // " ON PJM.PROJECT_ID = CAS.PROJECT_ID JOIN T_ORDER_BOOK OB ON PJM.PROJECT_ID = OB.PROJECT_ID ) A WHERE ";
+     " ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
+  String getPoReceivedDtl1 =  " AND PO_NUM IS NOT NULL AND CNTRCT_STATUS != 'CLOSED' ORDER BY PO_NUM ";
   @Override
   public User getPmrDataFrUser(User user) {
 
@@ -669,6 +672,18 @@ public class PmrprojDaoImpl implements PmrprojDao {
         casumData.setPgmName(rs.getString("PGM_NAME"));
         casumData.setPmName(rs.getString("PM_NAME"));
         casumData.setProjectType(rs.getString("PROJECT_TYPE"));
+       /* casumData.setCfyJan(rs.getString("CFY_JAN"));
+        casumData.setCfyFeb(rs.getString("CFY_FEB"));
+        casumData.setCfyMar(rs.getString("CFY_MAR"));
+        casumData.setCfyApr(rs.getString("CFY_APR"));
+        casumData.setCfyMay(rs.getString("CFY_MAY"));
+        casumData.setCfyJun(rs.getString("CFY_JUN"));
+        casumData.setCfyJul(rs.getString("CFY_JUL"));
+        casumData.setCfyAug(rs.getString("CFY_AUG"));
+        casumData.setCfySep(rs.getString("CFY_SEP"));
+        casumData.setCfyOct(rs.getString("CFY_OCT"));
+        casumData.setCfyNov(rs.getString("CFY_NOV"));
+        casumData.setCfyDec(rs.getString("CFY_DEC"));*/
       
       return casumData;
     }

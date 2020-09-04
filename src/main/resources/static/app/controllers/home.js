@@ -8,7 +8,8 @@ angular.module('PmoxApp')
           var selectedPrjId='';
           $scope.showProjects=false;
           $scope.showAssociates=false;
-          $scope.showPnL=true;
+          $scope.showPnL=false;
+          $scope.showOB=true;
           $scope.makeShrink = false;  
           $scope.manNames=[];
           $scope.pgManagers=[];
@@ -161,7 +162,7 @@ angular.module('PmoxApp')
              
            });
            
-           alert('$scope.pnlSummaryData---'+JSON.stringify($scope.pnlSummaryData));
+          // alert('$scope.pnlSummaryData---'+JSON.stringify($scope.pnlSummaryData));
            
          }
          
@@ -890,10 +891,10 @@ angular.module('PmoxApp')
                  },
                  legend: {
                      layout: 'vertical',
-                     align: 'right',
-                     x: 5,
+                     align: 'top',
+                     x: 200,
                      verticalAlign: 'top',
-                     y: 5,
+                     y: 50,
                      floating: true,
                      backgroundColor:
                          Highcharts.defaultOptions.legend.backgroundColor || // theme

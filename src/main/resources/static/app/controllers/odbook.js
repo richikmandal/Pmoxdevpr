@@ -93,13 +93,7 @@ angular.module('PmoxApp')
           }
           
         });
-        
-       // alert(JSON.stringify($scope.poDtlsList))
-        
-      
-       // alert(JSON.stringify($scope.poNumList))
-       // return $scope.poDtlsList;
-        
+       
       }
       
         $scope.getDetailsDataPgm=function(ibuHeadId){ 
@@ -125,6 +119,30 @@ angular.module('PmoxApp')
          // alert(JSON.stringify($scope.poNumList));
                  
        }
+        
+        $scope.getDetailsDataPgm=function(pgmId){ 
+          
+          // alert('pgmId--'+pgmId)
+           
+          // alert(JSON.stringify($scope.poDtlsList));
+           
+           var poTempList =  $scope.poDtlsList.filter(x => x.pgmName == pgmId);
+          // alert(JSON.stringify(poTempList));
+           
+          // $scope.pgmList = poTempList.map(item => item.pgmName).filter((value, index, self) => self.indexOf(value) === index);
+           //alert('77777---'+JSON.stringify($scope.pgmList));
+           //$scope.pgmList.push('---All PGMs---');
+          // $scope.selPgm = '---All PGMs---';
+           
+           $scope.pmList = poTempList.map(item => item.pmName).filter((value, index, self) => self.indexOf(value) === index);
+          // alert(JSON.stringify($scope.pgmList));
+           $scope.pmList.push('---All PMs---');
+           $scope.selPm = '---All PMs---';
+           
+           $scope.poNumList = poTempList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
+          // alert(JSON.stringify($scope.poNumList));
+                  
+        }
       
       $scope.getContrctNPidForPo=function(poNum){ 
         
@@ -147,6 +165,24 @@ angular.module('PmoxApp')
         $scope.contrctStartDt = datestrt.toLocaleDateString()
         var dateend = new Date(contrctData.contrctEndDt);
         $scope.contrctEndDt = dateend.toLocaleDateString();
+        
+        for(var i = 0; i < 12; i++){
+          
+          
+          var id = $scope.currentYear+''+i;
+          document.getElementById(id).disabled = true;
+          
+          var id2 = $scope.prevYear+''+i;
+          if(i>2){
+          document.getElementById(id2).disabled = true;
+          }
+        
+          var id3 = $scope.futureYear+''+i;
+         
+          document.getElementById(id3).disabled = true;
+          
+       }
+        
         
         angular.forEach(monthList, function (valueOut, keyOut) { 
           

@@ -19,6 +19,22 @@ public class CasumData {
 	private String  ibuHeadName    ;
 	private String  pgmName  ;
 	private String  pmName    ;
+	private String  cfyJan  ;
+	private String  cfyFeb  ;
+	private String  cfyMar  ;
+    private String  cfyApr  ;
+    private String  cfyMay  ;
+    private String  cfyJun  ;
+    private String  cfyJul  ;
+    private String  cfyAug  ;
+    private String  cfySep  ;
+    private String  cfyOct  ;
+    private String  cfyNov  ;
+    private String  cfyDec  ;
+    private String  cfyQOne  ;
+    private String  cfyQTwo  ;
+    private String  cfyQThree  ;
+    private String  cfyQFour  ;
 
 	
 	
@@ -123,6 +139,104 @@ public class CasumData {
     }
     public void setProjectType(String projectType) {
       this.projectType = projectType;
-    }  
+    }
+    public String getCfyJan() {
+      return cfyJan;
+    }
+    public void setCfyJan(String cfyJan) {
+      this.cfyJan = cfyJan;
+    }
+    public String getCfyFeb() {
+      return cfyFeb;
+    }
+    public void setCfyFeb(String cfyFeb) {
+      this.cfyFeb = cfyFeb;
+    }
+    public String getCfyMar() {
+      return cfyMar;
+    }
+    public void setCfyMar(String cfyMar) {
+      this.cfyMar = cfyMar;
+    }
+    public String getCfyApr() {
+      return cfyApr;
+    }
+    public void setCfyApr(String cfyApr) {
+      this.cfyApr = cfyApr;
+    }
+    public String getCfyMay() {
+      return cfyMay;
+    }
+    public void setCfyMay(String cfyMay) {
+      this.cfyMay = cfyMay;
+    }
+    public String getCfyJun() {
+      return cfyJun;
+    }
+    public void setCfyJun(String cfyJun) {
+      this.cfyJun = cfyJun;
+    }
+    public String getCfyJul() {
+      return cfyJul;
+    }
+    public void setCfyJul(String cfyJul) {
+      this.cfyJul = cfyJul;
+    }
+    public String getCfyAug() {
+      return cfyAug;
+    }
+    public void setCfyAug(String cfyAug) {
+      this.cfyAug = cfyAug;
+    }
+    public String getCfySep() {
+      return cfySep;
+    }
+    public void setCfySep(String cfySep) {
+      this.cfySep = cfySep;
+    }
+    public String getCfyOct() {
+      return cfyOct;
+    }
+    public void setCfyOct(String cfyOct) {
+      this.cfyOct = cfyOct;
+    }
+    public String getCfyNov() {
+      return cfyNov;
+    }
+    public void setCfyNov(String cfyNov) {
+      this.cfyNov = cfyNov;
+    }
+    public String getCfyDec() {
+      return cfyDec;
+    }
+    public void setCfyDec(String cfyDec) {
+      this.cfyDec = cfyDec;
+    }
+    public String getCfyQOne() {
+      return cfyQOne;
+    }
+    public void setCfyQOne(String cfyQOne) {
+      this.cfyQOne = cfyQOne;
+    }
+    public String getCfyQTwo() {
+      return cfyQTwo;
+    }
+    public void setCfyQTwo(String cfyQTwo) {
+      this.cfyQTwo = cfyQTwo;
+    }
+    public String getCfyQThree() {
+      return cfyQThree;
+    }
+    public void setCfyQThree(String cfyQThree) {
+      this.cfyQThree = cfyQThree;
+    }
+    public String getCfyQFour() {
+      return cfyQFour;
+    }
+    public void setCfyQFour(String cfyQFour) {
+      this.cfyQFour = cfyQFour;
+    } 
+    
+    
 	
 }
