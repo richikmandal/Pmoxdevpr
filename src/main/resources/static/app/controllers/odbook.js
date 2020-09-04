@@ -5,16 +5,42 @@ angular.module('PmoxApp')
       $scope.user = AuthService.user;
       $scope.showEditOb=false;
       $scope.showAssociates=false;
-      $scope.startDate='';
-      $scope.endDate='';
       $scope.poDtlsList= [];
       $scope.poNumList= [];
       $scope.contractList= [];
       $scope.prjList= [];
+      $scope.ibuHeadList= [];
+      $scope.pgmList= [];
+      $scope.pmList= [];
+      $scope.customerName='';
+      $scope.optyDesc='';
+      $scope.contrctStatus='';
+      $scope.contrctAmnt='';
+      $scope.contrctStartDt='';
+      $scope.contrctEndDt='';
+      $scope.projectDesc='';
+      $scope.projectType='';
+      $scope.ibuHeadName='';
+      $scope.pgmName='';
+      $scope.pmName='';
+      $scope.currentYear = '';
+      $scope.prevYear = '';
+      $scope.futureYear = '';
+      
+      
       $scope.init = function () {
-
+        
         $scope.showEditOb=false; 
-        const sample = getMonths(new Date('2019-07-28'), new Date('2020-12-20'));
+        $scope.currentYear = new Date().getFullYear();
+        $scope.prevYear = parseInt($scope.currentYear)-1;
+        $scope.futureYear = parseInt($scope.currentYear)+1;
+        $scope.loadOdMasterData($scope.user);
+        var projs = new Object();
+        //projs.pid="allIbuHead";
+        projs.pname="---All IBU Head---";
+        $scope.ibuHeadList.push("---All IBU Head---");
+        $scope.ibuHeadList.push($scope.poDtlsList.map(item => item.ibuHeadName).filter((value, index, self) => self.indexOf(value) === index));
+        selIbuHead
     
       };
       
@@ -28,13 +54,13 @@ angular.module('PmoxApp')
             
         $scope.showEditOb=true;
         
-        $scope.loadOdMasterData($scope.user);
+        $scope.poNumList = $scope.poDtlsList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
        
      }
       
       $scope.loadOdMasterData = function(userFrSearch){
         
-        alert(JSON.stringify(userFrSearch))
+       // alert(JSON.stringify(userFrSearch))
         
         var usr = [];
         $.ajax({
@@ -59,21 +85,64 @@ angular.module('PmoxApp')
           
         });
         
-        alert(JSON.stringify($scope.poDtlsList))
+       // alert(JSON.stringify($scope.poDtlsList))
         
-       $scope.poNumList = $scope.poDtlsList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
-        alert(JSON.stringify($scope.poNumList))
-        return $scope.poDtlsList;
+      
+       // alert(JSON.stringify($scope.poNumList))
+       // return $scope.poDtlsList;
         
       }
       
+        $scope.getDetailsDataPgm=function(ibuHeadId){ 
+          
+          var poTempList =  $scope.poDtlsList.filter(x => x.ibuHeadName === ibuHeadId);
+          
+          $scope.pgmList = poTempList.map(item => item.pgmName).filter((value, index, self) => self.indexOf(value) === index);
+          
+          $scope.poNumList = poTempList.map(item => item.poNum).filter((value, index, self) => self.indexOf(value) === index);
+                 
+       }
+      
       $scope.getContrctNPidForPo=function(poNum){ 
-        alert(23232323)
         
+        $scope.clearAll();        
         $scope.contractList =  $scope.poDtlsList.filter(x => x.poNum === poNum);
+               
+     }
+      
+      $scope.getContrctDtl=function(contrctData){ 
+       // alert('contrctNum--'+JSON.stringify(contrctData));
+        var monthList = [];
+        $scope.customerName=contrctData.customerName;
+        $scope.optyDesc=contrctData.optyDesc;
+        $scope.contrctStatus=contrctData.contrctStatus;
+        $scope.contrctAmnt=contrctData.contrctAmnt;
+        $scope.contrctStartDt=contrctData.contrctStartDt;
+        $scope.contrctEndDt=contrctData.contrctEndDt;
+        monthList = $scope.enableDateRange();
+        var datestrt = new Date(contrctData.contrctStartDt);
+        $scope.contrctStartDt = datestrt.toLocaleDateString()
+        var dateend = new Date(contrctData.contrctEndDt);
+        $scope.contrctEndDt = dateend.toLocaleDateString();
         
-        alert(JSON.stringify($scope.contractList));
-       
+        angular.forEach(monthList, function (valueOut, keyOut) { 
+          
+          var id = valueOut.year+''+valueOut.month;
+          
+          document.getElementById(id).disabled = false;
+
+        });
+        
+     }
+      
+      $scope.getProjectDtl=function(projData){ 
+      
+        $scope.projectDesc=projData.projectDesc;
+        $scope.projectType=projData.projectType;
+        $scope.ibuHeadName=projData.ibuHeadName;
+        $scope.pgmName=projData.pgmName;
+        $scope.pmName=projData.pmName;
+               
      }
       
       $scope.goOrderBook=function(){   
@@ -82,20 +151,33 @@ angular.module('PmoxApp')
        
      }
       
-      $scope.enableDateRange=function(){   
+      $scope.clearAll=function(){   
         
-        const sample = getMonths(new Date($scope.startDate), new Date($scope.endDate));
-        alert(JSON.stringify(sample));
-        const sample1 = getMonths(new Date('2019-07-28'), new Date('2020-12-20'));
-        alert(JSON.stringify(sample1));
+        $scope.customerName='';
+        $scope.optyDesc='';
+        $scope.contrctStatus='';
+        $scope.contrctAmnt='';
+        $scope.contrctStartDt='';
+        $scope.contrctEndDt='';
+        $scope.projectDesc='';
+        $scope.projectType='';
+        $scope.ibuHeadName='';
+        $scope.pgmName='';
+        $scope.pmName='';
        
      }
       
+      $scope.enableDateRange=function(){   
+        
+        const sample = getMonths(new Date($scope.contrctStartDt), new Date($scope.contrctEndDt));
+        return sample;
+     }
+      
         const getMonths = (fromDate, toDate) => {
-          const fromYear = fromDate.getFullYear();
+          const fromYear =  fromDate.getFullYear();
           const fromMonth = fromDate.getMonth();
-          const toYear = toDate.getFullYear();
-          const toMonth = toDate.getMonth();
+          const toYear =    toDate.getFullYear();
+          const toMonth =   toDate.getMonth();
           const months = [];
           for(let year = fromYear; year <= toYear; year++) {
             let month = year === fromYear ? fromMonth : 0;

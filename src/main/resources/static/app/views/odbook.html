@@ -117,6 +117,34 @@ div.dataTables_wrapper {
 					</div>
 				</div>
 			</section>
+			<section class="py-2" id="section22" style="width: 1300px;">
+				<div class="row">
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select class="btn btn-secondary" name="pgm" ng-model="selIbuHead"  style="width: 100%;"
+							ng-options="ibuHead as ibuHead for ibuHead in ibuHeadList" ng-change="getDetailsDataPgm(selIbuHead)">
+						</select>
+					</div>
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select class="btn btn-secondary" name="selPgm" style="width: 100%;"
+							ng-options="pgm as pgm for pgm in pgmList"	ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+						</select>
+					</div>
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select name="selPm" class="btn btn-secondary" style="width: 100%;"
+							ng-options="name as name.pmname for name in manNames" ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+						</select>
+					</div>
+					<div class="col-xl-3 col-md-6"
+						style="width: 100%;">
+						<select name="selPrj" class="btn btn-secondary" style="width: 100%;"
+							ng-options="project as project.pname for project in projects"	ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
+						</select>
+					</div>
+				</div>
+			</section>
 			<section class="py-2" id="section22" style="width: 1300px;" ng-show="showEditOb">
 				<div class="card" style="width: 100%;">
 					<div class="card-body" style="padding-top: 0px;padding-bottom: 0px;padding-left: 0px;padding-right: 0px;">
@@ -138,7 +166,7 @@ div.dataTables_wrapper {
 							<div class="col-sm-12 col-md-12 col-lg-12" style="text-align: center;padding-top: 9px;" >
 								<div class="form-check-inline">
 								  <label class="form-check-label" style="padding-right: 30px;">
-								    <input type="radio" class="form-check-input" name="optradio">PO Received
+								    <input type="radio" class="form-check-input" checked name="optradio">PO Received
 								  </label>
 								</div>
 								<div class="form-check-inline">
@@ -163,11 +191,14 @@ div.dataTables_wrapper {
 								<table class="stripe row-border order-column" style="width:100%;padding-left: 65px;padding-right: 5px;">
 							        <thead>
 							            <tr>
-							                <th style="text-align: center;width: 20%;">PO#</th>
-							                <th style="text-align: center;width: 20%;">Contract#</th>
-							                <th style="text-align: center;width: 20%;">PO Amount</th>
-							                <th style="text-align: center;width: 20%;">Start Date</th>
-							                <th style="text-align: center;width: 20%;">End Date</th>
+							                <th style="text-align: center;width: 12.5%;">PO#</th>
+							                <th style="text-align: center;width: 12.5%;">Contract#</th>
+							                <th style="text-align: center;width: 12.5%;">CustomerName</th>
+							                <th style="text-align: center;width: 12.5%;">Opp Desc</th>
+							                <th style="text-align: center;width: 12.5%;">Status</th>
+							                <th style="text-align: center;width: 12.5%;">PO Amount</th>
+							                <th style="text-align: center;width: 12.5%;">Start Date</th>
+							                <th style="text-align: center;width: 12.5%;">End Date</th>
 							                						           
 							             </tr>
 							             <tr>
@@ -175,8 +206,7 @@ div.dataTables_wrapper {
 							                	<div class="form-group" >
 											        <div class='input-group'>
 											          	<select class="form-control" style="height: 27px;width: 100%;" name="poNum"
-															ng-options="poNum as poNum for poNum in poNumList"
-															ng-model="poNum" ng-change="getContrctNPidForPo(poNum)">
+															ng-options="poNum as poNum for poNum in poNumList" ng-model="poNum" ng-change="getContrctNPidForPo(poNum)">
 														</select>
 											        </div>
 										      	</div>
@@ -185,23 +215,43 @@ div.dataTables_wrapper {
 							                	<div class="form-group" style="padding-right: 2px">
 											        <div class='input-group'>
 											          <select class="form-control" style="height: 27px;width: 100%;" name="contrctNum"
-															ng-options="contrct as contrct.contrctNum for contrct in contractList"
-															ng-model="contrctNum" >
+															ng-options="contrct as contrct.contrctNum for contrct in contractList" ng-change="getContrctDtl(contrctNum)" ng-model="contrctNum" >
 														</select>
+											        </div>
+										      	</div>
+											</th>
+											<th style="padding-right: 2px">
+							                	<div class="form-group">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="customerName" ng-model="customerName" />
 											        </div>
 										      	</div>
 											</th>
 							                <th style="padding-right: 2px">
 							                	<div class="form-group">
 											        <div class='input-group'>
-											          <input type='text' class="form-control" id="poValue" />
+											          <input type='text' class="form-control" disabled id="optyDesc" ng-model="optyDesc" />
+											        </div>
+										      	</div>
+											</th>
+											<th style="padding-right: 2px">
+							                	<div class="form-group">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="contrctStatus" ng-model="contrctStatus"/>
+											        </div>
+										      	</div>
+											</th>
+											<th style="padding-right: 2px">
+							                	<div class="form-group">
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="contrctAmnt" ng-model="contrctAmnt" />
 											        </div>
 										      	</div>
 											</th>
 							                <th style="padding-right: 2px">
 							                 	<div class="form-group">
 											        <div class='input-group date' id='datetimepicker1'>
-											          <input type='text' class="form-control" id="startDate" ng-model="startDate" />
+											          <input type='text' class="form-control" disabled id="contrctStartDt" ng-model="contrctStartDt" />
 											          <span class="input-group-addon" style="padding-bottom: 2px;height: 14px;padding-top: 4px;">
 											            <span class="glyphicon glyphicon-calendar">
 											            </span>
@@ -212,7 +262,7 @@ div.dataTables_wrapper {
 							                <th style="padding-right: 2px">
 								                <div class="form-group">
 											        <div class='input-group date' id='datetimepicker2'>
-											          <input type='text' class="form-control" id="endDate" ng-model="endDate" ng-blur="enableDateRange()"/>
+											          <input type='text' class="form-control" disabled id="contrctEndDt" ng-model="contrctEndDt" ng-blur="enableDateRange()"/>
 											          <span class="input-group-addon" style="padding-bottom: 2px;height: 14px;padding-top: 4px;">
 											            <span class="glyphicon glyphicon-calendar"></span>
 											          </span>
@@ -234,19 +284,18 @@ div.dataTables_wrapper {
 							        <thead>
 							            <tr>
 							                <th style="text-align: center;width: 16.6%;">Project ID</th>
-							                <th style="text-align: center;width: 16.6%;">Project Desc</th>
-							                <th style="text-align: center;width: 16.6%;">IBG_Head_D</th>
-							                <th style="text-align: center;width: 16.6%;">IBU_Head_D</th>
+							                <th style="text-align: center;width: 16.6%;">Project Name</th>
+							                <th style="text-align: center;width: 16.6%;">Project Type</th>
+							                <th style="text-align: center;width: 16.6%;">DeliveryIBU</th>
 							                <th style="text-align: center;width: 16.6%;">PGM</th>
-							                <th style="text-align: center;width: 16.6%;">PM</th>							           
+							                <th style="text-align: center;width: 16.6%;">PM</th>					           
 							             </tr>
 							             <tr>
 							                <th style="padding-right: 2px">
 							                	<div class="form-group" >
 											        <div class='input-group'>
 											          	<select class="form-control" style="height: 27px;width: 100%;" name="projectId"
-															ng-options="project as project.projectId for project in contractList"
-															ng-model="projectId" >
+															ng-options="project as project.projectId for project in contractList" ng-change="getProjectDtl(projectId)" ng-model="projectId" >
 														</select>
 											        </div>
 										      	</div>
@@ -254,87 +303,35 @@ div.dataTables_wrapper {
 							                <th style="padding-right: 2px">
 							                	<div class="form-group" style="padding-right: 2px">
 											        <div class='input-group'>
-											          <input type='text' class="form-control" disabled id="contractNumber" />
+											          <input type='text' class="form-control" disabled id="projectDesc" ng-model="projectDesc" />
 											        </div>
 										      	</div>
 											</th>
 							                <th style="padding-right: 2px">
 							                	<div class="form-group">
 											        <div class='input-group'>
-											          <input type='text' class="form-control" disabled id="contractNumber" />
+											          <input type='text' class="form-control" disabled id="projectType" ng-model="projectType" />
 											        </div>
 										      	</div>
 											</th>
 							                <th style="padding-right: 2px">
 							                 	<div class="form-group">
-											        <div class='input-group date' id='datetimepicker1'>
-											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="ibuHeadName" ng-model="ibuHeadName" />
 											        </div>
 										      	</div>
 										    </th>
 							                <th style="padding-right: 2px">
 								                <div class="form-group">
-											        <div class='input-group date' id='datetimepicker2'>
-											          <input type='text' class="form-control" disabled id="contractNumber" />
+											        <div class='input-group'>
+											          <input type='text' class="form-control" disabled id="pgmName" ng-model="pgmName" />
 											        </div>
-											    </div>
+										      	</div>
 										    </th>
 										    <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 28px;width: 225px;margin-bottom: 13px;">
+							                	<div class="form-group">
 											        <div class='input-group'>
-											          	<input type='text' class="form-control" disabled id="contractNumber" />
-											        </div>
-										      	</div>
-											</th>
-							            </tr>
-							            <tr>
-							                <th style="text-align: center;width: 25%;">IBG_Head_S</th>
-							                <th style="text-align: center;width: 16.6%;">IBU_Head_S</th>
-							                <th style="text-align: center;width: 16.6%;">BRM</th>
-							                <th style="text-align: center;width: 16.6%;">CDM</th>
-							                <th style="text-align: center;width: 16.6%;">ENGMT_MODEL</th>
-							                <th style="text-align: center;width: 16.6%;">PROJ_TYPE</th>							           
-							             </tr>
-							             <tr>
-							                <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-											          	<input type='text' class="form-control" disabled  />
-											        </div>
-										      	</div>
-											</th>
-							                <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-											          <input type='text' class="form-control" disabled  />
-											        </div>
-										      	</div>
-											</th>
-							                <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-											         <input type='text' class="form-control" disabled  />
-											        </div>
-										      	</div>
-											</th>
-							                <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-												         <input type='text' class="form-control" disabled  />
-											        </div>
-										      	</div>
-											</th>
-							                <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-												          <input type='text' class="form-control" disabled  />
-											        </div>
-										      	</div>
-											</th>
-										    <th style="padding-right: 2px">
-							                	<div class="form-group" style="height: 35px;width: 100%;">
-											        <div class='input-group'>
-												          <input type='text' class="form-control" disabled  />
+											          <input type='text' class="form-control" disabled id="pmName" ng-model="pmName" />
 											        </div>
 										      	</div>
 											</th>
@@ -1408,65 +1405,65 @@ div.dataTables_wrapper {
 							        <thead>
 							            <tr>
 							                <th style="text-align: center;width: 10%;">Month</th>
-							                <th style="text-align: center;width: 7.5%;">Apr</th>
-							                <th style="text-align: center;width: 7.5%;">May</th>
-							                <th style="text-align: center;width: 7.5%;">Jun</th>
-							                <th style="text-align: center;width: 7.5%;">Jul</th>
-							                <th style="text-align: center;width: 7.5%;">Aug</th>
-							                <th style="text-align: center;width: 7.5%;">Sep</th>
-							                <th style="text-align: center;width: 7.5%;">Oct</th>
-							                <th style="text-align: center;width: 7.5%;">Nov</th>
-							                <th style="text-align: center;width: 7.5%;">Dec</th>
-							                <th style="text-align: center;width: 7.5%;">Jan</th>
-							                <th style="text-align: center;width: 7.5%;">Feb</th>
-							                <th style="text-align: center;width: 7.5%;">Mar</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Apr</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">May</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Jun</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Jul</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Aug</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Sep</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Oct</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Nov</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Dec</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Jan</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Feb</th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;">Mar</th>
 							     
 							                						           
 							             </tr>
 							             <tr>
 							                <th style="text-align: center;width: 10%;">FY 19-20</th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'3'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'4'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'5'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'6'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'7'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'8'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'9'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'10'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{prevYear+'11'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'0'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'1'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'2'}}" class="form-control" disabled /></th>
 							            </tr>
 							            <tr>
 							                <th style="text-align: center;width: 10%;">FY 20-21</th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'3'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'4'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'5'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'6'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'7'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'8'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'9'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'10'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{currentYear+'11'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'0'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'1'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'2'}}" class="form-control" disabled /></th>
 							            </tr>
 							            <tr>
 							                <th style="text-align: center;width: 10%;">FY 21-22</th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
-							                <th style="text-align: center;width: 7.5%;"><input type='text' class="form-control" disabled /></th>
+							               <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'3'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'4'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'5'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'6'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'7'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'8'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'9'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'10'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{futureYear+'11'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{'na'+'0'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{'na'+'1'}}" class="form-control" disabled /></th>
+							                <th style="text-align: center;width: 7.5%;padding-left: 2px;padding-right: 2px;"><input type='text' id="{{'na'+'2'}}" class="form-control" disabled /></th>
 							            </tr>
 							        </thead>
 							     </table>

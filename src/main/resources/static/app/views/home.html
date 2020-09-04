@@ -341,27 +341,27 @@
 				<div class="row">
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
-						<select class="btn btn-secondary" name="pgm" ng-model="pgmdata1"
+						<select class="btn btn-secondary" name="pgm" ng-model="pgmdata1" style="width: 100%;"
 							ng-change="getDetailsDataPgm(pgmdata1)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
-						<select class="btn btn-secondary" name="pgm"
+						<select class="btn btn-secondary" name="pgm" style="width: 100%;"
 							ng-options="programManager as programManager.name for programManager in pgManagers"
 							ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
-						style="width: 100px;">
-						<select name="pm" class="btn btn-secondary"
+						style="width: 100%;">
+						<select name="pm" class="btn btn-secondary" style="width: 100%;"
 							ng-options="name as name.pmname for name in manNames"
 							ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
 						</select>
 					</div>
 					<div class="col-xl-3 col-md-6"
-						style="width: 100px;">
-						<select name="prj" class="btn btn-secondary"
+						style="width: 100%;">
+						<select name="prj" class="btn btn-secondary" style="width: 100%;"
 							ng-options="project as project.pname for project in projects"
 							ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
 						</select>

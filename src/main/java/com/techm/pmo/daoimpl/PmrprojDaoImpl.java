@@ -107,7 +107,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   String getPnLData2 = " GROUP BY category ORDER BY category";
   
   String getPoReceivedDtl = "SELECT * FROM (SELECT PGM_ID,PM_ID,D_IBU_HEAD_ID,PO_NUM,CUST_ID,CUST_NAME,OPTY_ID,OPTY_DESC,CNTRCT_NUM,CNTRCT_AMT,CRNCY,CNTRCT_AMT_USD," + 
-      " CNTRCT_STATUS,CNTRCT_START_DATE,CNTRCT_END_DATE,CAS.PROJECT_ID, PROJECT_DESC FROM T_CASUM CAS JOIN T_PROJECT_MASTER PJM ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
+      " CNTRCT_STATUS,CNTRCT_START_DATE,CNTRCT_END_DATE,CAS.PROJECT_ID, PROJECT_DESC ,D_IBU_HEAD_NAME,PGM_NAME,PM_NAME,PROJECT_TYPE  FROM T_CASUM CAS JOIN T_PROJECT_MASTER PJM ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
   String getPoReceivedDtl1 =  " AND PO_NUM IS NOT NULL ORDER BY PO_NUM ";
   @Override
   public User getPmrDataFrUser(User user) {
@@ -654,17 +654,21 @@ public class PmrprojDaoImpl implements PmrprojDao {
   
   public static class CasumRowMapper implements RowMapper<CasumData> {
     public CasumData mapRow(ResultSet rs, int rowNum) throws SQLException {
-      CasumData casumData = new CasumData();
-      casumData.setPoNum(rs.getString("PO_NUM"));
-      casumData.setContrctNum(rs.getString("CNTRCT_NUM"));
-      casumData.setContrctAmnt(rs.getString("CNTRCT_AMT"));
-      casumData.setContrctStatus(rs.getString("CNTRCT_STATUS"));
-      casumData.setContrctStartDt(rs.getString("CNTRCT_START_DATE"));
-      casumData.setContrctEndDt(rs.getString("CNTRCT_END_DATE"));
-      casumData.setProjectId(rs.getString("PROJECT_ID"));
-      casumData.setProjectDesc(rs.getString("PROJECT_DESC"));
-      casumData.setCustomerName(rs.getString("CUST_NAME"));
-      //.casumData.casumData.setContrctDesc(-rs.getString(""));
+        CasumData casumData = new CasumData();
+        casumData.setPoNum(rs.getString("PO_NUM"));
+        casumData.setContrctNum(rs.getString("CNTRCT_NUM"));
+        casumData.setContrctAmnt(rs.getString("CNTRCT_AMT"));
+        casumData.setContrctStatus(rs.getString("CNTRCT_STATUS"));
+        casumData.setContrctStartDt(rs.getString("CNTRCT_START_DATE"));
+        casumData.setContrctEndDt(rs.getString("CNTRCT_END_DATE"));
+        casumData.setProjectId(rs.getString("PROJECT_ID"));
+        casumData.setProjectDesc(rs.getString("PROJECT_DESC"));
+        casumData.setCustomerName(rs.getString("CUST_NAME"));
+        casumData.setOptyDesc(rs.getString("OPTY_DESC"));
+        casumData.setIbuHeadName(rs.getString("D_IBU_HEAD_NAME"));
+        casumData.setPgmName(rs.getString("PGM_NAME"));
+        casumData.setPmName(rs.getString("PM_NAME"));
+        casumData.setProjectType(rs.getString("PROJECT_TYPE"));
       
       return casumData;
     }

@@ -10,11 +10,16 @@ public class CasumData {
 	private String	contrctStartDt	;
 	private String	contrctEndDt	;
 	private String	projectId	;
-	private String projectDesc   ;
+	private String  projectDesc   ;
+	private String  projectType;
 	private String	optyId	;
 	private String	optyDesc	;
 	private String	customerId	;
 	private String	customerName	;
+	private String  ibuHeadName    ;
+	private String  pgmName  ;
+	private String  pmName    ;
+
 	
 	
     public String getPoNum() {
@@ -94,6 +99,30 @@ public class CasumData {
     }
     public void setProjectDesc(String projectDesc) {
       this.projectDesc = projectDesc;
-    }       
+    }
+    public String getIbuHeadName() {
+      return ibuHeadName;
+    }
+    public void setIbuHeadName(String ibuHeadName) {
+      this.ibuHeadName = ibuHeadName;
+    }
+    public String getPgmName() {
+      return pgmName;
+    }
+    public void setPgmName(String pgmName) {
+      this.pgmName = pgmName;
+    }
+    public String getPmName() {
+      return pmName;
+    }
+    public void setPmName(String pmName) {
+      this.pmName = pmName;
+    }
+    public String getProjectType() {
+      return projectType;
+    }
+    public void setProjectType(String projectType) {
+      this.projectType = projectType;
+    }  
 	
 }
