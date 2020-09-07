@@ -66,7 +66,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       + ") select * from rws  pivot ( count(*) for ON_OFF in ('OFFSHORE' AS OFFSHORE, 'ONSITE' AS ONSITE ) ) ";
 
   String               getPrjRevEbidta     =
-      "SELECT ROUND((NVL(REV_TOTAL,0)),2) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL,"
+      "SELECT ROUND((NVL(REV_TOTAL,0)/POWER(10,6)),3) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL,"
           + " CASE when SUM(REV_TOTAL) <> 0 THEN (SUM(EBIDTA)*100)/SUM(REV_TOTAL) END  AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.T_PROJECT_MASTER PJM  "
           + " ON PJM.PROJECT_ID = pnl.PROJECT_ID ";
   String               getPrjRevEbidta1    = " GROUP BY FY ) A";
@@ -87,21 +87,21 @@ public class PmrprojDaoImpl implements PmrprojDao {
   String               getPmSeriesData1    = " GROUP BY PM_ID,PM_NAME,PGM_ID";
 
   String               getRevEbidtaConsQry =
-      " select SUM(JANUARY_EBIDTA)*100/SUM(JANUARY_REV_TOTAL) AS JANUARY_EBIDTA,SUM(FEBRUARY_EBIDTA)*100/SUM(FEBRUARY_REV_TOTAL) AS FEBRUARY_EBIDTA,"
-          + " SUM(MARCH_EBIDTA)*100/SUM(MARCH_REV_TOTAL) AS MARCH_EBIDTA,SUM(APRIL_EBIDTA)*100/SUM(APRIL_REV_TOTAL) AS APRIL_EBIDTA,"
-          + " SUM(MAY_EBIDTA)*100/SUM(MAY_REV_TOTAL) AS MAY_EBIDTA,SUM(JUNE_EBIDTA)*100/SUM(JUNE_REV_TOTAL) AS JUNE_EBIDTA,"
-          + " SUM(JULY_EBIDTA)*100/SUM(JULY_REV_TOTAL) AS JULY_EBIDTA,SUM(AUGUST_EBIDTA)*100/SUM(AUGUST_REV_TOTAL) AS AUGUST_EBIDTA,\r\n"
-          + " SUM(SEPTEMBER_EBIDTA)*100/SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_EBIDTA,SUM(OCTOBER_EBIDTA)*100/SUM(OCTOBER_REV_TOTAL) AS OCTOBER_EBIDTA,"
-          + " SUM(NOVEMBER_EBIDTA)*100/SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_EBIDTA,SUM(DECEMBER_EBIDTA)*100/SUM(DECEMBER_REV_TOTAL) AS DECEMBER_EBIDTA,"
-          + " SUM(JANUARY_REV_TOTAL) AS JANUARY_REV_TOTAL,SUM(FEBRUARY_REV_TOTAL) AS FEBRUARY_REV_TOTAL,SUM(MARCH_REV_TOTAL) AS MARCH_REV_TOTAL,SUM(APRIL_REV_TOTAL) AS APRIL_REV_TOTAL,"
-          + " SUM(MAY_REV_TOTAL) AS MAY_REV_TOTAL,SUM(JUNE_REV_TOTAL) AS JUNE_REV_TOTAL,SUM(JULY_REV_TOTAL) AS JULY_REV_TOTAL,SUM(AUGUST_REV_TOTAL) AS AUGUST_REV_TOTAL, "
-          + " SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_REV_TOTAL,SUM(OCTOBER_REV_TOTAL) AS OCTOBER_REV_TOTAL,SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_REV_TOTAL,SUM(DECEMBER_REV_TOTAL) AS DECEMBER_REV_TOTAL"
-          + " from ( select * from ( "
-          + " select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PM_NAME,PJM.PGM_ID,PGM_NAME,PJM.STATUS,PJM.D_IBU_HEAD_ID,D_IBU_HEAD_NAME,REV_TOTAL,EBIDTA from PMOX.T_PNL_BASE PNL "
-          + " JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "
-          + " ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL, "
-          + " 'MAY' AS MAY,'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER, "
-          + " 'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER) )) WHERE  ";
+      " select ROUND(((SUM(JANUARY_EBIDTA)*100/SUM(JANUARY_REV_TOTAL))/POWER(10,6)),3)  AS JANUARY_EBIDTA,SUM(FEBRUARY_EBIDTA)*100/SUM(FEBRUARY_REV_TOTAL) AS FEBRUARY_EBIDTA,  " + 
+      "  SUM(MARCH_EBIDTA)*100/SUM(MARCH_REV_TOTAL) AS MARCH_EBIDTA,SUM(APRIL_EBIDTA)*100/SUM(APRIL_REV_TOTAL) AS APRIL_EBIDTA, " + 
+      "  SUM(MAY_EBIDTA)*100/SUM(MAY_REV_TOTAL) AS MAY_EBIDTA,SUM(JUNE_EBIDTA)*100/SUM(JUNE_REV_TOTAL) AS JUNE_EBIDTA," + 
+      "  SUM(JULY_EBIDTA)*100/SUM(JULY_REV_TOTAL) AS JULY_EBIDTA,SUM(AUGUST_EBIDTA)*100/SUM(AUGUST_REV_TOTAL) AS AUGUST_EBIDTA," + 
+      "  SUM(SEPTEMBER_EBIDTA)*100/SUM(SEPTEMBER_REV_TOTAL) AS SEPTEMBER_EBIDTA,SUM(OCTOBER_EBIDTA)*100/SUM(OCTOBER_REV_TOTAL) AS OCTOBER_EBIDTA," + 
+      "  SUM(NOVEMBER_EBIDTA)*100/SUM(NOVEMBER_REV_TOTAL) AS NOVEMBER_EBIDTA,SUM(DECEMBER_EBIDTA)*100/SUM(DECEMBER_REV_TOTAL) AS DECEMBER_EBIDTA, " + 
+      "  ROUND((SUM(JANUARY_REV_TOTAL)/POWER(10,6)),3) AS JANUARY_REV_TOTAL,ROUND((SUM(FEBRUARY_REV_TOTAL)/POWER(10,6)),3)  AS FEBRUARY_REV_TOTAL,ROUND((SUM(MARCH_REV_TOTAL)/POWER(10,6)),3) AS MARCH_REV_TOTAL, " + 
+      "  ROUND((SUM(APRIL_REV_TOTAL)/POWER(10,6)),3) AS APRIL_REV_TOTAL,ROUND((SUM(MAY_REV_TOTAL)/POWER(10,6)),3) AS MAY_REV_TOTAL,ROUND((SUM(JUNE_REV_TOTAL)/POWER(10,6)),3) AS JUNE_REV_TOTAL, " + 
+      "  ROUND((SUM(JULY_REV_TOTAL)/POWER(10,6)),3) AS JULY_REV_TOTAL,ROUND((SUM(AUGUST_REV_TOTAL)/POWER(10,6)),3) AS AUGUST_REV_TOTAL, ROUND((SUM(SEPTEMBER_REV_TOTAL)/POWER(10,6)),3) AS SEPTEMBER_REV_TOTAL, " + 
+      "  ROUND((SUM(OCTOBER_REV_TOTAL)/POWER(10,6)),3) AS OCTOBER_REV_TOTAL,ROUND((SUM(NOVEMBER_REV_TOTAL)/POWER(10,6)),3) AS NOVEMBER_REV_TOTAL,ROUND((SUM(DECEMBER_REV_TOTAL)/POWER(10,6)),3) AS DECEMBER_REV_TOTAL " + 
+      "  from ( select * from ( select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PM_NAME,PJM.PGM_ID,PGM_NAME,PJM.STATUS,PJM.D_IBU_HEAD_ID,D_IBU_HEAD_NAME,REV_TOTAL,EBIDTA from PMOX.T_PNL_BASE PNL " + 
+      "  JOIN PMOX.T_PROJECT_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID " + 
+      "  ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL, " + 
+      "  'MAY' AS MAY,'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER, " + 
+      "  'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER) )) WHERE ";
   String getPnLData1 = "SELECT category,SUM(APRIL) APRIL ,SUM(MAY) MAY,SUM(JUNE) JUNE,SUM(JULY) JULY,SUM(AUGUST) AUGUST,SUM(SEPTEMBER) SEPTEMBER,SUM(OCTOBER) OCTOBER, " + 
       " SUM(NOVEMBER) NOVEMBER,SUM(DECEMBER) DECEMBER,SUM(JANUARY) JANUARY,SUM(FEBRUARY) FEBRUARY,SUM(MARCH) MARCH FROM PMOX.V_PNL_PROJECT WHERE ";
   String getPnLData2 = " GROUP BY category ORDER BY category";
@@ -626,9 +626,10 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pnlData.setMonJan(rs.getString("JANUARY"));
       pnlData.setMonFeb(rs.getString("FEBRUARY"));
       pnlData.setMonMar(rs.getString("MARCH"));
-      pnlData.setTotal((Float.parseFloat(pnlData.getMonApr()==null? "0.0" : pnlData.getMonApr())+Float.parseFloat(pnlData.getMonMay()==null? "0.0" :pnlData.getMonMay())+Float.parseFloat(pnlData.getMonJun()==null? "0.0" :pnlData.getMonJun())+Float.parseFloat(pnlData.getMonJul()==null? "0.0" :pnlData.getMonJul())+
-      Float.parseFloat(pnlData.getMonAug()==null? "0.0" :pnlData.getMonAug())+Float.parseFloat(pnlData.getMonSep()==null? "0.0" :pnlData.getMonSep())+Float.parseFloat(pnlData.getMonOct()==null? "0.0" :pnlData.getMonOct())+Float.parseFloat(pnlData.getMonNov()==null? "0.0" :pnlData.getMonNov())+
-      Float.parseFloat(pnlData.getMonDec()==null? "0.0" :pnlData.getMonDec())+Float.parseFloat(pnlData.getMonJan()==null? "0.0" :pnlData.getMonJan())+Float.parseFloat(pnlData.getMonFeb()==null? "0.0" :pnlData.getMonFeb())+Float.parseFloat(pnlData.getMonMar()==null? "0.0" :pnlData.getMonMar()))+"");
+      float total = Float.parseFloat(pnlData.getMonApr()==null? "0.0" : pnlData.getMonApr())+Float.parseFloat(pnlData.getMonMay()==null? "0.0" :pnlData.getMonMay())+Float.parseFloat(pnlData.getMonJun()==null? "0.0" :pnlData.getMonJun())+Float.parseFloat(pnlData.getMonJul()==null? "0.0" :pnlData.getMonJul())+
+          Float.parseFloat(pnlData.getMonAug()==null? "0.0" :pnlData.getMonAug())+Float.parseFloat(pnlData.getMonSep()==null? "0.0" :pnlData.getMonSep())+Float.parseFloat(pnlData.getMonOct()==null? "0.0" :pnlData.getMonOct())+Float.parseFloat(pnlData.getMonNov()==null? "0.0" :pnlData.getMonNov())+
+          Float.parseFloat(pnlData.getMonDec()==null? "0.0" :pnlData.getMonDec())+Float.parseFloat(pnlData.getMonJan()==null? "0.0" :pnlData.getMonJan())+Float.parseFloat(pnlData.getMonFeb()==null? "0.0" :pnlData.getMonFeb())+Float.parseFloat(pnlData.getMonMar()==null? "0.0" :pnlData.getMonMar());
+      pnlData.setTotal(String.format("%.2f", total));
       
      
       return pnlData;
