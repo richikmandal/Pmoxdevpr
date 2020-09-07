@@ -163,6 +163,22 @@
 		border: #282828 solid 1px;
 		background: #F5F5F5;
 	}
+#grad1 {
+  
+  background-color: #a82a2a; /* For browsers that do not support gradients */
+  background-image: linear-gradient(#a82a2a, #c91616); /* Standard syntax (must be last) */
+}
+	
+#grad2 {
+  
+  background-color: #c91616; /* For browsers that do not support gradients */
+  background-image: linear-gradient(#c91616, #e00d0d); /* Standard syntax (must be last) */
+}
+#grad3 {
+  
+  background-color: #a82a2a; /* For browsers that do not support gradients */
+  background-image: linear-gradient(#a82a2a, #e00d0d); /* Standard syntax (must be last) */
+}
 	
 </style>
 <div class="h-75 d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="HomeController" style="">
@@ -174,30 +190,30 @@
 			</div>
 			<section class="py-2" id="section11" >
 				<div class="row" style="height: 67px;">
-					<div class="col-xl-3 col-md-6">
-						<ul class="list-group">
-							<li class="list-group-item gradient-warning text-white rounded" style="height: 40px;">
+					<div class="col-xl-3 col-md-6" >
+						<ul class="list-group" >
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;">
 								<div class="row">
-									<div class="col-lg-1">
-										<div class="icon text-white bg-violet">
+									<div class="col-lg-2" style="margin-bottom: 65px;">
+										<div class="icon text-white" style="background-color:#838ba3;">
 											<i class="fas fa-book"></i>
 										</div>
 									</div>
 									
 									<div class="col-lg-5">
-										<div class="text-white" style="text-align: left">
+										<div class="text-white">
 											<a ng-click="showOdBook()"><b>Order Book</b></a>
 										</div>
 									</div>
 									<div class="col-lg-5" style="text-align: right">
-										<div class="text-blue">
+										<div class="text-white">
 											<a ng-click="goOrderBook()"><b>Edit Order Book</b></a>
 										</div>
 									</div>
 
 								</div>
 							</li>
-							<li class="list-group-item gradient-warning text-white rounded" style="height: 33px;">
+							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
 									<div class="col-lg-2">
 										<div class="samll text-white">
@@ -225,10 +241,10 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item gradient-success text-white rounded" style="height: 40px;">
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;">
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="icon text-white bg-violet">
+										<div class="icon text-white" style="background-color:#838ba3">
 											<i class="fas fa-chart-bar"></i>
 										</div>
 									</div>
@@ -240,7 +256,7 @@
 
 								</div>
 							</li>
-							<li class="list-group-item gradient-success text-white rounded" style="height: 33px;">
+							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
 									<div class="col-lg-6">
 										<div class="text-white">
@@ -258,10 +274,10 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item gradient-primary text-white rounded" style="height: 40px;"><div
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;"><div
 									class="row">
 									<div class="col-lg-2">
-										<div class="icon text-white bg-violet">
+										<div class="icon text-white" style="background-color:#838ba3">
 											<i class="fas fa-server"></i>
 										</div>
 									</div>
@@ -280,7 +296,7 @@
 									<!-- <div class="col-lg-5">    
 								                </div> -->
 								</div></li>
-							<li class="list-group-item gradient-primary text-white rounded" style="height: 33px;">
+							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
 									<div class="col-lg-4">
 										<div class="samll text-white">
@@ -303,10 +319,10 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item gradient-danger text-white rounded" style="height: 40px;">
+							<li class="list-group-item  text-white rounded" id="grad1" style="height: 40px;">
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="icon text-white bg-violet">
+										<div class="icon text-white" style="background-color:#838ba3">
 											<i class="fas fa-book"></i>
 										</div>
 									</div>
@@ -318,7 +334,7 @@
 									</div>
 								</div>
 							</li>
-							<li class="list-group-item gradient-danger text-white rounded" style="height: 33px;">
+							<li class="list-group-item text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
 									<div class="col-lg-3">
 										<div class="samll text-white">
@@ -347,7 +363,7 @@
 				</div>
 			</section>
 			<section class="py-2" id="section33">
-				<div class="row">
+				<div class="row" >
 					<div class="col-xl-3 col-md-6"
 						style="width: 100%;">
 						<select class="btn btn-secondary" name="pgm" ng-model="pgmdata1" style="width: 100%;"
@@ -378,16 +394,16 @@
 				</div>
 			</section>
 			<section class="py-2" id="section88" ng-show="showOB">
-				<div class="row shadow-lg mb-4">
+				<div class="row shadow-lg mb-4" >
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						<div class="card shadow-lg mb-3">
 							<div class="card-body">
 								<div class="row align-items-center flex-row">
 									<div class="col-lg-12">
 										<table class="table-sm table-bordered"
-											style="border: 2px solid black; height: 90%;">
+											style="border: 2px solid black; height: ">
 											<thead>
-												<tr style="background-color: #a82a2a; color: #ffffff">
+												<tr style="color: #ffffff" id="grad3">
 													<th>Account Name</th>
 													<th>Q4FY20</th>
 													<th>Q1FY21</th>
@@ -574,7 +590,7 @@
 				</div>
 			</section>
 			<section class="py-2" id="section44" ng-show="showProjects">
-				<div class="row shadow-lg mb-4">
+				<div class="row shadow-md mb-4">
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						<div class="card shadow-lg mb-3">
 							<div class="card-body">
@@ -674,15 +690,15 @@
 										<!-- <hc-chart options="chartProjRevenue"></hc-chart> -->
 										<table class="table-sm table-bordered" style="border:2px solid black; width:auto;" >
 										    <thead >
-											<tr style="text-align: center;background-color:#a82a2a; color: #ffffff;">
-										        <th style="width:15%;text-align: center;" rowspan="2"></th>
+											<tr style="text-align: center; color: #ffffff;" id="grad1">
+										        <th style="width:15%;text-align: center;" rowspan="2" id="grad3"></th>
 										        <th colspan="3" style="text-align: center;">Q1</th>
 												<th colspan="3" style="text-align: center;">Q2</th>
 												<th colspan="3" style="text-align: center;">Q3</th>
 										        <th colspan="3" style="text-align: center;">Q4</th>
-												<th rowspan="2">Total</th>
+												<th rowspan="2" id="grad3">Total</th>
 										      </tr>
-										      <tr style="background-color:#a82a2a; color: #ffffff;">
+										      <tr style="color: #ffffff;" id="grad2">
 										        	
 										        <th style="width:6.5%;text-align: center;">Apr</th>
 										        <th style="width:6.5%;text-align: center;">May</th>
