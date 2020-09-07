@@ -11,33 +11,35 @@ angular.module('PmoxApp')
           $scope.showPnL=false;
           $scope.showOB=true;
           $scope.makeShrink = false;  
+          $scope.ibuName = '';
           $scope.manNames=[];
           $scope.pgManagers=[];
+          $scope.ibuNames=[];
           $scope.prjTech = [];
           $scope.prjTechCnt = [];
           $scope.prjType = [];
           $scope.prjTypeCnt = [];
           $scope.pnlSummaryData = [];
           $scope.init = function () {
-             $scope.disableTabs=true;           
-             $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
-             
-             //alert(JSON.stringify($scope.user.pandlMap))
-             
-             $scope.totalProjectCount = $scope.user.totalProjectCount;
-             $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
-             $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
-             $scope.totalRevenue = $scope.user.totalRevenue;
-             $scope.totalEbidta = $scope.user.totalEbidta;
-             $scope.loadPricingMdlData($scope.user.projMasterData);
-             
-             $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
-             $scope.loadProjStatus($scope.user.projMasterData);
-             $scope.loadProjManaged($scope.user.projMasterData); 
-             $scope.loadProjTech($scope.user.projMasterData);
-             $scope.loadProjType($scope.user.projMasterData);
-             $scope.loadProjLocChrt($scope.user.resourceMap);
-             $scope.loadProjRevEbidtaChrt($scope.user);
+           $scope.disableTabs=true;           
+           $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
+           
+           alert(JSON.stringify($scope.user.projMasterData))
+           
+           $scope.totalProjectCount = $scope.user.totalProjectCount;
+           $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
+           $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
+           $scope.totalRevenue = $scope.user.totalRevenue;
+           $scope.totalEbidta = $scope.user.totalEbidta;
+           $scope.loadPricingMdlData($scope.user.projMasterData);
+           
+           $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
+           $scope.loadProjStatus($scope.user.projMasterData);
+           $scope.loadProjManaged($scope.user.projMasterData); 
+           $scope.loadProjTech($scope.user.projMasterData);
+           $scope.loadProjType($scope.user.projMasterData);
+           $scope.loadProjLocChrt($scope.user.resourceMap);
+           $scope.loadProjRevEbidtaChrt($scope.user);
 
               
          };
@@ -81,9 +83,7 @@ angular.module('PmoxApp')
              acc[val.pricingModel] = acc[val.pricingModel] === undefined ? 1 : acc[val.pricingModel] += 1;
              return acc;
            }, {});
-           
-          // alert(JSON.stringify(uniqsPricing))
-           
+                     
            var fpVal = 0;
            var tnmVal = 0;
            var otherVal = 0
@@ -162,8 +162,6 @@ angular.module('PmoxApp')
              
            });
            
-          // alert('$scope.pnlSummaryData---'+JSON.stringify($scope.pnlSummaryData));
-           
          }
          
 
@@ -177,6 +175,12 @@ angular.module('PmoxApp')
            if(selectedPmId==='' && selectedPrjId==='' )
            {
              $scope.projects=[];
+             
+             var ibu = new Object();
+             ibu.ibuid="allibu";
+             ibu.ibumname="---All IBU---";
+             $scope.ibuNames.push(ibu);
+                                      
              var managers = new Object();
              managers.pid="allpm";
              managers.pmname="---All PMs---";
@@ -193,6 +197,32 @@ angular.module('PmoxApp')
              projects.pname="---All Projects---";
              $scope.projects.push(projects);
              $scope.selProject=$scope.projects[0];
+             
+             var distinctIbu = [...new Set(projMasterData.map(ibu => ibu.ibuHeadId+':'+ibu.ibuHeadName))];
+             
+             if(distinctIbu.length==1){
+               var ibuArr = distinctIbu[0].split(':');
+               var ibu = new Object();
+               ibu.id=ibuArr[0];
+               ibu.name=ibuArr[1];
+               $scope.ibuNames = [];
+               $scope.ibuNames.push(ibu);
+               $scope.ibuName=ibu;
+               
+             }else{
+               
+                 angular.forEach(distinctIbu, function (valueOut, keyOut) {
+                   
+                   var ibuArr = valueOut.split(':');
+                   var ibu = new Object();
+                   ibu.id=ibuArr[0];
+                   ibu.name=ibuArr[1];
+                   $scope.ibuNames.push(ibu);
+                   alert($scope.ibuNames.length)
+                 
+               });  
+             }
+            
           
              var distinctPgm = [...new Set(projMasterData.map(pgm => pgm.pgmId+':'+pgm.pgmName))];
            
@@ -204,10 +234,6 @@ angular.module('PmoxApp')
                    pgm.name=pgmArr[1];
                    $scope.pgManagers.push(pgm);
                    $scope.pgmdata=$scope.pgManagers[0];
-                   
-                   lastPgmId = valueOut.pgmId;
-                   lastPgmName = valueOut.pgmName;
-                 
                  
                });  
               
@@ -238,13 +264,12 @@ angular.module('PmoxApp')
                });  
            
            }
-          // alert('manNames----'+JSON.stringify($scope.projects));
                       
          }
          
          $scope.getDetailsDataPgm=function(pgm){
            
-          // alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
+           alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
            
            $scope.projects=[];
            $scope.manNames=[];
@@ -278,8 +303,6 @@ angular.module('PmoxApp')
             $scope.totalEbidta = userDataPrj.totalEbidta;
             $scope.loadPricingMdlData(userDataPrj.projMasterData);
             
-            
-           // $scope.loadFiltersWithStatusData('','',userDataPrj.projMasterData);
             $scope.loadProjStatus(userDataPrj.projMasterData);  
             $scope.loadProjManaged(userDataPrj.projMasterData);
             $scope.loadProjTech(userDataPrj.projMasterData);
@@ -369,8 +392,7 @@ angular.module('PmoxApp')
             $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
             $scope.totalRevenue = userDataPrj.totalRevenue;
             $scope.totalEbidta = userDataPrj.totalEbidta;
-            $scope.loadPricingMdlData(userDataPrj.projMasterData);
-            
+            $scope.loadPricingMdlData(userDataPrj.projMasterData);  
             $scope.loadFiltersWithStatusData(pm.pid,'',userDataPrj.projMasterData);
             $scope.loadProjStatus(userDataPrj.projMasterData);  
             $scope.loadProjManaged(userDataPrj.projMasterData);
@@ -399,19 +421,16 @@ angular.module('PmoxApp')
                       } 
                       
                     }
-
             }); 
             
          }; 
          
          $scope.getDetailsDataPrj=function(selProject){
               
-          // 
            if(selProject.pid==='allprj'){
-            // user.projectSelected = '';
-             
+           
              if($scope.pmData.pid==='allpm'){
-               //alert('pm.pid--'+pm.pid)
+             
                var user = new Object();
                user.username =  $scope.pgmdata.id;
                user.name = $scope.pgmdata.name;
@@ -449,21 +468,14 @@ angular.module('PmoxApp')
              user.projectSelected = selProject.pid;
              $scope.loadProjRevEbidtaChrt(user);
              userDataPrj = $scope.loadProjectMasterData(user)[0];
-           }
-           //user.projectSelected = selProject.pid;
-         
-           //alert('--project---'+JSON.stringify(user))
-        
-          
+           }        
 
           $scope.totalProjectCount = userDataPrj.totalProjectCount;
           $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
           $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
           $scope.totalRevenue = userDataPrj.totalRevenue;
           $scope.totalEbidta = userDataPrj.totalEbidta;
-          
           $scope.loadPricingMdlData(userDataPrj.projMasterData);
-          
           $scope.loadFiltersWithStatusData('',selProject.pid,userDataPrj.projMasterData);         
           $scope.loadProjStatus(userDataPrj.projMasterData);         
           $scope.loadProjManaged(userDataPrj.projMasterData);          
@@ -520,19 +532,14 @@ angular.module('PmoxApp')
                   colors: ['#79d279','#ffb84d','#00bfff'],
                   series: statusSeriesData
                 };
-
          }
          
          $scope.loadProjManaged = function(projMasterData) {
-           
-           //alert(JSON.stringify(projMasterData))
-           
+                      
            var uniqsStatus = projMasterData.reduce((acc, val) => {
              acc[val.deliveryOwnership] = acc[val.deliveryOwnership] === undefined ? 1 : acc[val.deliveryOwnership] += 1;
              return acc;
            }, {});
-           
-           //alert(uniqsStatus+'---uniqsStatus----'+JSON.stringify(uniqsStatus))
            
           var statusFlag = [];
           var statusFlagData = [];
@@ -546,8 +553,7 @@ angular.module('PmoxApp')
             });
             
             managedSeriesData.push({data:statusFlagData});
-          // alert(managedSeriesData+'-----uniqs----'+JSON.stringify(managedSeriesData))
-            
+     
             $scope.chartOptionsMan = {
                     chart: {
                       type: 'pie',
@@ -575,7 +581,6 @@ angular.module('PmoxApp')
                   colors: ['#b3e0ff','#bf80ff','#e6e600','#ff8c66'],
                   series: managedSeriesData
                 };
-
          }
          
          $scope.loadProjTech = function(projMasterData) {
@@ -587,8 +592,6 @@ angular.module('PmoxApp')
              acc[val.projectTechnology] = acc[val.projectTechnology] === undefined ? 1 : acc[val.projectTechnology] += 1;
              return acc;
            }, {});
-           
-          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
            
            angular.forEach(uniqs, function (value, key) {
              
@@ -611,8 +614,6 @@ angular.module('PmoxApp')
              acc[val.projectType] = acc[val.projectType] === undefined ? 1 : acc[val.projectType] += 1;
              return acc;
            }, {});
-           
-          // alert(uniqs+'-----uniqs----'+JSON.stringify(uniqs))
            
            angular.forEach(uniqs, function (value, key) {
              
@@ -1273,7 +1274,7 @@ angular.module('PmoxApp')
 		 }
 		 
 		 $scope.showProgress=function(){
-		   //alert(123454321)
+		   
 		   $scope.loaderds =true;
        // $scope.showSaveBtn11=true;
      }
