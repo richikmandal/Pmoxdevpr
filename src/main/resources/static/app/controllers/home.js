@@ -218,7 +218,7 @@ angular.module('PmoxApp')
                    ibu.id=ibuArr[0];
                    ibu.name=ibuArr[1];
                    $scope.ibuNames.push(ibu);
-                   alert($scope.ibuNames.length)
+                  // alert($scope.ibuNames.length)
                  
                });  
              }
@@ -269,7 +269,7 @@ angular.module('PmoxApp')
          
          $scope.getDetailsDataPgm=function(pgm){
            
-           alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
+         //  alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
            
            $scope.projects=[];
            $scope.manNames=[];
@@ -1160,10 +1160,8 @@ angular.module('PmoxApp')
                legend: {
                    layout: 'vertical',
                    align: 'right',
-                   verticalAlign: 'top',
-                   x: -40,
-                   y: 80,
-                   floating: true,
+                   verticalAlign: 'middle',
+                   floating: false,
                    borderWidth: 1,
                    backgroundColor:
                        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
