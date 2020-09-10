@@ -181,7 +181,7 @@
 }
 	
 </style>
-<div class="h-75 d-flex align-items-stretch shadow" ng-init="init()"	ng-controller="HomeController" style="">
+<div class="h-75 d-flex align-items-stretch shadow" ng-init="init()" ng-controller="HomeController" style="">
 
 	<div class="page-holder w-100 d-flex flex-wrap">
 		<div class="container-fluid px-xl-5">
@@ -192,7 +192,7 @@
 				<div class="row" style="height: 67px;">
 					<div class="col-xl-3 col-md-6" >
 						<ul class="list-group" >
-							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;">
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;padding-bottom: 5px;padding-top: 6px;">
 								<div class="row">
 									<div class="col-lg-2" style="margin-bottom: 65px;">
 										<div class="icon text-white" style="background-color:#838ba3;">
@@ -201,39 +201,36 @@
 									</div>
 									
 
-									<div class="col-lg-5">
-										<div class="text-white">
-											<a ng-click="showOdBook()"><b>Order Book</b></a>
+									<div class="col-lg-8">
+										<div class="text-white" style="padding-top: 5px;">
+											<a ng-click="showOdBook()"><b>Revenue Projection</b></a>
 										</div>
 									</div>
-									<div class="col-lg-5" style="text-align: right">
-										<div class="text-white">
-											<a ng-click="goOrderBook()"><b>Edit Order Book</b></a>
-										</div>
-
+									<div class="col-lg-2" style="text-align: right">
+										
 									</div>
 
 								</div>
 							</li>
 							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
-									<div class="col-lg-2">
-										<div class="samll text-white">
+									<div class="col-lg-3">
+										<div class="samll text-white" >
 											<b>Q1:</b>
 										</div>
 									</div>
-									<div class="col-lg-2">
-										<div class="samll text-white">
+									<div class="col-lg-3">
+										<div class="samll text-white" >
 											<b>Q2:</b>
 										</div>
 									</div>
-									<div class="col-lg-2">
-										<div class="samll text-white">
+									<div class="col-lg-3">
+										<div class="samll text-white" >
 											<b>Q3:</b>
 										</div>
 									</div>
-									<div class="col-lg-2">
-										<div class="samll text-white">
+									<div class="col-lg-3">
+										<div class="samll text-white" >
 											<b>Q4:</b>
 										</div>
 									</div>
@@ -243,7 +240,7 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;">
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;padding-bottom: 5px;padding-top: 6px;">
 								<div class="row">
 
 									<div class="col-lg-2">
@@ -252,7 +249,7 @@
 										</div>
 									</div>
 									<div class="col-lg-10">
-										<div class="text-white">
+										<div class="text-white" style="padding-top: 5px;">
 											<a ng-click="showPnLChrt()"><b>Profit & Loss </b></a>
 										</div>
 									</div>
@@ -262,12 +259,12 @@
 							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
 									<div class="col-lg-6">
-										<div class="text-white">
+										<div class="text-white" >
 											<b> Rev: $ {{totalRevenue}} M</b>
 										</div>
 									</div>
 									<div class="col-lg-6">
-										<div class="text-white">
+										<div class="text-white" >
 											<b>EBIDTA(%): {{totalEbidta}}</b>
 										</div>
 									</div>
@@ -277,7 +274,7 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;"><div
+							<li class="list-group-item text-white rounded" id="grad1" style="height: 40px;padding-bottom: 5px;padding-top: 6px;"><div
 									class="row">
 
 									<div class="col-lg-2">
@@ -287,14 +284,14 @@
 									</div>
 
 									<div class="col-lg-5">
-										<div class="text-white">
+										<div class="text-white" style="padding-top: 5px;">
 											<a ng-click="showProjectChrt()"><b>Projects
 													({{totalProjectCount}})</b></a>
 										</div>
 									</div>
 
 									<div class="col-lg-5">
-										<div class="text-white">
+										<div class="text-white" style="padding-top: 5px;">
 											<a ng-click="showAssociateChrt()"><b>Associates
 													({{totalOffShoreCount+totalOnShoreCount}})</b></a>
 										</div>
@@ -325,7 +322,7 @@
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<ul class="list-group">
-							<li class="list-group-item  text-white rounded" id="grad1" style="height: 40px;">
+							<li class="list-group-item  text-white rounded" id="grad1" style="height: 40px;padding-bottom: 5px;padding-top: 6px;">
 								<div class="row">
 
 									<div class="col-lg-2">
@@ -334,7 +331,7 @@
 										</div>
 									</div>
 									<div class="col-lg-10">
-										<div class="text-white">
+										<div class="text-white" style="padding-top: 5px;">
 											<a ng-click="showInProgress()"><b>Operational
 													Parameter</b></a>
 										</div>
@@ -370,229 +367,97 @@
 				</div>
 			</section>
 			<section class="py-2" id="section33">
-				<div class="row" >
-					<div class="col-xl-3 col-md-6"
-						style="width: 100%;">
-						<select class="btn btn-secondary" name="ibu" ng-model="ibuName" style="width: 100%;height: 24px;padding-bottom: 4px;padding-top: 4px;"
+				<div class="row" style="padding-top: 0px;padding-bottom: 3px;">
+					<div class="col-xl-3 col-md-6"	style="width: 100%;">
+						<select class="form-control"  style="width: 100%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;" disabled>
+						</select>
+					</div>
+					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
+					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">SBU</span>
+						<select class="form-control" name="sbu" ng-model="sbuName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
+							ng-options="sbuhead as sbuhead.name for sbuhead in sbuNames" ng-change="getDetailsDataIbu(sbuName)">
+
+						</select>
+					</div>
+					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
+					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">IBG</span>
+						<select class="form-control" name="ibg" ng-model="ibgName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
+							ng-options="ibghead as ibghead.name for ibghead in ibgNames" ng-change="getDetailsDataIbu(ibgName)">
+
+						</select>
+					</div>
+					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
+					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">IBU</span>
+						<select class="form-control" name="ibu" ng-model="ibuName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
 							ng-options="ibuhead as ibuhead.name for ibuhead in ibuNames" ng-change="getDetailsDataIbu(ibuName)">
 
 						</select>
 					</div>
-					<div class="col-xl-3 col-md-6"
-						style="width: 100%;">
-					<select class="btn btn-secondary" name="pgm" style="width: 100%;"
+				</div>
+				<div class="row" >
+					<div class="input-group col-xl-3 col-md-6"
+						style="width: 100%;padding-left: 15px;">
+						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">SALES</span>
+						<select class="form-control" name="spgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="sProgramManager as sProgramManager.name for sProgramManager in sPgManagers"
+							ng-model="sPgmdata" ng-change="getDetailsDataSPgm(sPgmdata)">
+						</select>
+					</div>
+					<div class="input-group col-xl-3 col-md-6"
+						style="width: 100%;padding-left: 15px;">
+						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROGRAM</span>
+						<select class="form-control" name="pgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"
 							ng-options="programManager as programManager.name for programManager in pgManagers"
-							ng-model="pgmdata" ng-change="getDetailsDataPgm(pgmdata)">
+							ng-model="pgmdata" ng-change="getFilterData(pgmdata,'PGM')">
 						</select>
 					</div>
-					<div class="col-xl-3 col-md-6"
-						style="width: 100%;">
-						<select name="pm" class="btn btn-secondary" style="width: 100%;"
-							ng-options="name as name.pmname for name in manNames"
-							ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+					<div class="input-group col-xl-3 col-md-6"
+						style="width: 100%;padding-left: 15px;">
+						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PM</span>
+						<select name="pm" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"	ng-options="name as name.pmname for name in manNames"	ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
 						</select>
 					</div>
-					<div class="col-xl-3 col-md-6"
-						style="width: 100%;">
-						<select name="prj" class="btn btn-secondary" style="width: 100%;"
-							ng-options="project as project.pname for project in projects"
+					<div class="input-group col-xl-3 col-md-6"
+						style="width: 100%;padding-left: 15px;">
+						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROJECT</span>
+						<select name="prj" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="project as project.pname for project in projects"
 							ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
 						</select>
 					</div>
 				</div>
-				<div class="row" style="padding-top: 3px;">
-					<div class="col-xl-3 col-md-6"	style="width: 100%;">
-						<select class="btn btn-secondary"  style="width: 100%;height: 24px;padding-bottom: 4px;padding-top: 4px;" disabled>
-						</select>
-					</div>
-					<div class="col-xl-3 col-md-6"	style="width: 100%;">
-						<select class="btn btn-secondary" name="pgm" style="width: 100%;height: 24px;padding-bottom: 4px;padding-top: 4px;" disabled>
-						</select>
-					</div>
-					<div class="col-xl-3 col-md-6"	style="width: 100%;">
-						<select  class="btn btn-secondary" style="width: 100%;height: 24px;padding-bottom: 4px;padding-top: 4px;" disabled>
-						</select>
-					</div>
-					<div class="col-xl-3 col-md-6"	style="width: 100%;">
-						<select class="btn btn-secondary" style="width: 100%;height: 24px;padding-bottom: 4px;padding-top: 4px;" disabled>
-						</select>
-					</div>
-				</div>
+				
 			</section>
 			<section class="py-2" id="section88" ng-show="showOB">
 				<div class="row shadow-lg mb-4" >
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						<div class="card shadow-lg mb-3">
-							<div class="card-body">
+							<div class="card-body" style="padding-left: 5px;padding-top: 10px;padding-right: 5px;padding-bottom: 5px;">
 								<div class="row align-items-center flex-row">
-									<div class="col-lg-12">
+									<div class="col-lg-12" style="padding-left: 25px;">
 										<table class="table-sm table-bordered"
-											style="border: 2px solid black; height: ">
+											style="border: 2px solid black; height: 425px;">
 											<thead>
 												<tr style="color: #ffffff" id="grad3">
 													<th>Account Name</th>
-													<th>Q4FY20</th>
-													<th>Q1FY21</th>
-													<th>Q2FY21</th>
-													<th>Q3FY21</th>
-													<th>Q4FY21</th>
-													<th>FY21</th>
-													<th>Q1FY22</th>
+													<th>PFY-Q4</th>
+													<th>CFY-Q1</th>
+													<th>CFY-Q2</th>
+													<th>CFY-Q3</th>
+													<th>CFY-Q4</th>
+													<th>CFY-TOT</th>
+													<th>NFY-Q1</th>
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>Target (T)</td>
+												<tr style="text-align: center;" ng-repeat="rev in revProjectionData" >
+													<td>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</td>
 													<td></td>
-													<td>$3.38</td>
-													<td>$3.38</td>
-													<td>$3.38</td>
-													<td>$3.38</td>
-													<td>$13.50</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Target (BHAG)</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
+													<td style="text-align: right;">{{rev.cfyQOne}}</td>
+													<td style="text-align: right;">{{rev.cfyQTwo}}</td>
+													<td style="text-align: right;">{{rev.cfyQThree}}</td>
+													<td style="text-align: right;">{{rev.cfyQFour}}</td>
+													<td style="text-align: right;">{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</td>
 													<td></td>
 
-												</tr>
-												<tr>
-													<td>Order Book (OB) & Pending PO</td>
-													<td></td>
-													<td>$1.69</td>
-													<td>$2.15</td>
-													<td>$2.32</td>
-													<td>$1.62</td>
-													<td>$7.79</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Renewal (R)</td>
-													<td></td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.40</td>
-													<td>$0.40</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Commit (P4) (C)</td>
-													<td></td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Strong Upside (P3.1) (SU)</td>
-													<td></td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td>$0.00</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Forecast (F) (=OB+R+C+SU)</td>
-													<td></td>
-													<td>$1.69</td>
-													<td>$2.15</td>
-													<td>$2.32</td>
-													<td>$2.02</td>
-													<td>$8.19</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Gap (=T-F)</td>
-													<td></td>
-													<td>$1.68</td>
-													<td>$1.22</td>
-													<td>$1.05</td>
-													<td>$1.35</td>
-													<td>$5.31</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Last Forecast</td>
-													<td></td>
-													<td>$0.22</td>
-													<td>$0.35</td>
-													<td>$0.41</td>
-													<td>$0.41</td>
-													<td>$1.39</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Change from Last Forecast</td>
-													<td></td>
-													<td>$1.47</td>
-													<td>$1.80</td>
-													<td>$1.92</td>
-													<td>$1.61</td>
-													<td>$6.80</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Upside(P3)</td>
-													<td></td>
-													<td>$0.00</td>
-													<td>$0.06</td>
-													<td>$0.18</td>
-													<td>$0.12</td>
-													<td>$0.36</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Pipeline(P0 to P3)</td>
-													<td></td>
-													<td>$0.00</td>
-													<td>$0.06</td>
-													<td>$0.18</td>
-													<td>$0.12</td>
-													<td>$0.36</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Achievement %</td>
-													<td>0.00%</td>
-													<td>50.16%</td>
-													<td>63.79%</td>
-													<td>68.87%</td>
-													<td>59.94%</td>
-													<td>60.69%</td>
-													<td></td>
-
-												</tr>
-												<tr>
-													<td>Forecasted Growth (QoQ)</td>
-													<td></td>
-													<td>0.0%</td>
-													<td>27.2%</td>
-													<td>8.0%</td>
-													<td>-13.0%</td>
-													<td></td>
-													<td></td>
 												</tr>
 											</tbody>
 										</table>
@@ -742,7 +607,7 @@
 										      </tr>
 										    </thead>
 										    <tbody>
-										      <tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData">
+										      <tr style="text-align: center;">
 												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute">
 										        <td >
 										       	 <span ng-switch-when="Total #"><b>{{pnlData.attribute}}</b></span>
@@ -753,7 +618,7 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.attribute}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.attribute}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.attribute}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.attribute}}</span>
 										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.attribute}}</b></span>
 										        </td>
@@ -766,35 +631,35 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monApr}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monApr}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monApr}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monApr}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monApr}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monMay}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monMay}}</span>
+										         <span ng-switch-when="Onsite #">{{pnlData.monMay}}</span>
 										       	 <span ng-switch-when="Offshore #">{{pnlData.monMay}}</span>
 										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monMay}}</b></span>
 										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monMay}}</b></span>
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monMay}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monMay}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monMay}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monMay}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monMay}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monJun}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monJun}}</span>
+										         <span ng-switch-when="Onsite #">{{pnlData.monJun}}</span>
 										       	 <span ng-switch-when="Offshore #">{{pnlData.monJun}}</span>
 										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monJun}}</b></span>
 										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monJun}}</b></span>
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJun}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJun}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monJun}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJun}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monJun}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monJul}}</b></span>
@@ -805,9 +670,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJul}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJul}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monJul}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJul}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monJul}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monAug}}</b></span>
@@ -818,9 +683,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monAug}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monAug}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monAug}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monAug}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monAug}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monSep}}</b></span>
@@ -831,9 +696,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monSep}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monSep}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monSep}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monSep}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monSep}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										        <span ng-switch-when="Total #"><b>{{pnlData.monOct}}</b></span>
@@ -844,9 +709,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monOct}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monOct}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monOct}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monOct}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monOct}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monNov}}</b></span>
@@ -857,9 +722,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monNov}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monNov}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monNov}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monNov}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monNov}}</b></span> 
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span> 
 										       	</td>
 										       	<td>
 										        <span ng-switch-when="Total #"><b>{{pnlData.monDec}}</b></span>
@@ -870,9 +735,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monDec}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monDec}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monDec}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monDec}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monDec}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monJan}}</b></span>
@@ -883,9 +748,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJan}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJan}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monJan}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJan}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monJan}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monFeb}}</b></span>
@@ -896,9 +761,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monFeb}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monFeb}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monFeb}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monFeb}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monFeb}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.monMar}}</b></span>
@@ -909,9 +774,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.monMar}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.monMar}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.monMar}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monMar}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.monMar}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										       	<td>
 										         <span ng-switch-when="Total #"><b>{{pnlData.total}}</b></span>
@@ -922,9 +787,9 @@
 										       	 <span ng-switch-when="CNB Cost">{{pnlData.total}}</span>
 										       	 <span ng-switch-when="TNL Cost">{{pnlData.total}}</span>
 										       	 <span ng-switch-when="Buffer Cost">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="SGNA Cost">{{pnlData.total}}</span>
+										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.total}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.total}}</b></span>
+										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										      </tr>
 										    </tbody>

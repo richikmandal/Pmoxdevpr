@@ -10,16 +10,24 @@ angular.module('PmoxApp')
           $scope.showAssociates=false;
           $scope.showPnL=false;
           $scope.showOB=true;
-          $scope.makeShrink = false;  
+          $scope.makeShrink = false; 
+          $scope.sbuName = '';
+          $scope.ibgName = '';
           $scope.ibuName = '';
-          $scope.manNames=[];
-          $scope.pgManagers=[];
+          $scope.sbuNames =[];
+          $scope.ibgNames =[];
           $scope.ibuNames=[];
+          $scope.pgManagers=[];
+          $scope.sPgManagers=[];
+          $scope.manNames=[];
+          
+          
           $scope.prjTech = [];
           $scope.prjTechCnt = [];
           $scope.prjType = [];
           $scope.prjTypeCnt = [];
           $scope.pnlSummaryData = [];
+          $scope.revProjectionData = [];
           $scope.init = function () {
            $scope.disableTabs=true;           
            $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
@@ -31,7 +39,7 @@ angular.module('PmoxApp')
            $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
            $scope.totalRevenue = $scope.user.totalRevenue;
            $scope.totalEbidta = $scope.user.totalEbidta;
-           $scope.loadPricingMdlData($scope.user.projMasterData);
+          // $scope.loadPricingMdlData($scope.user.projMasterData);
            
            $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
            $scope.loadProjStatus($scope.user.projMasterData);
@@ -39,7 +47,8 @@ angular.module('PmoxApp')
            $scope.loadProjTech($scope.user.projMasterData);
            $scope.loadProjType($scope.user.projMasterData);
            $scope.loadProjLocChrt($scope.user.resourceMap);
-           $scope.loadProjRevEbidtaChrt($scope.user);
+          // $scope.loadProjRevEbidtaChrt($scope.user);
+           $scope.loadProjRevProjectionData($scope.user);
 
               
          };
@@ -174,98 +183,325 @@ angular.module('PmoxApp')
                       
            if(selectedPmId==='' && selectedPrjId==='' )
            {
-             $scope.projects=[];
              
-             var ibu = new Object();
-             ibu.ibuid="allibu";
-             ibu.ibumname="---All IBU---";
-             $scope.ibuNames.push(ibu);
-                                      
-             var managers = new Object();
-             managers.pid="allpm";
-             managers.pmname="---All PMs---";
-             $scope.manNames.push(managers);
-             $scope.pmData=$scope.manNames[0];
-             
-             var pgm = new Object();
-             pgm.id="allpgm";
-             pgm.name="---All PGMs---";
-             $scope.pgManagers.push(pgm);
-             
-             var projects = new Object();
-             projects.pid="allprj";
-             projects.pname="---All Projects---";
-             $scope.projects.push(projects);
-             $scope.selProject=$scope.projects[0];
-             
-             var distinctIbu = [...new Set(projMasterData.map(ibu => ibu.ibuHeadId+':'+ibu.ibuHeadName))];
-             
-             if(distinctIbu.length==1){
-               var ibuArr = distinctIbu[0].split(':');
-               var ibu = new Object();
-               ibu.id=ibuArr[0];
-               ibu.name=ibuArr[1];
-               $scope.ibuNames = [];
-               $scope.ibuNames.push(ibu);
-               $scope.ibuName=ibu;
-               
-             }else{
-               
-                 angular.forEach(distinctIbu, function (valueOut, keyOut) {
-                   
-                   var ibuArr = valueOut.split(':');
-                   var ibu = new Object();
-                   ibu.id=ibuArr[0];
-                   ibu.name=ibuArr[1];
-                   $scope.ibuNames.push(ibu);
-                  // alert($scope.ibuNames.length)
-                 
-               });  
-             }
-            
-          
-             var distinctPgm = [...new Set(projMasterData.map(pgm => pgm.pgmId+':'+pgm.pgmName))];
-           
-               angular.forEach(distinctPgm, function (valueOut, keyOut) {
-                 
-                   var pgmArr = valueOut.split(':');
-                   var pgm = new Object();
-                   pgm.id=pgmArr[0];
-                   pgm.name=pgmArr[1];
-                   $scope.pgManagers.push(pgm);
-                   $scope.pgmdata=$scope.pgManagers[0];
-                 
-               });  
-              
-               var distinctPm = [...new Set(projMasterData.map(pm => pm.pmId+':'+pm.pmName))];
-                          
-               angular.forEach(distinctPm, function (valueOut, keyOut) {
-                 
-                   var pmArr = valueOut.split(':');
-                   var managers = new Object();
-                   managers.pid=pmArr[0];
-                   managers.pmname=pmArr[1];
-                   $scope.manNames.push(managers);
-                 
-                 
-               });  
-                        
-               var distinctProject = [...new Set(projMasterData.map(project => project.projectId+':'+project.projectDescription))];
-                         
-               angular.forEach(distinctProject, function (valueOut, keyOut) {
-                 
-                   var projectArr = valueOut.split(':');
-                   var projects = new Object();
-                   projects.pid=projectArr[0];
-                   projects.pname=projectArr[1];
-                   $scope.projects.push(projects);
-                 
-                 
-               });  
+             $scope.getDistinctSbu(projMasterData);
+             $scope.getDistinctIbg(projMasterData);
+             $scope.getDistinctIbu(projMasterData);
+             $scope.getDistinctSales(projMasterData);
+             $scope.getDistinctPGM(projMasterData);
+             $scope.getDistinctPM(projMasterData);
+             $scope.getDistinctProject(projMasterData);
            
            }
                       
          }
+         
+         
+         $scope.getDistinctSbu=function(projMasterData){
+           
+           var sbu = new Object();
+           sbu.id="allsbu";
+           sbu.name="---All SBU---";
+           $scope.sbuNames.push(sbu);
+           
+           var distinctSbu = [...new Set(projMasterData.map(sbu => sbu.sbu+':'+sbu.sbu))];
+           
+           if(distinctSbu.length==1){
+             var ibuArr = distinctSbu[0].split(':');
+             var ibu = new Object();
+             ibu.id=ibuArr[0];
+             ibu.name=ibuArr[1];
+             $scope.sbuNames = [];
+             $scope.sbuNames.push(ibu);
+             $scope.sbuName=ibu;
+             
+           }else{
+             
+               angular.forEach(distinctSbu, function (valueOut, keyOut) {
+                 
+                 var ibuArr = valueOut.split(':');
+                 var ibu = new Object();
+                 ibu.id=ibuArr[0];
+                 ibu.name=ibuArr[1];
+                 $scope.sbuNames.push(ibu);
+                // alert($scope.ibuNames.length)
+               
+             });  
+           }
+         
+         }; 
+         
+         $scope.getDistinctIbg=function(projMasterData){
+           
+           var ibg = new Object();
+           ibg.id="allibg";
+           ibg.name="---All IBG---";
+           $scope.ibgNames.push(ibg);
+           
+          var distinctIbg = [...new Set(projMasterData.map(ibg => ibg.ibg+':'+ibg.ibg))];
+           
+           if(distinctIbg.length==1){
+             var ibuArr = distinctIbg[0].split(':');
+             var ibu = new Object();
+             ibu.id=ibuArr[0];
+             ibu.name=ibuArr[1];
+             $scope.ibgNames = [];
+             $scope.ibgNames.push(ibu);
+             $scope.ibgName=ibu;
+             
+           }else{
+             
+               angular.forEach(distinctIbg, function (valueOut, keyOut) {
+                 
+                 var ibuArr = valueOut.split(':');
+                 var ibu = new Object();
+                 ibu.id=ibuArr[0];
+                 ibu.name=ibuArr[1];
+                 $scope.ibgNames.push(ibu);
+                // alert($scope.ibuNames.length)
+               
+             });  
+           }
+         
+         }; 
+         
+         
+         
+         $scope.getDistinctIbu=function(projMasterData){
+           
+           var ibu = new Object();
+           ibu.id="allibu";
+           ibu.name="---All IBU---";
+           $scope.ibuNames.push(ibu);
+                      
+           var distinctIbu = [...new Set(projMasterData.map(ibu => ibu.ibu+':'+ibu.ibu))];
+           
+           if(distinctIbu.length==1){
+             var ibuArr = distinctIbu[0].split(':');
+             var ibu = new Object();
+             ibu.id=ibuArr[0];
+             ibu.name=ibuArr[1];
+             $scope.ibuNames = [];
+             $scope.ibuNames.push(ibu);
+             $scope.ibuName=ibu;
+             
+           }else{
+             
+               angular.forEach(distinctIbu, function (valueOut, keyOut) {
+                 
+                 var ibuArr = valueOut.split(':');
+                 var ibu = new Object();
+                 ibu.id=ibuArr[0];
+                 ibu.name=ibuArr[1];
+                 $scope.ibuNames.push(ibu);
+                // alert($scope.ibuNames.length)
+               
+             });  
+           }
+         
+         }; 
+         
+         $scope.getDistinctSales=function(projMasterData){
+           
+           var sPgm = new Object();
+           sPgm.id="allspgm";
+           sPgm.name="---All Sales Mangers---";
+           $scope.sPgManagers.push(sPgm);
+           
+           var distinctsPgm = [...new Set(projMasterData.map(spgm => spgm.sPgmId+':'+spgm.sPgmName))];
+           
+           // alert(JSON.stringify(distinctsPgm))
+            
+            angular.forEach(distinctsPgm, function (valueOut, keyOut) {
+              
+                var pgmArr = valueOut.split(':');
+                var pgm = new Object();
+                pgm.id=pgmArr[0];
+                pgm.name=pgmArr[1];
+                $scope.sPgManagers.push(pgm);
+                $scope.sPgmdata=$scope.sPgManagers[0];
+              
+            });  
+         
+         }; 
+         
+         $scope.getDistinctPGM=function(projMasterData){
+           
+           var pgm = new Object();
+           pgm.id="allpgm";
+           pgm.name="---All PGMs---";
+           $scope.pgManagers.push(pgm);
+           
+           var distinctPgm = [...new Set(projMasterData.map(pgm => pgm.pgmId+':'+pgm.pgmName))];
+           
+           angular.forEach(distinctPgm, function (valueOut, keyOut) {
+             
+               var pgmArr = valueOut.split(':');
+               var pgm = new Object();
+               pgm.id=pgmArr[0];
+               pgm.name=pgmArr[1];
+               $scope.pgManagers.push(pgm);
+               $scope.pgmdata=$scope.pgManagers[0];
+             
+           });  
+           
+         
+         }; 
+         
+         $scope.getDistinctPM=function(projMasterData){
+           
+           var managers = new Object();
+           managers.pid="allpm";
+           managers.pmname="---All PMs---";
+           $scope.manNames.push(managers);
+           $scope.pmData=$scope.manNames[0];
+           
+           var distinctPm = [...new Set(projMasterData.map(pm => pm.pmId+':'+pm.pmName))];
+           
+           angular.forEach(distinctPm, function (valueOut, keyOut) {
+             
+               var pmArr = valueOut.split(':');
+               var managers = new Object();
+               managers.pid=pmArr[0];
+               managers.pmname=pmArr[1];
+               $scope.manNames.push(managers);
+             
+             
+           });  
+         
+         }; 
+         
+         $scope.getDistinctProject=function(projMasterData){
+           $scope.projects=[];
+           var projects = new Object();
+           projects.pid="allprj";
+           projects.pname="---All Projects---";
+           $scope.projects.push(projects);
+           $scope.selProject=$scope.projects[0];
+           
+           var distinctProject = [...new Set(projMasterData.map(project => project.projectId+':'+project.projectDescription))];
+           
+           angular.forEach(distinctProject, function (valueOut, keyOut) {
+             
+               var projectArr = valueOut.split(':');
+               var projects = new Object();
+               projects.pid=projectArr[0];
+               projects.pname=projectArr[1];
+               $scope.projects.push(projects);
+             
+             
+           });  
+         
+         }; 
+         
+         
+         $scope.getFilterData=function(filtrObj,roleFilter){
+           
+           alert('filtrObj--'+JSON.stringify(filtrObj));
+           alert('roleFilter--'+roleFilter);
+           
+             if(roleFilter==='SBU'){
+               
+             }else if(roleFilter==='IBG'){
+               
+             }else if(roleFilter==='IBU'){
+               
+             }else if(roleFilter==='SALESM'){
+               
+             }else if(roleFilter==='PGM'){
+               
+               
+               
+             }else if(roleFilter==='PM'){
+               
+             }else if(roleFilter==='PM'){
+               
+             }
+           
+           
+           }; 
+         
+         $scope.getDetailsDataSPgm=function(spgm){
+           
+           //  alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
+             
+             $scope.projects=[];
+             $scope.manNames=[];
+             $scope.pmData={};
+             var lastPmId = '';
+             var userDataPrj =[];
+             $scope.showdropdown=true; 
+             
+              
+              if(pgm.id==='allpgm'){
+                userDataPrj = $scope.user;
+                var user = new Object();
+                user.username = $scope.user.username;
+                user.name = $scope.user.name;
+                user.roleName = $scope.user.roleName;
+               // alert('allpgm--'+JSON.stringify(user))
+                $scope.loadProjRevEbidtaChrt(user);
+              }else{
+                var user = new Object();
+                user.username = pgm.id;
+                user.name = pgm.name;
+                user.roleName = 'PGM';
+                userDataPrj = $scope.loadProjectMasterData(user)[0];
+                $scope.loadProjRevEbidtaChrt(user);
+              }
+   
+              $scope.totalProjectCount = userDataPrj.totalProjectCount;
+              $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
+              $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
+              $scope.totalRevenue = userDataPrj.totalRevenue;
+              $scope.totalEbidta = userDataPrj.totalEbidta;
+              $scope.loadPricingMdlData(userDataPrj.projMasterData);
+              
+              $scope.loadProjStatus(userDataPrj.projMasterData);  
+              $scope.loadProjManaged(userDataPrj.projMasterData);
+              $scope.loadProjTech(userDataPrj.projMasterData);
+              $scope.loadProjType(userDataPrj.projMasterData);
+              $scope.loadProjLocChrt(userDataPrj.resourceMap);
+              
+              var managers = new Object();
+              managers.pid="allpm";
+              managers.pmname="---All PMs---";
+              $scope.manNames.push(managers);
+              $scope.pmData=$scope.manNames[0];
+             // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+             // $scope.pmData=$scope.manNames[0];
+             // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+              
+              var projs = new Object();
+              projs.pid="allprj";
+              projs.pname="---All Projects---";
+              $scope.projects.push(projs);
+             
+              angular.forEach(userDataPrj.projMasterData, function (valueOut, keyOut) { 
+                         
+                    if(valueOut.pmId!=lastPmId)
+                    {
+                      var managers = new Object();
+                      managers.pid=valueOut.pmId;
+                      managers.pmname=valueOut.pmName;
+                      $scope.manNames.push(managers);
+      
+                      lastPmId = valueOut.pmId;
+                      lastPmName = valueOut.pmName;
+                    } 
+                    
+                    var projects = new Object();
+                    projects.pid=valueOut.projectId;
+                    projects.pname=valueOut.projectDescription;
+                    $scope.projects.push(projects);
+              }); 
+              
+              //alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
+              
+              $scope.pmData=$scope.manNames[0];
+              $scope.selProject=$scope.projects[0];
+              
+           }; 
          
          $scope.getDetailsDataPgm=function(pgm){
            
@@ -444,7 +680,7 @@ angular.module('PmoxApp')
                else{
                   userDataPrj = $scope.loadProjectMasterData(user)[0];
                   $scope.loadProjRevEbidtaChrt(user);
-                  $scope.loadProjRevEbidtaChrt(user);
+                 // $scope.loadProjRevEbidtaChrt(user);
                }
               
              }else{
@@ -803,6 +1039,237 @@ angular.module('PmoxApp')
                          
          }
          
+         
+         $scope.loadProjRevProjectionData= function(user) {
+           
+                    
+           var revProjectionData = [];
+           var foreCastSeriesData = [];
+           var upsideSeriesData = [];
+           var pipeSeriesData = [];
+           var targetSeriesData = [];
+           
+           $.ajax({
+             url: "api/projects/getRevenueProjData",
+             error: function (e) {
+               //alert('Invalid Result set.......'+JSON.stringify(e))
+               
+                $("#alertMsg").html("The required data is not available for the selected user.");                          
+                $('#alertModal').modal("show");
+            
+              //alert(JSON.stringify('error occured----'+e))
+             },
+             dataType: "json",
+             contentType: 'application/json; charset=utf-8',
+            // headers: {"Authorization": "Bearer "+AuthService.token},
+             type: "POST",
+             async: false,
+             cache: false,
+             data: JSON.stringify(user),
+             timeout: 30000,
+             crossDomain: true,
+             success: function (data) {               
+              //alert(JSON.stringify(data))
+               alert(data[0].category);
+               console.log(JSON.stringify(data));
+                              
+               revProjectionData = data;
+               var foreCast = new Object();
+               foreCast.cfyQOne = parseFloat((data[0].cfyQOne + data[1].cfyQOne + data[2].cfyQOne + data[3].cfyQOne).toFixed(3));
+               foreCast.cfyQTwo =  parseFloat((data[0].cfyQTwo + data[1].cfyQTwo + data[2].cfyQTwo + data[3].cfyQTwo).toFixed(3));
+               foreCast.cfyQThree =  parseFloat((data[0].cfyQThree + data[1].cfyQThree + data[2].cfyQThree + data[3].cfyQThree).toFixed(3));
+               foreCast.cfyQFour =  parseFloat((data[0].cfyQFour + data[1].cfyQFour + data[2].cfyQFour + data[3].cfyQFour).toFixed(3)); 
+               foreCast.category = "f6-ForeCast";
+               foreCastSeriesData= [foreCast.cfyQOne,foreCast.cfyQTwo,foreCast.cfyQThree,foreCast.cfyQFour];
+               //foreCastSeriesData.push(foreCast);
+               revProjectionData.push(foreCast);
+               
+               
+               var gap = new Object();
+               gap.cfyQOne = parseFloat((8.75 - foreCast.cfyQOne).toFixed(3)); 
+               gap.cfyQTwo = parseFloat((8.75 - foreCast.cfyQTwo).toFixed(3)) ;
+               gap.cfyQThree = parseFloat((8.75 - foreCast.cfyQThree).toFixed(3));
+               gap.cfyQFour = parseFloat((8.75 - foreCast.cfyQFour).toFixed(3)) ;
+               gap.category = "g7-Gap";
+               revProjectionData.push(gap);
+              
+               
+               var target = new Object();
+               target.cfyQOne = 8.75; 
+               target.cfyQTwo =  8.75; 
+               target.cfyQThree =  8.75; 
+               target.cfyQFour =  8.75; 
+               target.category = "a1-Target";
+               targetSeriesData= [target.cfyQOne,target.cfyQTwo,target.cfyQThree,target.cfyQFour];
+               revProjectionData.push(target);
+               
+               var upside = new Object();
+               upside.cfyQOne = data[4].cfyQOne; 
+               upside.cfyQTwo =  data[4].cfyQTwo;
+               upside.cfyQThree = data[4].cfyQThree;
+               upside.cfyQFour =  data[4].cfyQFour;
+               upside.category = "j10-Upside";
+               upsideSeriesData = [data[4].cfyQOne,data[4].cfyQTwo,data[4].cfyQThree,data[4].cfyQFour];
+               //revProjectionData.push(target);
+               
+               var pipe = new Object();
+               pipe.cfyQOne = data[5].cfyQOne; 
+               pipe.cfyQTwo =  data[5].cfyQTwo;
+               pipe.cfyQThree = data[5].cfyQThree;
+               pipe.cfyQFour =  data[5].cfyQFour;
+               pipe.category = "j10-Pipeline(P0 to P2)";
+               pipeSeriesData = [data[5].cfyQOne,data[5].cfyQTwo,data[5].cfyQThree,data[5].cfyQFour];
+              // pipeSeriesData.push(upside);
+               
+               
+               var lstForcst = new Object();
+               lstForcst.cfyQOne = 0.00; 
+               lstForcst.cfyQTwo =  0.00; 
+               lstForcst.cfyQThree =  0.00; 
+               lstForcst.cfyQFour =  0.00; 
+               lstForcst.category = "h8-Last Forecast";
+               revProjectionData.push(lstForcst);
+               
+               
+               var chngLstForcst = new Object();
+               chngLstForcst.cfyQOne = 0.00; 
+               chngLstForcst.cfyQTwo =  0.00; 
+               chngLstForcst.cfyQThree =  0.00; 
+               chngLstForcst.cfyQFour =  0.00; 
+               chngLstForcst.category = "i9-Change From Last Forecast";
+               revProjectionData.push(chngLstForcst);
+               
+               
+               var achvment = new Object();
+               achvment.cfyQOne = parseFloat(((foreCast.cfyQOne*100)/target.cfyQOne).toFixed(3));  
+               achvment.cfyQTwo =  parseFloat(((foreCast.cfyQTwo*100)/target.cfyQTwo).toFixed(3)); 
+               achvment.cfyQThree =  parseFloat(((foreCast.cfyQThree*100)/target.cfyQThree).toFixed(3)); 
+               achvment.cfyQFour = parseFloat(((foreCast.cfyQFour*100)/target.cfyQFour).toFixed(3)); 
+               achvment.category = "l12-Achievement %";
+               revProjectionData.push(achvment);
+               
+               
+               var growthRate = new Object();
+               growthRate.cfyQOne = 0.00; 
+               growthRate.cfyQTwo =  0.00; 
+               growthRate.cfyQThree =  0.00; 
+               growthRate.cfyQFour =  0.00; 
+               growthRate.category = "m13-Growth Rate (QnQ)";
+               revProjectionData.push(growthRate);
+               
+               
+               $scope.revProjectionData = revProjectionData.sort((a, b) => (a.category > b.category) ? 1 : -1);
+               
+               alert(JSON.stringify($scope.revProjectionData));
+               
+               foreCast = null;
+               gap = null;
+               target = null;
+               lstForcst = null;
+               chngLstForcst = null;
+               achvment = null;
+               growthRate = null;
+  
+             }
+             
+           });
+           
+           
+           
+            
+             $scope.chartOBForecast = {
+            
+                   chart: {
+                     type: 'column',
+                  style: {
+                                  fontFamily: 'Bahnschrift'
+                              }
+                 },
+                 plotOptions: {
+                   series: {
+                       stacking: 'normal',
+                       allowPointSelect: true,
+                       states: {
+                           select: {
+                               color: null,
+                               borderWidth:5,
+                               borderColor:'Blue'
+                           }
+                       }
+                   }
+               },
+
+                 title: {
+                     text: 'Revenue Projection'
+                 },
+                 xAxis: {
+                     categories: ['Q1', 'Q2', 'Q3', 'Q4']
+
+                 },
+
+                 yAxis: {
+                     allowDecimals: false,
+                     min: 0,
+                     title: {
+                         align: 'high'
+                       },labels: {
+                            overflow: 'justify'
+                        }
+                 },
+
+                 tooltip: {
+                     formatter: function () {
+                         return '<b>' + this.x + '</b><br/>' +
+                             this.series.name + ': ' + this.y + '<br/>' +
+                             'Total: ' + this.point.stackTotal;
+                     }
+
+                 },
+
+                 plotOptions: {
+                     column: {
+                         stacking: 'normal'
+                     }
+                 },
+               legend: {
+                                layout: 'vertical',
+                                align: 'right',
+                                verticalAlign: 'middle',
+                                floating: false,
+                                borderWidth: 1,
+                                backgroundColor:
+                                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                                shadow: true
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                   series: [{
+                                name: 'Target',
+                                data: targetSeriesData,
+                                stack: 'target'
+                        
+                            }, {
+                                name: 'Upside',
+                                color: '#ff7f00',
+                                data: upsideSeriesData,
+                                stack: 'project'
+                            }, {
+                                name: 'Pipeline',
+                                color: '#ffff00',
+                                data: pipeSeriesData,
+                                stack: 'project'
+                            },
+                            {
+                              name: 'Forecast',
+                              color: '#009d00',
+                              data: foreCastSeriesData,
+                              stack: 'project'
+                          }]            
+             }     
+
+         }
+         
          $scope.loadProjRevEbidtaChrt = function(user) {
            
            //alert($scope.sumArrays([[0, 1, 2], [1, 2, 3, 4], [1, 2]]));
@@ -822,7 +1289,7 @@ angular.module('PmoxApp')
            
            $scope.pnlSummaryData = [];
            
-           $scope.loadPnLSummaryData(user);
+          // $scope.loadPnLSummaryData(user);
           
            angular.forEach(userDataPrj, function (value, key) {
              
@@ -1119,70 +1586,91 @@ angular.module('PmoxApp')
  
              $scope.chartOBForecast = {
             
-               chart: {
-                   type: 'bar',
-                   style: {
-                     fontFamily: 'Bahnschrift'
-                 }
-               },
-               title: {
-                   text: 'Order Book'
-               },
-               subtitle: {
-                   text: ''
-               },
-               xAxis: {
-                   categories: ['Q1', 'Q2', 'Q3', 'Q4'],
-                   title: {
-                       text: null
-                   }
-               },
-               yAxis: {
-                   min: 0,
-                   title: {
-                       text: 'ForeCast ($M)',
-                       align: 'high'
-                   },
-                   labels: {
-                       overflow: 'justify'
-                   }
-               },
-               tooltip: {
-                   valueSuffix: ' millions'
-               },
-               plotOptions: {
-                   bar: {
-                       dataLabels: {
-                           enabled: true
+                   chart: {
+                     type: 'column',
+                  style: {
+                                  fontFamily: 'Bahnschrift'
+                              }
+                 },
+                 plotOptions: {
+                   series: {
+                       stacking: 'normal',
+                       allowPointSelect: true,
+                       states: {
+                           select: {
+                               color: null,
+                               borderWidth:5,
+                               borderColor:'Blue'
+                           }
                        }
                    }
                },
+
+                 title: {
+                     text: 'Revenue Projection'
+                 },
+                 xAxis: {
+                     categories: ['Q1', 'Q2', 'Q3', 'Q4']
+
+                 },
+
+                 yAxis: {
+                     allowDecimals: false,
+                     min: 0,
+                     title: {
+                         align: 'high'
+                       },labels: {
+                            overflow: 'justify'
+                        }
+                 },
+
+                 tooltip: {
+                     formatter: function () {
+                         return '<b>' + this.x + '</b><br/>' +
+                             this.series.name + ': ' + this.y + '<br/>' +
+                             'Total: ' + this.point.stackTotal;
+                     }
+
+                 },
+
+                 plotOptions: {
+                     column: {
+                         stacking: 'normal'
+                     }
+                 },
                legend: {
-                   layout: 'vertical',
-                   align: 'right',
-                   verticalAlign: 'middle',
-                   floating: false,
-                   borderWidth: 1,
-                   backgroundColor:
-                       Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-                   shadow: true
-               },
-               credits: {
-                   enabled: false
-               },
-               series: [{
-                   name: 'Target',
-                   data: [3.38, 3.38, 3.38, 3.38]
-               }, {
-                   name: 'Forecast',
-                   data: [1.69, 2.15, 2.32, 2.02]
-               }, {
-                   name: 'Upside',
-                   data: [0.00, 0.06, 0.18, 0.12]
-               }, {
-                   name: 'Pipeline',
-                   data: [0.00, 0.06, 0.18, 0.12]
-               }]
+                                layout: 'vertical',
+                                align: 'right',
+                                verticalAlign: 'middle',
+                                floating: false,
+                                borderWidth: 1,
+                                backgroundColor:
+                                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                                shadow: true
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                   series: [{
+                                name: 'Target',
+                                data: [3.38, 3.38, 3.38, 3.38],
+                                stack: 'target'
+                        
+                            }, {
+                                name: 'Upside',
+                                data: [0.00, 0.06, 0.18, 0.12],
+                                stack: 'project'
+                            }, {
+                                name: 'Pipeline',
+                                data: [0.00, 0.06, 0.18, 0.12],
+                                stack: 'project'
+                            },
+                            {
+                              name: 'Forecast',
+                              data: [1.69, 2.15, 2.32, 2.02],
+                              stack: 'project'
+                          }]
+
             
              }     
 

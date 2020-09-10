@@ -34,4 +34,6 @@ public interface PmrprojDao {
 
   public List<CasumData> getPoReceived(User user);
 
+  public List<CasumData> getRevenueProjData(User user);
+
 }

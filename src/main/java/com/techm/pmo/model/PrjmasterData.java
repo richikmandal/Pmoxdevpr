@@ -36,12 +36,24 @@ public class PrjmasterData implements java.io.Serializable {
 	private String closureDate    ;
 	private String	project_location	;
 	private String	sbu;
+	private String dSbuHeadId;
+	private String dSbuHeadName;
+	private String sSbuHeadName;
+	private String sSbuHeadId;
 	private String ibg ;
+	private String dIbgHeadId;
+	private String dIbgHeadName;
+	private String sIbgHeadName;
+	private String sIbgHeadId;
 	private String ibu ;
 	private String ibuHeadId    ;
     private String  ibuHeadName   ;
+    private String  sIbuHeadId    ;
+    private String  sIbuHeadName   ;
     private String  pgmId  ;
     private String  pgmName    ;
+    private String  sPgmId  ;
+    private String  sPgmName    ;
     private String  pmId  ;
     private String  pmName    ;
     private String  projectMainType  ;
@@ -56,7 +68,6 @@ public class PrjmasterData implements java.io.Serializable {
     private String  digitalCategory    ;
     private String revTotal;
     private String ebidtaTotal;
-    
     
     public String getBusinessUnit() {
       return businessUnit;
@@ -118,11 +129,35 @@ public class PrjmasterData implements java.io.Serializable {
     public void setSbu(String sbu) {
       this.sbu = sbu;
     }
+    public String getdSbuHeadId() {
+      return dSbuHeadId;
+    }
+    public void setdSbuHeadId(String dSbuHeadId) {
+      this.dSbuHeadId = dSbuHeadId;
+    }
+    public String getsSbuHeadId() {
+      return sSbuHeadId;
+    }
+    public void setsSbuHeadId(String sSbuHeadId) {
+      this.sSbuHeadId = sSbuHeadId;
+    }
     public String getIbg() {
       return ibg;
     }
     public void setIbg(String ibg) {
       this.ibg = ibg;
+    }
+    public String getdIbgHeadId() {
+      return dIbgHeadId;
+    }
+    public void setdIbgHeadId(String dIbgHeadId) {
+      this.dIbgHeadId = dIbgHeadId;
+    }
+    public String getsIbgHeadId() {
+      return sIbgHeadId;
+    }
+    public void setsIbgHeadId(String sIbgHeadId) {
+      this.sIbgHeadId = sIbgHeadId;
     }
     public String getIbu() {
       return ibu;
@@ -142,6 +177,18 @@ public class PrjmasterData implements java.io.Serializable {
     public void setIbuHeadName(String ibuHeadName) {
       this.ibuHeadName = ibuHeadName;
     }
+    public String getsIbuHeadId() {
+      return sIbuHeadId;
+    }
+    public void setsIbuHeadId(String sIbuHeadId) {
+      this.sIbuHeadId = sIbuHeadId;
+    }
+    public String getsIbuHeadName() {
+      return sIbuHeadName;
+    }
+    public void setsIbuHeadName(String sIbuHeadName) {
+      this.sIbuHeadName = sIbuHeadName;
+    }
     public String getPgmId() {
       return pgmId;
     }
@@ -153,6 +200,18 @@ public class PrjmasterData implements java.io.Serializable {
     }
     public void setPgmName(String pgmName) {
       this.pgmName = pgmName;
+    }
+    public String getsPgmId() {
+      return sPgmId;
+    }
+    public void setsPgmId(String sPgmId) {
+      this.sPgmId = sPgmId;
+    }
+    public String getsPgmName() {
+      return sPgmName;
+    }
+    public void setsPgmName(String sPgmName) {
+      this.sPgmName = sPgmName;
     }
     public String getPmId() {
       return pmId;
@@ -238,6 +297,30 @@ public class PrjmasterData implements java.io.Serializable {
     public void setEbidtaTotal(String ebidtaTotal) {
       this.ebidtaTotal = ebidtaTotal;
     }
-    	
+    public String getdSbuHeadName() {
+      return dSbuHeadName;
+    }
+    public void setdSbuHeadName(String dSbuHeadName) {
+      this.dSbuHeadName = dSbuHeadName;
+    }
+    public String getsSbuHeadName() {
+      return sSbuHeadName;
+    }
+    public void setsSbuHeadName(String sSbuHeadName) {
+      this.sSbuHeadName = sSbuHeadName;
+    }
+    public String getdIbgHeadName() {
+      return dIbgHeadName;
+    }
+    public void setdIbgHeadName(String dIbgHeadName) {
+      this.dIbgHeadName = dIbgHeadName;
+    }
+    public String getsIbgHeadName() {
+      return sIbgHeadName;
+    }
+    public void setsIbgHeadName(String sIbgHeadName) {
+      this.sIbgHeadName = sIbgHeadName;
+    }
+    
 
 }

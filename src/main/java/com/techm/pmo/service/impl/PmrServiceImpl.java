@@ -1,5 +1,6 @@
 package com.techm.pmo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,14 @@ public class PmrServiceImpl implements PmrService {
   public List<CasumData> getPoReceived(User user) {
     // TODO Auto-generated method stub
     return pmrprojdao.getPoReceived(user);
+  }
+
+  @Override
+  public List<CasumData> getRevenueProjData(User user) {
+    // TODO Auto-generated method stub
+    List<CasumData> lstCasumData = pmrprojdao.getRevenueProjData(user);
+   
+    return lstCasumData;
   }
 
 

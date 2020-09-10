@@ -28,7 +28,7 @@ public class ProjectController {
   private PmrService    pmrservice;
 
 
-  private final Logger    log = LoggerFactory.getLogger(ProjectController.class);
+  private final Logger log = LoggerFactory.getLogger(ProjectController.class);
 
 
 
@@ -95,6 +95,16 @@ public class ProjectController {
   public List<Casum> getOrderBookData(@PathVariable String user) {
    
     return pmrservice.getCasum(user);
+  }
+  
+  @PostMapping("/getRevenueProjData")
+  public String getRevenueProjData(@RequestBody User user) {
+
+    Gson gsonRes = new Gson();
+    log.debug("REST request to get User : {}", user);
+
+    return gsonRes.toJson(pmrservice.getRevenueProjData(user));// ResponseEntity<>(userService.getUserWithRoleByUsername(username),
+                                                             // HttpStatus.OK);
   }
 
 

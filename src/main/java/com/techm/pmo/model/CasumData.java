@@ -31,10 +31,11 @@ public class CasumData {
     private String  cfyOct  ;
     private String  cfyNov  ;
     private String  cfyDec  ;
-    private String  cfyQOne  ;
-    private String  cfyQTwo  ;
-    private String  cfyQThree  ;
-    private String  cfyQFour  ;
+    private float  cfyQOne  ;
+    private float  cfyQTwo  ;
+    private float  cfyQThree  ;
+    private float  cfyQFour  ;
+    private String  category;
 
 	
 	
@@ -212,31 +213,35 @@ public class CasumData {
     public void setCfyDec(String cfyDec) {
       this.cfyDec = cfyDec;
     }
-    public String getCfyQOne() {
+    public float getCfyQOne() {
       return cfyQOne;
     }
-    public void setCfyQOne(String cfyQOne) {
+    public void setCfyQOne(float cfyQOne) {
       this.cfyQOne = cfyQOne;
     }
-    public String getCfyQTwo() {
+    public float getCfyQTwo() {
       return cfyQTwo;
     }
-    public void setCfyQTwo(String cfyQTwo) {
+    public void setCfyQTwo(float cfyQTwo) {
       this.cfyQTwo = cfyQTwo;
     }
-    public String getCfyQThree() {
+    public float getCfyQThree() {
       return cfyQThree;
     }
-    public void setCfyQThree(String cfyQThree) {
+    public void setCfyQThree(float cfyQThree) {
       this.cfyQThree = cfyQThree;
     }
-    public String getCfyQFour() {
+    public float getCfyQFour() {
       return cfyQFour;
     }
-    public void setCfyQFour(String cfyQFour) {
+    public void setCfyQFour(float cfyQFour) {
       this.cfyQFour = cfyQFour;
+    }
+    public String getCategory() {
+      return category;
+    }
+    public void setCategory(String category) {
+      this.category = category;
     } 
-    
-    
 	
 }
