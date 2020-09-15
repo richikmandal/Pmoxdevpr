@@ -32,6 +32,11 @@ angular.module('PmoxApp')
           $scope.revProjectionData = [];
           $scope.filterLevelMap = [];
           
+          $scope.cfyQOne = '';
+          $scope.cfyQTwo = '';
+          $scope.cfyQThree = '';
+          $scope.cfyQFour = '';
+          
           $scope.init = function () {
             $scope.disableTabs=true;  
                       
@@ -1393,6 +1398,11 @@ angular.module('PmoxApp')
                foreCast.category = "f-ForeCast";
                foreCastSeriesData= [foreCast.cfyQOne,foreCast.cfyQTwo,foreCast.cfyQThree,foreCast.cfyQFour];
                revProjectionData.push(foreCast);
+               
+               $scope.cfyQOne = foreCast.cfyQOne;
+               $scope.cfyQTwo = foreCast.cfyQTwo;
+               $scope.cfyQThree = foreCast.cfyQThree;
+               $scope.cfyQFour = foreCast.cfyQFour;
                               
                var gap = new Object();
                gap.cfyQOne = parseFloat((target.cfyQOne - foreCast.cfyQOne).toFixed(3)); 
