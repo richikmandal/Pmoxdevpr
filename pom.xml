@@ -12,7 +12,7 @@
 	<groupId>com.techm.pmo</groupId>
 	<artifactId>pmoxdevpr</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>pmoxdevpr</name>
 	<description>PMOX ORA</description>
 
