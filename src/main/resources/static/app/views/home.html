@@ -265,7 +265,7 @@
 									</div>
 									<div class="col-lg-6">
 										<div class="text-white" >
-											<b>EBIDTA(%): {{totalEbidta}}</b>
+											<b>EBIDTA(%): {{totalEBIDTA}}</b>
 										</div>
 									</div>
 								</div>
@@ -375,21 +375,21 @@
 					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
 					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">SBU</span>
 						<select class="form-control" name="sbu" ng-model="sbuName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
-							ng-options="sbuhead as sbuhead.name for sbuhead in sbuNames" ng-change="getDetailsDataIbu(sbuName)">
+							ng-options="sbuhead as sbuhead.name for sbuhead in sbuNames" ng-change="getFilterData(sbuName,'SBU')">
 
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
 					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">IBG</span>
 						<select class="form-control" name="ibg" ng-model="ibgName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
-							ng-options="ibghead as ibghead.name for ibghead in ibgNames" ng-change="getDetailsDataIbu(ibgName)">
+							ng-options="ibghead as ibghead.name for ibghead in ibgNames" ng-change="getFilterData(ibgName.'IBG')">
 
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"	style="width: 100%;padding-left: 15px;">
 					<span class="input-group-addon" style="width: 88px;height: 24px;padding-bottom: 4px;padding-top: 4px;">IBU</span>
 						<select class="form-control" name="ibu" ng-model="ibuName" style="width: 94%;height: 24px;padding-top: 2px;padding-bottom: 2px;padding-left: 10px;"
-							ng-options="ibuhead as ibuhead.name for ibuhead in ibuNames" ng-change="getDetailsDataIbu(ibuName)">
+							ng-options="ibuhead as ibuhead.name for ibuhead in ibuNames" ng-change="getFilterData(ibuName,'IBU')">
 
 						</select>
 					</div>
@@ -399,13 +399,13 @@
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">SALES</span>
 						<select class="form-control" name="spgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="sProgramManager as sProgramManager.name for sProgramManager in sPgManagers"
-							ng-model="sPgmdata" ng-change="getDetailsDataSPgm(sPgmdata)">
+							ng-model="sPgmdata" ng-change="getFilterData(sPgmdata,'SALES')">
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROGRAM</span>
-						<select class="form-control" name="pgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"
+						<select class="form-control" name="pgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-disabled="showOB"
 							ng-options="programManager as programManager.name for programManager in pgManagers"
 							ng-model="pgmdata" ng-change="getFilterData(pgmdata,'PGM')">
 						</select>
@@ -413,14 +413,14 @@
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PM</span>
-						<select name="pm" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"	ng-options="name as name.pmname for name in manNames"	ng-model="pmData" ng-change="getDetailsDataPm(pmData)">
+						<select name="pm" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"	ng-disabled="showOB" ng-options="name as name.pmname for name in manNames"	ng-model="pmData" ng-change="getFilterData(pmData,'PM')">
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROJECT</span>
-						<select name="prj" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="project as project.pname for project in projects"
-							ng-model="selProject" ng-change="getDetailsDataPrj(selProject)">
+						<select name="prj" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-disabled="showOB" ng-options="project as project.pname for project in projects"
+							ng-model="selProject" ng-change="getFilterData(selProject,'PRJ')">
 						</select>
 					</div>
 				</div>
@@ -448,14 +448,51 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr style="text-align: center;" ng-repeat="rev in revProjectionData" >
-													<td>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</td>
+												<tr ng-repeat="rev in revProjectionData" ng-switch on="rev.category" >
+													<td >
+														 <span ng-switch-when="a-Target"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
+														 <span ng-switch-default>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</span>
+													</td>
 													<td></td>
-													<td style="text-align: right;">{{rev.cfyQOne}}</td>
-													<td style="text-align: right;">{{rev.cfyQTwo}}</td>
-													<td style="text-align: right;">{{rev.cfyQThree}}</td>
-													<td style="text-align: right;">{{rev.cfyQFour}}</td>
-													<td style="text-align: right;">{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</td>
+													<td style="text-align: right;">
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
+														 <span ng-switch-default>{{(rev.cfyQOne).toFixed(3)}}</span>
+													</td>
+													<td style="text-align: right;">
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
+														 <span ng-switch-default>{{(rev.cfyQTwo).toFixed(3)}}</span>
+													</td>
+													<td style="text-align: right;">
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
+														 <span ng-switch-default>{{(rev.cfyQThree).toFixed(3)}}</span>
+													</td>
+													<td style="text-align: right;">
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-default>{{(rev.cfyQFour).toFixed(3)}}</span>
+													</td>
+													<td style="text-align: right;">
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-default>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</span>
+													</td>
+													
 													<td></td>
 
 												</tr>
@@ -609,186 +646,186 @@
 										    <tbody>
 										      <tr style="text-align: center;">
 												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute">
-										        <td >
-										       	 <span ng-switch-when="Total #"><b>{{pnlData.attribute}}</b></span>
-										       	 <span ng-switch-when="Onsite #"> {{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.attribute}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.attribute}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.attribute}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.attribute}}</b></span>
+										        <td style="text-align: left;">
+										       	 <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.attribute}}</b></span>
+										       	 <span ng-switch-when="ONSITE #">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{pnlData.attribute}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{pnlData.attribute}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="TNL COST">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{pnlData.attribute}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{pnlData.attribute}}</b></span>
 										       	 <span ng-switch-when="EBIDTA">{{pnlData.attribute}}</span>
 										       	 <span ng-switch-when="EBIDTA %"><b>{{pnlData.attribute}}</b></span>
 										        </td>
-										        <td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monApr}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monApr}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monApr}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monApr}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monApr}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										        <td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monApr ===0 ? '' : pnlData.monApr}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monApr ===0 ? '' : pnlData.monApr}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monApr ===0 ? '' : pnlData.monApr}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monApr/1000000).toFixed(3) ==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monApr/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monApr/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monApr).toFixed(3)==='0.000' ? '' : pnlData.monApr.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monMay}}</b></span>
-										         <span ng-switch-when="Onsite #">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monMay}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monMay}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monMay}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monMay}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monMay===0 ? '' : pnlData.monMay}}</b></span>
+										         <span ng-switch-when="ONSITE #">{{pnlData.monMay===0 ? '' : pnlData.monMay}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monMay===0 ? '' : pnlData.monMay}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monMay/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMay/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monMay).toFixed(3)==='0.000' ? '' : pnlData.monMay.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monJun}}</b></span>
-										         <span ng-switch-when="Onsite #">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monJun}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monJun}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJun}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJun}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monJun===0 ? '' : pnlData.monJun}}</b></span>
+										         <span ng-switch-when="ONSITE #">{{pnlData.monJun===0 ? '' : pnlData.monJun}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monJun===0 ? '' : pnlData.monJun}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monJun/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJun/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monJun).toFixed(3)==='0.000' ? '' : pnlData.monJun.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monJul}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monJul}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monJul}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJul}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJul}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monJul===0 ? '' : pnlData.monJul}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monJul===0 ? '' : pnlData.monJul}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monJul===0 ? '' : pnlData.monJul}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monJul/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJul/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monJul).toFixed(3)==='0.000' ? '' : pnlData.monJul.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monAug}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monAug}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monAug}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monAug}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monAug}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monAug===0 ? '' : pnlData.monAug}}</b></span>
+										         <span ng-switch-when="ONSITE #">{{pnlData.monAug===0 ? '' : pnlData.monAug}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monAug===0 ? '' : pnlData.monAug}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monAug/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monAug/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monAug).toFixed(3)==='0.000' ? '' : pnlData.monAug.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monSep}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monSep}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monSep}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monSep}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monSep}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monSep===0 ? '' : pnlData.monSep}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monSep===0 ? '' : pnlData.monSep}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monSep===0 ? '' : pnlData.monSep}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monSep/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monSep/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monSep).toFixed(3)==='0.000' ? '' : pnlData.monSep.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										        <span ng-switch-when="Total #"><b>{{pnlData.monOct}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monOct}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monOct}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monOct}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monOct}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										        <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monOct===0 ? '' : pnlData.monOct}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monOct===0 ? '' : pnlData.monOct}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monOct===0 ? '' : pnlData.monOct}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monOct/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monOct/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monOct).toFixed(3)==='0.000' ? '' : pnlData.monOct.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monNov}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monNov}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monNov}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monNov}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monNov}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span> 
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monNov===0 ? '' : pnlData.monNov}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monNov===0 ? '' : pnlData.monNov}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monNov===0 ? '' : pnlData.monNov}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monNov/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monNov/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monNov).toFixed(3)==='0.000' ? '' : pnlData.monNov.toFixed(3)}}</b></span> 
 										       	</td>
-										       	<td>
-										        <span ng-switch-when="Total #"><b>{{pnlData.monDec}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monDec}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monDec}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monDec}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monDec}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										        <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monDec===0 ? '' : pnlData.monDec}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monDec===0 ? '' : pnlData.monDec}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monDec===0 ? '' : pnlData.monDec}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monDec/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monDec/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monDec).toFixed(3)==='0.000' ? '' : pnlData.monDec.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monJan}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monJan}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monJan}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monJan}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monJan}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monJan===0 ? '' : pnlData.monJan}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monJan===0 ? '' : pnlData.monJan}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monJan===0 ? '' : pnlData.monJan}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monJan/1000000).toFixed(3)==='0.000'?'' : (pnlData.monJan/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monJan/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monJan/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monJan).toFixed(3)==='0.000' ? '' : pnlData.monJan.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monFeb}}</b></span>
-										         <span ng-switch-when="Onsite #">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monFeb}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monFeb}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monFeb}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monFeb}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monFeb===0 ? '' : pnlData.monFeb}}</b></span>
+										         <span ng-switch-when="ONSITE #">{{pnlData.monFeb===0 ? '' : pnlData.monFeb}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monFeb===0 ? '' : pnlData.monFeb}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monFeb/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monFeb/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monFeb).toFixed(3)==='0.000' ? '' : pnlData.monFeb.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.monMar}}</b></span>
-										         <span ng-switch-when="Onsite #">   {{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.monMar}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.monMar}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.monMar}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.monMar}}</span>
-										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monMar===0 ? '' : pnlData.monMar}}</b></span>
+										         <span ng-switch-when="ONSITE #">  {{pnlData.monMar===0 ? '' : pnlData.monMar}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.monMar===0 ? '' : pnlData.monMar}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.monMar/1000000).toFixed(3)==='0.000' ? '' : (pnlData.monMar/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="EBIDTA %"><b>{{(pnlData.monMar).toFixed(3)==='0.000' ? '' : pnlData.monMar.toFixed(3)}}</b></span>
 										       	</td>
-										       	<td>
-										         <span ng-switch-when="Total #"><b>{{pnlData.total}}</b></span>
-										         <span ng-switch-when="Onsite #">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="Offshore #">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="Revenue"><b>{{pnlData.total}}</b></span>
-										       	 <span ng-switch-when="Direct Cost"><b>{{pnlData.total}}</b></span>
-										       	 <span ng-switch-when="CNB Cost">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="TNL Cost">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="Buffer Cost">{{pnlData.total}}</span>
-										       	 <span ng-switch-when="SGNA Cost"><b>{{pnlData.total}}</b></span>
-										       	 <span ng-switch-when="EBIDTA">{{pnlData.total}}</span>
+										       	<td style="text-align: right;">
+										         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.total===0 ? '' : pnlData.total}}</b></span>
+										         <span ng-switch-when="ONSITE #">{{pnlData.total===0 ? '' : pnlData.total}}</span>
+										       	 <span ng-switch-when="OFFSHORE #">{{pnlData.total===0 ? '' : pnlData.total}}</span>
+										       	 <span ng-switch-when="REVENUE"><b>{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="DIRECT COST"><b>{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="CNB COST">{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="TNL COST">{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="BUFFER COST">{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</span>
+										       	 <span ng-switch-when="SGNA COST"><b>{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</b></span>
+										       	 <span ng-switch-when="EBIDTA">{{(pnlData.total/1000000).toFixed(3)==='0.000' ? '' : (pnlData.total/1000000).toFixed(3)}}</span>
 										       	 <span ng-switch-when="EBIDTA %"><b></b></span>
 										       	</td>
 										      </tr>

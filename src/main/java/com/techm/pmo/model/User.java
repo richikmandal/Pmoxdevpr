@@ -26,6 +26,17 @@ public class User implements java.io.Serializable {
  private List<PrjmasterData> projMasterData = new ArrayList<PrjmasterData>();
  private Map<String, List<ResourceBaseData>> resourceMap = new HashMap<String, List<ResourceBaseData>>();
  private Map<String, List<ProfitAndLossData>> pandlMap = new HashMap<String, List<ProfitAndLossData>>();
+ 
+ private String sbuName;
+ private String ibgName;
+ private String ibuName;
+ private String spgmName;
+ private String pgmName;
+ private String pmName;
+ private String prjNme;
+ private String filterRoleSel;
+
+ 
 
   public User() {}
 
@@ -150,6 +161,71 @@ public class User implements java.io.Serializable {
   public void setPandlMap(Map<String, List<ProfitAndLossData>> pandlMap) {
     this.pandlMap = pandlMap;
   }
+
+    public String getSbuName() {
+      return sbuName;
+    }
   
-   
+    public void setSbuName(String sbuName) {
+      this.sbuName = sbuName;
+    }
+  
+    public String getIbgName() {
+      return ibgName;
+    }
+  
+    public void setIbgName(String ibgName) {
+      this.ibgName = ibgName;
+    }
+  
+    public String getIbuName() {
+      return ibuName;
+    }
+  
+    public void setIbuName(String ibuName) {
+      this.ibuName = ibuName;
+    }
+  
+    public String getSpgmName() {
+      return spgmName;
+    }
+  
+    public void setSpgmName(String spgmName) {
+      this.spgmName = spgmName;
+    }
+  
+    public String getPgmName() {
+      return pgmName;
+    }
+  
+    public void setPgmName(String pgmName) {
+      this.pgmName = pgmName;
+    }
+  
+    public String getPmName() {
+      return pmName;
+    }
+  
+    public void setPmName(String pmName) {
+      this.pmName = pmName;
+    }
+  
+    public String getPrjNme() {
+      return prjNme;
+    }
+  
+    public void setPrjNme(String prjNme) {
+      this.prjNme = prjNme;
+    }
+
+    public String getFilterRoleSel() {
+      return filterRoleSel;
+    }
+
+    public void setFilterRoleSel(String filterRoleSel) {
+      this.filterRoleSel = filterRoleSel;
+    }
+    
+    
+     
 }

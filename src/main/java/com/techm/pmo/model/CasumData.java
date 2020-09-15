@@ -36,6 +36,7 @@ public class CasumData {
     private float  cfyQThree  ;
     private float  cfyQFour  ;
     private String  category;
+    private String colorCode;
 
 	
 	
@@ -242,6 +243,14 @@ public class CasumData {
     }
     public void setCategory(String category) {
       this.category = category;
+    }
+    public String getColorCode() {
+      return colorCode;
+    }
+    public void setColorCode(String colorCode) {
+      this.colorCode = colorCode;
     } 
+    
+    
 	
 }

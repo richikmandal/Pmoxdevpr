@@ -31,7 +31,7 @@ public class PmrServiceImpl implements PmrService {
 	  user = pmrprojdao.getPmrDataFrUser(user);
 	 // if(user.getRoleName().equals("PGM")||user.getRoleName().equals("PM")) {
 	    user = pmrprojdao.getProjectMasterDataForPGM(user);
-	    user = pmrprojdao.getResourceDataForPGM(user);
+	   // user = pmrprojdao.getResourceDataForPGM(user);
 	   // user = pmrprojdao.getPandLDataForPGM(user);
 	  //}
 	  

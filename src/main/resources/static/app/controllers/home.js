@@ -1,9 +1,8 @@
 angular.module('PmoxApp')
-// Creating the Angular Controller
+
     .controller('HomeController', function ($http, $scope, $state,AuthService,$rootScope) {
         $scope.user = AuthService.user;
-      // $scope.user = AuthService.user.name;
-        // $scope.userPrjData = '';
+     
           var selectedPmId='';
           var selectedPrjId='';
           $scope.showProjects=false;
@@ -14,6 +13,10 @@ angular.module('PmoxApp')
           $scope.sbuName = '';
           $scope.ibgName = '';
           $scope.ibuName = '';
+          $scope.pgmName = '';
+          $scope.spgmName = '';
+          $scope.prjNme = '';
+          $scope.pmName = '';
           $scope.sbuNames =[];
           $scope.ibgNames =[];
           $scope.ibuNames=[];
@@ -21,36 +24,32 @@ angular.module('PmoxApp')
           $scope.sPgManagers=[];
           $scope.manNames=[];
           
-          
           $scope.prjTech = [];
           $scope.prjTechCnt = [];
           $scope.prjType = [];
           $scope.prjTypeCnt = [];
           $scope.pnlSummaryData = [];
           $scope.revProjectionData = [];
+          $scope.filterLevelMap = [];
+          
           $scope.init = function () {
-           $scope.disableTabs=true;           
-           $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;
-           
-           alert(JSON.stringify($scope.user.projMasterData))
-           
+            $scope.disableTabs=true;  
+                      
+           $scope.user = $scope.loadProjectMasterData($scope.user)[0] ;           
            $scope.totalProjectCount = $scope.user.totalProjectCount;
            $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
            $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
            $scope.totalRevenue = $scope.user.totalRevenue;
            $scope.totalEbidta = $scope.user.totalEbidta;
-          // $scope.loadPricingMdlData($scope.user.projMasterData);
-           
-           $scope.loadFiltersWithStatusData(selectedPmId,selectedPrjId,$scope.user.projMasterData);
+           $scope.loadFiltersWithStatusData($scope.user.projMasterData);
            $scope.loadProjStatus($scope.user.projMasterData);
            $scope.loadProjManaged($scope.user.projMasterData); 
            $scope.loadProjTech($scope.user.projMasterData);
            $scope.loadProjType($scope.user.projMasterData);
            $scope.loadProjLocChrt($scope.user.resourceMap);
-          // $scope.loadProjRevEbidtaChrt($scope.user);
-           $scope.loadProjRevProjectionData($scope.user);
-
-              
+           $scope.loadProjRevProjectionData($scope.user); 
+           $scope.loadPnLSummaryData($scope.user);
+           
          };
          
          $scope.loadProjectMasterData = function(userFrSearch){
@@ -60,11 +59,9 @@ angular.module('PmoxApp')
              url: "api/projects/getprojectsfruser",
              error: function (e) {
                alert('Invalid Result set for the request.'+JSON.stringify(e))
-               //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
-            // headers: {"Authorization": "Bearer "+AuthService.token},
              type: "POST",
              async: false,
              cache: false,
@@ -120,16 +117,12 @@ angular.module('PmoxApp')
            $.ajax({
              url: "api/projects/getPmSeriesData",
              error: function (e) {
-               //alert('Invalid Result set.......'+JSON.stringify(e))
-               
+                              
                 $("#alertMsg").html("The required data is not available for the selected user.");                          
                 $('#alertModal').modal("show");
-            
-              //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
-            // headers: {"Authorization": "Bearer "+AuthService.token},
              type: "POST",
              async: false,
              cache: false,
@@ -137,7 +130,6 @@ angular.module('PmoxApp')
              timeout: 30000,
              crossDomain: true,
              success: function (data) {               
-              //alert(JSON.stringify(data))
                usr.push(data);
              }
              
@@ -149,15 +141,21 @@ angular.module('PmoxApp')
          
          $scope.loadPnLSummaryData = function(userFrSearch){
            
+           var ebidtaData = [];
+           var revData = [];
+           var ebidtaDataFinal = [];
+           var revDataFinal = [];
+           var revenue = new Object();
+           var ebidta = new Object();
+           var ebidtap = new Object();
+           
            $.ajax({
              url: "api/projects/getPnLSummary",
              error: function (e) {
                alert('Invalid Result set for the request.'+JSON.stringify(e))
-               //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
-            // headers: {"Authorization": "Bearer "+AuthService.token},
              type: "POST",
              async: false,
              cache: false,
@@ -165,41 +163,251 @@ angular.module('PmoxApp')
              timeout: 30000,
              crossDomain: true,
              success: function (data) {               
-              //alert(JSON.stringify(data))
+             
                $scope.pnlSummaryData = data;
+               
+               angular.forEach(data, function (value, key) {
+                 
+                 if(value.attribute==='REVENUE'){
+                                     
+                   revenue.monApr = value.monApr; 
+                   revenue.monMay = value.monMay; 
+                   revenue.monJun = value.monJun; 
+                   revenue.monJul = value.monJul; 
+                   revenue.monAug = value.monAug; 
+                   revenue.monSep = value.monSep; 
+                   revenue.monOct = value.monOct; 
+                   revenue.monNov = value.monNov; 
+                   revenue.monDec = value.monDec; 
+                   revenue.monJan = value.monJan; 
+                   revenue.monFeb = value.monFeb; 
+                   revenue.monMar = value.monMar; 
+                   revenue.total = value.total; 
+                   //alert('-----------'+value.total)
+                   $scope.totalRevenue = (value.total/1000000).toFixed(3);
+                   revData= [value.monApr/1000000,value.monMay/1000000,value.monJun/1000000,value.monJul/1000000,value.monAug/1000000,value.monSep/1000000,
+                     value.monOct/1000000,value.monNov/1000000,value.monDec/1000000,value.monJan/1000000,value.monFeb/1000000,value.monMar/1000000];
+                  
+                 }
+                   if(value.attribute==='EBIDTA'){
+                     
+                     ebidta.monApr = value.monApr; 
+                     ebidta.monMay = value.monMay; 
+                     ebidta.monJun = value.monJun; 
+                     ebidta.monJul = value.monJul; 
+                     ebidta.monAug = value.monAug; 
+                     ebidta.monSep = value.monSep; 
+                     ebidta.monOct = value.monOct; 
+                     ebidta.monNov = value.monNov; 
+                     ebidta.monDec = value.monDec; 
+                     ebidta.monJan = value.monJan; 
+                     ebidta.monFeb = value.monFeb; 
+                     ebidta.monMar = value.monMar; 
+                         
+                    }
+                 
+                 });
              }
              
            });
            
+           //alert(JSON.stringify(ebidta))
+            //   alert(JSON.stringify(revenue))
+            ebidtap.attribute = "EBIDTA %"
+            ebidtap.monApr = revenue.monApr==0 ? 0 : (ebidta.monApr*100/revenue.monApr); 
+            ebidtap.monMay = revenue.monMay==0 ? 0 : (ebidta.monMay*100/revenue.monMay) ; 
+            ebidtap.monJun = revenue.monJun==0 ? 0 : (ebidta.monJun*100/revenue.monJun) ; 
+            ebidtap.monJul = revenue.monJul==0 ? 0 : (ebidta.monJul*100/revenue.monJul) ; 
+            ebidtap.monAug = revenue.monAug==0 ? 0 : (ebidta.monAug*100/revenue.monAug) ; 
+            ebidtap.monSep = revenue.monSep==0 ? 0 : (ebidta.monSep*100/revenue.monSep) ; 
+            ebidtap.monOct = revenue.monOct==0 ? 0 : (ebidta.monOct*100/revenue.monOct) ; 
+            ebidtap.monNov = revenue.monNov==0 ? 0 : (ebidta.monNov*100/revenue.monNov) ; 
+            ebidtap.monDec = revenue.monDec==0 ? 0 : (ebidta.monDec*100/revenue.monDec) ; 
+            ebidtap.monJan = revenue.monJan==0 ? 0 : (ebidta.monJan*100/revenue.monJan) ; 
+            ebidtap.monFeb = revenue.monFeb==0 ? 0 : (ebidta.monFeb*100/revenue.monFeb) ; 
+            ebidtap.monMar = revenue.monMar==0 ? 0 : (ebidta.monMar*100/revenue.monMar) ; 
+            ebidtap.total = 0;
+            //alert(JSON.stringify(ebidtap))
+            ebidtaData=[ebidtap.monApr ==0 ? null : ebidtap.monApr ,ebidtap.monMay==0 ? null : ebidtap.monMay,ebidtap.monJun==0 ? null : ebidtap.monJun,ebidtap.monJul==0 ? null : ebidtap.monJul,
+            ebidtap.monAug==0 ? null : ebidtap.monAug,ebidtap.monSep==0 ? null : ebidtap.monSep,ebidtap.monOct==0 ? null : ebidtap.monOct,ebidtap.monNov==0 ? null : ebidtap.monNov,ebidtap.monDec==0 ? null : ebidtap.monDec,
+            ebidtap.monJan==0 ? null : ebidtap.monJan,ebidtap.monFeb==0 ? null : ebidtap.monFeb,ebidtap.monMar==0 ? null : ebidtap.monMar,ebidtap.total==0 ? null : ebidtap.total];
+          
+            $scope.pnlSummaryData.push(ebidtap);
+          
+           ebidtaDataFinal= ebidtaData.map(function(ebitap, i) { if(ebitap!=null){return parseFloat(ebitap.toFixed(2));} });
+           
+           revDataFinal = revData.map(function(revap, i) { return parseFloat(revap.toFixed(2)); });
+                   
+           $scope.chartProjRevenue = {  
+                   
+                   chart: {
+                     zoomType: 'xy',
+                     style: {
+                       fontFamily: 'Bahnschrift'
+                   }
+                 },
+                 title: {
+                     text: 'Revenue & EBIDTA Chart'
+                 },
+                 xAxis: [{
+                     categories: ['Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'],
+                     crosshair: true
+                 }],
+                 yAxis: [{ // Primary yAxis
+                     labels: {
+                         format: '{value} %',
+                         style: {
+                             color: Highcharts.getOptions().colors[1]
+                         }
+                     },
+                     title: {
+                         text: 'EBIDTA(%)',
+                         style: {
+                             color: Highcharts.getOptions().colors[1]
+                         }
+                     }
+                 }, { // Secondary yAxis
+                     title: {
+                         text: 'Revenue ($)',
+                         style: {
+                             color: Highcharts.getOptions().colors[0]
+                         }
+                     },
+                     labels: {
+                         format: '$ {value} M',
+                         style: {
+                             color: Highcharts.getOptions().colors[0]
+                         }
+                     },
+                     opposite: true
+                 }],
+                 tooltip: {
+                     shared: true
+                 },
+                 legend: {
+                     layout: 'vertical',
+                     align: 'top',
+                     x: 200,
+                     verticalAlign: 'top',
+                     y: 50,
+                     floating: true,
+                     backgroundColor:
+                         Highcharts.defaultOptions.legend.backgroundColor || // theme
+                         'rgba(255,255,255,0.25)'
+                 },
+                 series: [{
+                     name: 'Revenue',
+                     type: 'column',
+                     yAxis: 1,
+                     data: revDataFinal,
+                     tooltip: {
+                         valueSuffix: ' M'
+                     }
+
+                 }, {
+                     name: 'EBIDTA(%)',
+                     type: 'spline',
+                     data: ebidtaData,
+                     tooltip: {
+                         valueSuffix: '%'
+                     }
+                 }]
+           
+             }
+           
          }
          
-
-         $scope.loadFiltersWithStatusData = function(selectedPmId,selectedPrjId,projMasterData){
-           
-           var lastPgmId = 0;
-           var lastPgmName = '';
-           var lastPmId = 0;
-           var lastPmName = '';
+         $scope.getFilterData=function(filtrObj,roleFilter){
                       
-           if(selectedPmId==='' && selectedPrjId==='' )
-           {
+           var userDataPrj = [];
              
-             $scope.getDistinctSbu(projMasterData);
-             $scope.getDistinctIbg(projMasterData);
-             $scope.getDistinctIbu(projMasterData);
-             $scope.getDistinctSales(projMasterData);
-             $scope.getDistinctPGM(projMasterData);
-             $scope.getDistinctPM(projMasterData);
-             $scope.getDistinctProject(projMasterData);
+             switch(roleFilter) {
+             case 'SBU':
+               $scope.user.sbuName = filtrObj.name;
+               break;
+             case 'IBG':
+               $scope.user.ibgName = filtrObj.name;
+               break;
+             case 'IBU':
+               $scope.user.ibuName = filtrObj.name;
+               break;
+             case 'SALES':
+               $scope.user.spgmName = filtrObj.name;
+               break;
+             case 'PGM':
+               $scope.user.pgmName = filtrObj.name;
+               break;
+             case 'PM':
+               $scope.user.pmName = filtrObj.pmname;
+               break;
+             case 'PRJ':
+               $scope.user.prjNme = filtrObj.pname;
+               break;
+           }; 
+           $scope.user.filterRoleSel=roleFilter;
            
-           }
-                      
+           userDataPrj = $scope.loadProjectMasterData($scope.user)[0];
+           
+           $scope.loadFiltersWithStatusData(userDataPrj.projMasterData,roleFilter);
+           $scope.loadProjRevProjectionData($scope.user);
+           $scope.loadPnLSummaryData($scope.user);
+           
+         }
+         
+         $scope.loadFiltersWithStatusData = function(projMasterData,roleFilter){
+                    
+          switch(roleFilter) {
+             case 'SBU':
+               $scope.getDistinctIbg(projMasterData);
+               $scope.getDistinctIbu(projMasterData);
+               $scope.getDistinctSales(projMasterData);
+               $scope.getDistinctPGM(projMasterData);
+               $scope.getDistinctPM(projMasterData);
+               $scope.getDistinctProject(projMasterData);
+               break;
+             case 'IBG':
+               $scope.getDistinctIbu(projMasterData);
+               $scope.getDistinctSales(projMasterData);
+               $scope.getDistinctPGM(projMasterData);
+               $scope.getDistinctPM(projMasterData);
+               $scope.getDistinctProject(projMasterData);
+               break;
+             case 'IBU':
+               $scope.getDistinctSales(projMasterData);
+               $scope.getDistinctPGM(projMasterData);
+               $scope.getDistinctPM(projMasterData);
+               $scope.getDistinctProject(projMasterData);
+               break;
+             case 'SALES':
+               //$scope.user.spgmName = filtrObj.name;
+               break;
+             case 'PGM':
+               $scope.getDistinctPM(projMasterData);
+               $scope.getDistinctProject(projMasterData);
+               break;
+             case 'PM':
+               $scope.getDistinctProject(projMasterData);
+               break;
+             case 'PRJ':
+              // $scope.user.prjNme = filtrObj.name;
+               break;
+             default : 
+                $scope.getDistinctSbu(projMasterData);
+                $scope.getDistinctIbg(projMasterData);
+                $scope.getDistinctIbu(projMasterData);
+                $scope.getDistinctSales(projMasterData);
+                $scope.getDistinctPGM(projMasterData);
+                $scope.getDistinctPM(projMasterData);
+                $scope.getDistinctProject(projMasterData);
+           };                       
          }
          
          
          $scope.getDistinctSbu=function(projMasterData){
            
            var sbu = new Object();
+           //$scope.sbuNames = [];
            sbu.id="allsbu";
            sbu.name="---All SBU---";
            $scope.sbuNames.push(sbu);
@@ -224,8 +432,7 @@ angular.module('PmoxApp')
                  ibu.id=ibuArr[0];
                  ibu.name=ibuArr[1];
                  $scope.sbuNames.push(ibu);
-                // alert($scope.ibuNames.length)
-               
+                
              });  
            }
          
@@ -233,6 +440,7 @@ angular.module('PmoxApp')
          
          $scope.getDistinctIbg=function(projMasterData){
            
+          // $scope.ibgNames = [];
            var ibg = new Object();
            ibg.id="allibg";
            ibg.name="---All IBG---";
@@ -258,8 +466,7 @@ angular.module('PmoxApp')
                  ibu.id=ibuArr[0];
                  ibu.name=ibuArr[1];
                  $scope.ibgNames.push(ibu);
-                // alert($scope.ibuNames.length)
-               
+                              
              });  
            }
          
@@ -269,6 +476,7 @@ angular.module('PmoxApp')
          
          $scope.getDistinctIbu=function(projMasterData){
            
+           //$scope.ibuNames = [];
            var ibu = new Object();
            ibu.id="allibu";
            ibu.name="---All IBU---";
@@ -294,7 +502,6 @@ angular.module('PmoxApp')
                  ibu.id=ibuArr[0];
                  ibu.name=ibuArr[1];
                  $scope.ibuNames.push(ibu);
-                // alert($scope.ibuNames.length)
                
              });  
            }
@@ -303,15 +510,14 @@ angular.module('PmoxApp')
          
          $scope.getDistinctSales=function(projMasterData){
            
+           $scope.sPgManagers = [];
            var sPgm = new Object();
            sPgm.id="allspgm";
            sPgm.name="---All Sales Mangers---";
            $scope.sPgManagers.push(sPgm);
            
            var distinctsPgm = [...new Set(projMasterData.map(spgm => spgm.sPgmId+':'+spgm.sPgmName))];
-           
-           // alert(JSON.stringify(distinctsPgm))
-            
+                       
             angular.forEach(distinctsPgm, function (valueOut, keyOut) {
               
                 var pgmArr = valueOut.split(':');
@@ -327,6 +533,7 @@ angular.module('PmoxApp')
          
          $scope.getDistinctPGM=function(projMasterData){
            
+           $scope.pgManagers = [];
            var pgm = new Object();
            pgm.id="allpgm";
            pgm.name="---All PGMs---";
@@ -350,6 +557,8 @@ angular.module('PmoxApp')
          
          $scope.getDistinctPM=function(projMasterData){
            
+           $scope.manNames =[];
+          
            var managers = new Object();
            managers.pid="allpm";
            managers.pmname="---All PMs---";
@@ -372,6 +581,7 @@ angular.module('PmoxApp')
          }; 
          
          $scope.getDistinctProject=function(projMasterData){
+          
            $scope.projects=[];
            var projects = new Object();
            projects.pid="allprj";
@@ -395,36 +605,8 @@ angular.module('PmoxApp')
          }; 
          
          
-         $scope.getFilterData=function(filtrObj,roleFilter){
-           
-           alert('filtrObj--'+JSON.stringify(filtrObj));
-           alert('roleFilter--'+roleFilter);
-           
-             if(roleFilter==='SBU'){
-               
-             }else if(roleFilter==='IBG'){
-               
-             }else if(roleFilter==='IBU'){
-               
-             }else if(roleFilter==='SALESM'){
-               
-             }else if(roleFilter==='PGM'){
-               
-               
-               
-             }else if(roleFilter==='PM'){
-               
-             }else if(roleFilter==='PM'){
-               
-             }
-           
-           
-           }; 
-         
          $scope.getDetailsDataSPgm=function(spgm){
-           
-           //  alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
-             
+                       
              $scope.projects=[];
              $scope.manNames=[];
              $scope.pmData={};
@@ -468,10 +650,7 @@ angular.module('PmoxApp')
               managers.pmname="---All PMs---";
               $scope.manNames.push(managers);
               $scope.pmData=$scope.manNames[0];
-             // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
-             // $scope.pmData=$scope.manNames[0];
-             // alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
-              
+                          
               var projs = new Object();
               projs.pid="allprj";
               projs.pname="---All Projects---";
@@ -496,16 +675,12 @@ angular.module('PmoxApp')
                     $scope.projects.push(projects);
               }); 
               
-              //alert(JSON.stringify($scope.pmData)+'$scope.pmData----'+JSON.stringify($scope.manNames))
-              
               $scope.pmData=$scope.manNames[0];
               $scope.selProject=$scope.projects[0];
               
            }; 
          
          $scope.getDetailsDataPgm=function(pgm){
-           
-         //  alert('inside the getDetailsDatapgm '+JSON.stringify(pgm))
            
            $scope.projects=[];
            $scope.manNames=[];
@@ -629,7 +804,7 @@ angular.module('PmoxApp')
             $scope.totalRevenue = userDataPrj.totalRevenue;
             $scope.totalEbidta = userDataPrj.totalEbidta;
             $scope.loadPricingMdlData(userDataPrj.projMasterData);  
-            $scope.loadFiltersWithStatusData(pm.pid,'',userDataPrj.projMasterData);
+            $scope.loadFiltersWithStatusData(userDataPrj.projMasterData);
             $scope.loadProjStatus(userDataPrj.projMasterData);  
             $scope.loadProjManaged(userDataPrj.projMasterData);
             $scope.loadProjTech(userDataPrj.projMasterData);
@@ -712,7 +887,7 @@ angular.module('PmoxApp')
           $scope.totalRevenue = userDataPrj.totalRevenue;
           $scope.totalEbidta = userDataPrj.totalEbidta;
           $scope.loadPricingMdlData(userDataPrj.projMasterData);
-          $scope.loadFiltersWithStatusData('',selProject.pid,userDataPrj.projMasterData);         
+          $scope.loadFiltersWithStatusData(userDataPrj.projMasterData);         
           $scope.loadProjStatus(userDataPrj.projMasterData);         
           $scope.loadProjManaged(userDataPrj.projMasterData);          
           $scope.loadProjTech(userDataPrj.projMasterData);         
@@ -999,14 +1174,10 @@ angular.module('PmoxApp')
                 series: $scope.seriesOnOff
               };
            
-         //  alert(resMapData+'---resMapData--'+JSON.stringify(resMapData))
-           
            var uniqsCntry = resMapData.reduce((acc, val) => {
              acc[val.country] = acc[val.country] === undefined ? 1 : acc[val.country] += 1;
              return acc;
            }, {});
-           
-           //alert(uniqsCntry+'-----uniqs-cntry---'+JSON.stringify(uniqsCntry))
            
            angular.forEach(uniqsCntry, function (value, key) {
              
@@ -1023,9 +1194,7 @@ angular.module('PmoxApp')
              acc[val.band] = acc[val.band] === undefined ? 1 : acc[val.band] += 1;
              return acc;
            }, {});
-           
-          // alert(uniqsCntry+'-----uniqs-cntry---'+JSON.stringify(uniqsCntry))
-           
+                   
            angular.forEach(uniqsBand, function (value, key) {
              
              var pieData = new Object();
@@ -1039,10 +1208,8 @@ angular.module('PmoxApp')
                          
          }
          
-         
          $scope.loadProjRevProjectionData= function(user) {
-           
-                    
+                   
            var revProjectionData = [];
            var foreCastSeriesData = [];
            var upsideSeriesData = [];
@@ -1052,16 +1219,13 @@ angular.module('PmoxApp')
            $.ajax({
              url: "api/projects/getRevenueProjData",
              error: function (e) {
-               //alert('Invalid Result set.......'+JSON.stringify(e))
                
                 $("#alertMsg").html("The required data is not available for the selected user.");                          
                 $('#alertModal').modal("show");
             
-              //alert(JSON.stringify('error occured----'+e))
              },
              dataType: "json",
              contentType: 'application/json; charset=utf-8',
-            // headers: {"Authorization": "Bearer "+AuthService.token},
              type: "POST",
              async: false,
              cache: false,
@@ -1069,98 +1233,208 @@ angular.module('PmoxApp')
              timeout: 30000,
              crossDomain: true,
              success: function (data) {               
-              //alert(JSON.stringify(data))
-               alert(data[0].category);
+             
                console.log(JSON.stringify(data));
-                              
-               revProjectionData = data;
-               var foreCast = new Object();
-               foreCast.cfyQOne = parseFloat((data[0].cfyQOne + data[1].cfyQOne + data[2].cfyQOne + data[3].cfyQOne).toFixed(3));
-               foreCast.cfyQTwo =  parseFloat((data[0].cfyQTwo + data[1].cfyQTwo + data[2].cfyQTwo + data[3].cfyQTwo).toFixed(3));
-               foreCast.cfyQThree =  parseFloat((data[0].cfyQThree + data[1].cfyQThree + data[2].cfyQThree + data[3].cfyQThree).toFixed(3));
-               foreCast.cfyQFour =  parseFloat((data[0].cfyQFour + data[1].cfyQFour + data[2].cfyQFour + data[3].cfyQFour).toFixed(3)); 
-               foreCast.category = "f6-ForeCast";
-               foreCastSeriesData= [foreCast.cfyQOne,foreCast.cfyQTwo,foreCast.cfyQThree,foreCast.cfyQFour];
-               //foreCastSeriesData.push(foreCast);
-               revProjectionData.push(foreCast);
-               
-               
-               var gap = new Object();
-               gap.cfyQOne = parseFloat((8.75 - foreCast.cfyQOne).toFixed(3)); 
-               gap.cfyQTwo = parseFloat((8.75 - foreCast.cfyQTwo).toFixed(3)) ;
-               gap.cfyQThree = parseFloat((8.75 - foreCast.cfyQThree).toFixed(3));
-               gap.cfyQFour = parseFloat((8.75 - foreCast.cfyQFour).toFixed(3)) ;
-               gap.category = "g7-Gap";
-               revProjectionData.push(gap);
-              
-               
+
+               var odb = new Object();
+               var ren = new Object();
+               var commit = new Object();
+               var ups = new Object();
+               var pipe = new Object();
+               var strup = new Object();
                var target = new Object();
-               target.cfyQOne = 8.75; 
-               target.cfyQTwo =  8.75; 
-               target.cfyQThree =  8.75; 
-               target.cfyQFour =  8.75; 
-               target.category = "a1-Target";
+               target.cfyQOne = 0.00; 
+               target.cfyQTwo =  0.00; 
+               target.cfyQThree =  0.00; 
+               target.cfyQFour =  0.00; 
+               target.colorCode = true;
+               target.category = "a-Target";
                targetSeriesData= [target.cfyQOne,target.cfyQTwo,target.cfyQThree,target.cfyQFour];
                revProjectionData.push(target);
                
-               var upside = new Object();
-               upside.cfyQOne = data[4].cfyQOne; 
-               upside.cfyQTwo =  data[4].cfyQTwo;
-               upside.cfyQThree = data[4].cfyQThree;
-               upside.cfyQFour =  data[4].cfyQFour;
-               upside.category = "j10-Upside";
-               upsideSeriesData = [data[4].cfyQOne,data[4].cfyQTwo,data[4].cfyQThree,data[4].cfyQFour];
-               //revProjectionData.push(target);
+               odb.cfyQOne = 0.00; 
+               odb.cfyQTwo =  0.00; 
+               odb.cfyQThree = 0.00; 
+               odb.cfyQFour =  0.00; 
+               odb.category = 'b-Order Book & Pending PO (OB)';
+               revProjectionData.push(odb);
                
-               var pipe = new Object();
-               pipe.cfyQOne = data[5].cfyQOne; 
-               pipe.cfyQTwo =  data[5].cfyQTwo;
-               pipe.cfyQThree = data[5].cfyQThree;
-               pipe.cfyQFour =  data[5].cfyQFour;
-               pipe.category = "j10-Pipeline(P0 to P2)";
-               pipeSeriesData = [data[5].cfyQOne,data[5].cfyQTwo,data[5].cfyQThree,data[5].cfyQFour];
-              // pipeSeriesData.push(upside);
+               ren.cfyQOne = 0.00; 
+               ren.cfyQTwo =  0.00;
+               ren.cfyQThree = 0.00;
+               ren.cfyQFour =  0.00;
+               ren.category = 'c-Expected Renewal';
+               revProjectionData.push(ren);
                
+               commit.cfyQOne = 0.00; 
+               commit.cfyQTwo =  0.00; 
+               commit.cfyQThree = 0.00; 
+               commit.cfyQFour =  0.00; 
+               commit.category = 'd-Commit(P4) (C)'; 
+               revProjectionData.push(commit);
                
+               strup.cfyQOne = 0.00; 
+               strup.cfyQTwo =  0.00; 
+               strup.cfyQThree = 0.00; 
+               strup.cfyQFour =  0.00; 
+               strup.category = 'e-Strong Upside (P3.1) (SU)'; 
+               revProjectionData.push(strup);
+               
+               ups.cfyQOne = 0.00; 
+               ups.cfyQTwo = 0.00; 
+               ups.cfyQThree = 0.00; 
+               ups.cfyQFour =  0.00; 
+               ups.colorCode = true;
+               ups.category = 'j-Upside(P3)'; 
+               upsideSeriesData = [ups.cfyQOne,ups.cfyQTwo,ups.cfyQThree,ups.cfyQFour];
+               revProjectionData.push(ups);
+               
+               pipe.cfyQOne = 0.00;  
+               pipe.cfyQTwo = 0.00; 
+               pipe.cfyQThree = 0.00; 
+               pipe.cfyQFour = 0.00; 
+               pipe.colorCode = true;
+               pipe.category = 'k-Pipeline(P0 to P2)';
+               revProjectionData.push(pipe);
+               
+              var counter =1;
+               angular.forEach(data, function (value, key) {
+                 
+                     
+                 if(value.category==='a-Target'){
+                   
+                   revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                   
+                   target.cfyQOne = value.cfyQOne; 
+                   target.cfyQTwo =  value.cfyQTwo;
+                   target.cfyQThree = value.cfyQThree;
+                   target.cfyQFour =  value.cfyQFour;
+                   target.category = value.category;
+                   target.colorCode = true;
+                   revProjectionData.push(target);
+                   targetSeriesData= [target.cfyQOne,target.cfyQTwo,target.cfyQThree,target.cfyQFour];
+                   //alert('2222----'+JSON.stringify(revProjectionData));
+                 }
+                 if(value.category==='b-Order Book & Pending PO (OB)'){
+                       
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                       
+                       odb.cfyQOne = value.cfyQOne; 
+                       odb.cfyQTwo =  value.cfyQTwo;
+                       odb.cfyQThree = value.cfyQThree;
+                       odb.cfyQFour =  value.cfyQFour;
+                       odb.category = value.category;
+                       revProjectionData.push(odb);
+                       //alert('2222----'+JSON.stringify(revProjectionData));
+                     }
+                     if(value.category==='c-Expected Renewal'){
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                         
+                         ren.cfyQOne = value.cfyQOne; 
+                         ren.cfyQTwo =  value.cfyQTwo;
+                         ren.cfyQThree = value.cfyQThree;
+                         ren.cfyQFour =  value.cfyQFour;
+                         ren.category = value.category;
+                         revProjectionData.push(ren);
+                     }
+                     if( value.category==='d-Commit(P4) (C)'){
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                       
+                       commit.cfyQOne = value.cfyQOne; 
+                       commit.cfyQTwo =  value.cfyQTwo;
+                       commit.cfyQThree = value.cfyQThree;
+                       commit.cfyQFour =  value.cfyQFour;
+                       commit.category = value.category;
+                       revProjectionData.push(commit);
+                   }
+                     if( value.category==='e-Strong Upside (P3.1) (SU)'){
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                      
+                       strup.cfyQOne = value.cfyQOne; 
+                       strup.cfyQTwo =  value.cfyQTwo;
+                       strup.cfyQThree = value.cfyQThree;
+                       strup.cfyQFour =  value.cfyQFour;
+                       strup.category = value.category;
+                       revProjectionData.push(strup);
+                   }
+                     if(value.category==='j-Upside(P3)'){
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                      
+                       ups.cfyQOne = value.cfyQOne; 
+                       ups.cfyQTwo =  value.cfyQTwo;
+                       ups.cfyQThree = value.cfyQThree;
+                       ups.cfyQFour =  value.cfyQFour;
+                       ups.colorCode = true;
+                       ups.category = value.category;
+                       upsideSeriesData = [value.cfyQOne,value.cfyQTwo,value.cfyQThree,value.cfyQFour];
+                       revProjectionData.push(ups);
+                   }
+                     if(value.category==='k-Pipeline(P0 to P2)'){
+                       revProjectionData = revProjectionData.filter( obj => obj.category !== value.category);
+                       
+                       pipe.cfyQOne = value.cfyQOne; 
+                       pipe.cfyQTwo =  value.cfyQTwo;
+                       pipe.cfyQThree = value.cfyQThree;
+                       pipe.cfyQFour =  value.cfyQFour;
+                       pipe.colorCode = true;
+                       pipe.category = value.category;
+                       pipeSeriesData = [value.cfyQOne,value.cfyQTwo,value.cfyQThree,value.cfyQFour];
+                       revProjectionData.push(pipe);
+                   }
+                     
+               });
+               
+               var foreCast = new Object();
+               foreCast.cfyQOne = parseFloat((odb.cfyQOne + ren.cfyQOne + commit.cfyQOne + strup.cfyQOne).toFixed(3));
+               foreCast.cfyQTwo =  parseFloat((odb.cfyQTwo + ren.cfyQTwo + commit.cfyQTwo + strup.cfyQTwo).toFixed(3));
+               foreCast.cfyQThree = parseFloat((odb.cfyQThree + ren.cfyQThree + commit.cfyQThree + strup.cfyQThree).toFixed(3));
+               foreCast.cfyQFour =  parseFloat((odb.cfyQFour + ren.cfyQFour + commit.cfyQFour + strup.cfyQFour).toFixed(3));
+               foreCast.colorCode = true;
+               foreCast.category = "f-ForeCast";
+               foreCastSeriesData= [foreCast.cfyQOne,foreCast.cfyQTwo,foreCast.cfyQThree,foreCast.cfyQFour];
+               revProjectionData.push(foreCast);
+                              
+               var gap = new Object();
+               gap.cfyQOne = parseFloat((target.cfyQOne - foreCast.cfyQOne).toFixed(3)); 
+               gap.cfyQTwo = parseFloat((target.cfyQTwo - foreCast.cfyQTwo).toFixed(3)) ;
+               gap.cfyQThree = parseFloat((target.cfyQThree - foreCast.cfyQThree).toFixed(3));
+               gap.cfyQFour = parseFloat((target.cfyQFour - foreCast.cfyQFour).toFixed(3)) ;
+               gap.category = "g-Gap";
+               revProjectionData.push(gap);
+                              
                var lstForcst = new Object();
                lstForcst.cfyQOne = 0.00; 
                lstForcst.cfyQTwo =  0.00; 
                lstForcst.cfyQThree =  0.00; 
                lstForcst.cfyQFour =  0.00; 
-               lstForcst.category = "h8-Last Forecast";
+               lstForcst.category = "h-Last Forecast";
                revProjectionData.push(lstForcst);
-               
-               
+                              
                var chngLstForcst = new Object();
                chngLstForcst.cfyQOne = 0.00; 
                chngLstForcst.cfyQTwo =  0.00; 
-               chngLstForcst.cfyQThree =  0.00; 
+               chngLstForcst.cfyQThree = 0.00; 
                chngLstForcst.cfyQFour =  0.00; 
-               chngLstForcst.category = "i9-Change From Last Forecast";
+               chngLstForcst.category = "i-Change From Last Forecast";
                revProjectionData.push(chngLstForcst);
-               
-               
+                              
                var achvment = new Object();
                achvment.cfyQOne = parseFloat(((foreCast.cfyQOne*100)/target.cfyQOne).toFixed(3));  
                achvment.cfyQTwo =  parseFloat(((foreCast.cfyQTwo*100)/target.cfyQTwo).toFixed(3)); 
                achvment.cfyQThree =  parseFloat(((foreCast.cfyQThree*100)/target.cfyQThree).toFixed(3)); 
                achvment.cfyQFour = parseFloat(((foreCast.cfyQFour*100)/target.cfyQFour).toFixed(3)); 
-               achvment.category = "l12-Achievement %";
+               achvment.category = "l-Achievement %";
                revProjectionData.push(achvment);
-               
                
                var growthRate = new Object();
                growthRate.cfyQOne = 0.00; 
                growthRate.cfyQTwo =  0.00; 
-               growthRate.cfyQThree =  0.00; 
+               growthRate.cfyQThree = 0.00; 
                growthRate.cfyQFour =  0.00; 
-               growthRate.category = "m13-Growth Rate (QnQ)";
+               growthRate.category = "m-Growth Rate (QnQ)";
                revProjectionData.push(growthRate);
-               
-               
+                             
                $scope.revProjectionData = revProjectionData.sort((a, b) => (a.category > b.category) ? 1 : -1);
-               
-               alert(JSON.stringify($scope.revProjectionData));
                
                foreCast = null;
                gap = null;
@@ -1173,17 +1447,14 @@ angular.module('PmoxApp')
              }
              
            });
-           
-           
-           
-            
+                      
              $scope.chartOBForecast = {
             
                    chart: {
                      type: 'column',
                   style: {
-                                  fontFamily: 'Bahnschrift'
-                              }
+                           fontFamily: 'Bahnschrift'
+                         }
                  },
                  plotOptions: {
                    series: {
@@ -1249,20 +1520,20 @@ angular.module('PmoxApp')
                                 data: targetSeriesData,
                                 stack: 'target'
                         
-                            }, {
-                                name: 'Upside',
-                                color: '#ff7f00',
-                                data: upsideSeriesData,
-                                stack: 'project'
-                            }, {
+                            },  {
                                 name: 'Pipeline',
-                                color: '#ffff00',
+                                color: '#bf00ff',
                                 data: pipeSeriesData,
                                 stack: 'project'
-                            },
+                            },{
+                              name: 'Upside',
+                              color: '#ffbf00',
+                              data: upsideSeriesData,
+                              stack: 'project'
+                          },
                             {
                               name: 'Forecast',
-                              color: '#009d00',
+                              color: '#00ffbf',
                               data: foreCastSeriesData,
                               stack: 'project'
                           }]            
@@ -1289,7 +1560,7 @@ angular.module('PmoxApp')
            
            $scope.pnlSummaryData = [];
            
-          // $scope.loadPnLSummaryData(user);
+           $scope.loadPnLSummaryData(user);
           
            angular.forEach(userDataPrj, function (value, key) {
              
@@ -1386,58 +1657,6 @@ angular.module('PmoxApp')
                      }
                  }]
            }
-           
-           
-           
-           
-        /*   $scope.chartProjRevenue = {
-                   
-                   chart: {
-                     renderTo: 'container',
-                     type: 'column',
-                     style: {
-                       fontFamily: 'Bahnschrift'
-                   }
-                 },
-                 title: {
-                     text: 'Revenue Chart'
-                 },credits: {
-                   enabled: false
-                 },
-                 yAxis: {
-                   title: {
-                       text: 'Revenue ($)'
-                   },
-                   labels: {
-                     format: '$ {value} M',
-                     style: {
-                         color: Highcharts.getOptions().colors[1]
-                     }
-                 },
-               },
-
-               xAxis: {
-                 categories: ['Apr', 'May', 'Jun',
-                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'],
-                   crosshair: true
-               },
-               legend: {
-                 layout: 'vertical',
-                 align: 'right',
-                 verticalAlign: 'middle'
-             },
-
-                 plotOptions: {
-                     column: {
-                         depth: 25
-                     }
-                 },
-                 series: [{
-                   name: 'Revenue($ M)',
-                   data: revDataFinal
-                 }]
-                   
-           } */
            
            $scope.chartProjEbidta = {
                    
@@ -1716,7 +1935,7 @@ angular.module('PmoxApp')
          }
          
          $scope.showOdBook = function() {
-           
+           $scope.loadFiltersWithStatusData($scope.user.projMasterData);
            $scope.showOB=true;
            $scope.showPnL=false;
            $scope.showProjects=false;
