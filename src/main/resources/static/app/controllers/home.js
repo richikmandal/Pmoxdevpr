@@ -246,12 +246,18 @@ angular.module('PmoxApp')
                    
                    chart: {
                      zoomType: 'xy',
-                     style: {
+                     style: {                    
                        fontFamily: 'Bahnschrift'
                    }
                  },
                  title: {
-                     text: 'Revenue & EBIDTA Chart'
+                     text: 'Revenue & EBIDTA Chart',
+                     style: {                    
+                        fontSize: '15px',
+                       
+                   }
+                                       
+                     
                  },
                  xAxis: [{
                      categories: ['Apr', 'May', 'Jun',
@@ -313,6 +319,7 @@ angular.module('PmoxApp')
                      name: 'EBIDTA(%)',
                      type: 'spline',
                      data: ebidtaData,
+                     lineColor: 'red',
                      tooltip: {
                          valueSuffix: ''
                      }
@@ -868,7 +875,10 @@ angular.module('PmoxApp')
                     
                 },
                 title: {
-                    text: 'HTR Distribution'
+                    text: 'HTR Distribution',
+                    style: {                    
+                        fontSize: '15px',                      
+                   }                                     
                 },
                 credits: {
                   enabled: false
@@ -885,7 +895,7 @@ angular.module('PmoxApp')
                   center: ['40%', '50%'],
                   width: '80%'
                 },
-                // colors: ['#006600','#800000','#3285a8'],
+               colors: ['#54b6d1','#bf1717','#83e067'],
                 series: $scope.seriesHtrg,
                 responsive: {
                   rules: [{
@@ -1261,7 +1271,11 @@ angular.module('PmoxApp')
                },
 
                  title: {
-                     text: 'Revenue Projection'
+                     text: 'Revenue Projection',
+                     style: {                    
+                        fontSize: '15px',
+                       
+                   }
                  },
                  xAxis: {
                      categories: ['CFY-Q1', 'CFY-Q2', 'CFY-Q3', 'CFY-Q4']
