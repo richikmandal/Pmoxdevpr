@@ -28,9 +28,9 @@ public class UserDaoImpl implements UserDao {
   
   private String getPmrSmryDataFrUser = "select count(projectid) projectcount,sum(Onsite_Active_Head_Count) onactivheadcnt ,sum(Offshore_Active_Head_Count) offactivheadcnt from t_pmr where PM_Delegate_ID= ? ";
   
-  private String getAllDtls = "SELECT EMP_ID,EMP_NAME,ROLE FROM T_USER WHERE EMP_ID = ? AND PWD = ?";
+  private String getAllDtls = "SELECT EMP_ID,EMP_NAME,ROLE FROM T_USR_ROLE WHERE EMP_ID = ? AND PWD = ?";
   
-  private String getUserDtls =  "select EMP_ID,EMP_NAME,listagg(ROLE, ', ') within group (order by ROLE) AS ROLE from PMOX.T_USER WHERE EMP_ID = ? AND PWD = ? GROUP BY EMP_ID,EMP_NAME";
+  private String getUserDtls =  "select EMP_ID,EMP_NAME,listagg(ROLE, ', ') within group (order by ROLE) AS ROLE from PMOX.T_USR_ROLE WHERE EMP_ID = ? AND PWD = ? GROUP BY EMP_ID,EMP_NAME";
   
   private String getAssociateCount = "with rws as ( select ON_OFF from PMOX.T_RESOURCE_BASE ) select * from rws pivot ( count(*) for ON_OFF in ('ONSITE' ONSITE, 'OFFSHORE' OFFSHORE ) )";
   

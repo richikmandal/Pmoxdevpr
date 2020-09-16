@@ -48,6 +48,7 @@ public class ProfitAndLossData {
   private String ebidta;
   private String pgmId;
   private String pmId;
+  private String quarter;
   
   private String attribute;
   private float monJan;
@@ -519,6 +520,15 @@ public class ProfitAndLossData {
 
   public void setTotal(float total) {
     this.total = total;
+  }
+
+  public String getQuarter() {
+    return quarter;
+  }
+
+  public void setQuarter(String quarter) {
+    this.quarter = quarter;
   } 
+  
  
 }

@@ -35,8 +35,8 @@ public class User implements java.io.Serializable {
  private String pmName;
  private String prjNme;
  private String filterRoleSel;
-
- 
+ private String onOff;
+ private int onOffCnt;
 
   public User() {}
 
@@ -225,7 +225,21 @@ public class User implements java.io.Serializable {
     public void setFilterRoleSel(String filterRoleSel) {
       this.filterRoleSel = filterRoleSel;
     }
-    
-    
+
+    public String getOnOff() {
+      return onOff;
+    }
+
+    public void setOnOff(String onOff) {
+      this.onOff = onOff;
+    }
+
+    public int getOnOffCnt() {
+      return onOffCnt;
+    }
+
+    public void setOnOffCnt(int onOffCnt) {
+      this.onOffCnt = onOffCnt;
+    }
      
 }
