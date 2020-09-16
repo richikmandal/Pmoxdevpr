@@ -877,8 +877,7 @@ angular.module('PmoxApp')
                 title: {
                     text: 'HTR Distribution',
                     style: {                    
-                        fontSize: '15px',
-                       
+                        fontSize: '15px',                      
                    }
                                       
                 },
