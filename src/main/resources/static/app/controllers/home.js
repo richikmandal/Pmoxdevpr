@@ -42,13 +42,13 @@ angular.module('PmoxApp')
                       
            $scope.user = $scope.loadProjectMasterData($scope.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
-          // $scope.getDistinctProjectFilter($scope.user.projMasterData);
-           $scope.totalProjectCount = $scope.projects.length;
+          
+           $scope.totalProjectCount = $scope.projects.length-1;
            $scope.totalOffShoreCount = $scope.user.totalOffShoreCount;
            $scope.totalOnShoreCount = $scope.user.totalOnShoreCount;
-           
            $scope.loadProjRevProjectionData($scope.user); 
            $scope.loadPnLSummaryData($scope.user);
+           $scope.loadPricingMdlData($scope.user.projMasterData);
            $scope.loadProjStatus($scope.user.projMasterData);
            $scope.loadProjManaged($scope.user.projMasterData); 
            $scope.loadProjTech($scope.user.projMasterData);
@@ -208,7 +208,7 @@ angular.module('PmoxApp')
                      ebidta.monJan = value.monJan; 
                      ebidta.monFeb = value.monFeb; 
                      ebidta.monMar = value.monMar; 
-                     ebidta.total = value.total;   
+                     ebidta.total  = value.total;   
                     }
                  
                  });
@@ -229,7 +229,7 @@ angular.module('PmoxApp')
             ebidtap.monJan = revenue.monJan==0 ? 0 : (ebidta.monJan*100/revenue.monJan) ; 
             ebidtap.monFeb = revenue.monFeb==0 ? 0 : (ebidta.monFeb*100/revenue.monFeb) ; 
             ebidtap.monMar = revenue.monMar==0 ? 0 : (ebidta.monMar*100/revenue.monMar) ; 
-            ebidtap.total =  revenue.total== 0 ? 0 : (ebidta.total*100/revenue.total) ; 
+            ebidtap.total  = revenue.total== 0 ? 0 : (ebidta.total*100/revenue.total) ; 
                        
             $scope.totalEbidta = ebidtap.total.toFixed(2);
             ebidtaData=[ebidtap.monApr ==0 ? null : parseFloat(ebidtap.monApr.toFixed(2)) ,ebidtap.monMay==0 ? null : parseFloat(ebidtap.monMay.toFixed(2)),ebidtap.monJun==0 ? null : parseFloat(ebidtap.monJun.toFixed(2)),ebidtap.monJul==0 ? null : parseFloat(ebidtap.monJul.toFixed(2)),
@@ -290,7 +290,7 @@ angular.module('PmoxApp')
                      shared: true
                  },
                  legend: {
-                     layout: 'vertical',
+                     //layout: 'vertical',
                      align: 'top',
                      x: 200,
                      verticalAlign: 'top',
@@ -358,11 +358,9 @@ angular.module('PmoxApp')
            }else{
              $scope.totalProjectCount = $scope.projects.length-1;
            }
-           
+                      
            $scope.totalOffShoreCount = userDataPrj.totalOffShoreCount;
            $scope.totalOnShoreCount = userDataPrj.totalOnShoreCount;
-           //$scope.totalRevenue = userDataPrj.totalRevenue;
-          //$scope.totalEbidta = userDataPrj.totalEbidta;
            
            $scope.loadProjRevProjectionData($scope.user);  
            $scope.loadPnLSummaryData($scope.user);
@@ -400,7 +398,16 @@ angular.module('PmoxApp')
                $scope.getDistinctProject(projMasterData);
                break;
              case 'SALES':
-               //$scope.user.spgmName = filtrObj.name;
+               
+               angular.forEach($scope.pgManagers, function (valueOut, keyOut) {
+  
+                 if(valueOut.id==='allpgm'){
+                   $scope.pgmdata=valueOut;
+                 }
+               
+               });  
+               $scope.getDistinctPM(projMasterData);
+               $scope.getDistinctProject(projMasterData);
                break;
              case 'PGM':
                $scope.getDistinctPM(projMasterData);
@@ -900,8 +907,7 @@ angular.module('PmoxApp')
                 }
               };
           
-         // alert('resMapData--'+JSON.stringify(resMapData))
-          
+                   
           var uniqsOnOff = resMapData.reduce((acc, val) => {
             acc[val.onOff] = acc[val.onOff] === undefined ? 1 : acc[val.onOff] += 1;
             return acc;
@@ -1258,7 +1264,7 @@ angular.module('PmoxApp')
                      text: 'Revenue Projection'
                  },
                  xAxis: {
-                     categories: ['Q1', 'Q2', 'Q3', 'Q4']
+                     categories: ['CFY-Q1', 'CFY-Q2', 'CFY-Q3', 'CFY-Q4']
 
                  },
 
@@ -1287,9 +1293,9 @@ angular.module('PmoxApp')
                      }
                  },
                legend: {
-                                layout: 'vertical',
-                                align: 'right',
-                                verticalAlign: 'middle',
+                                //layout: 'vertical',
+                                align: 'center',
+                                verticalAlign: 'bottom',
                                 floating: false,
                                 borderWidth: 1,
                                 backgroundColor:
@@ -1413,8 +1419,8 @@ angular.module('PmoxApp')
                      shared: true
                  },
                  legend: {
-                     layout: 'vertical',
-                     align: 'top',
+                     //layout: 'vertical',
+                     align: 'center',
                      x: 200,
                      verticalAlign: 'top',
                      y: 50,
@@ -1422,6 +1428,8 @@ angular.module('PmoxApp')
                      backgroundColor:
                          Highcharts.defaultOptions.legend.backgroundColor || // theme
                          'rgba(255,255,255,0.25)'
+                 },credits: {
+                   enabled: false
                  },
                  series: [{
                      name: 'Revenue',
@@ -1473,7 +1481,7 @@ angular.module('PmoxApp')
                  },
 
                  legend: {
-                     layout: 'vertical',
+                     //layout: 'vertical',
                      align: 'right',
                      verticalAlign: 'middle'
                  },
@@ -1611,6 +1619,8 @@ angular.module('PmoxApp')
 
                  title: {
                      text: 'Revenue Projection'
+                 },credits: {
+                   enabled: false
                  },
                  xAxis: {
                      categories: ['CFY-Q1', 'CFY-Q2', 'CFY-Q3', 'CFY-Q4']
@@ -1642,7 +1652,7 @@ angular.module('PmoxApp')
                      }
                  },
                legend: {
-                                layout: 'vertical',
+                              //  layout: 'horizontal',
                                 align: 'right',
                                 verticalAlign: 'middle',
                                 floating: false,
@@ -1719,7 +1729,13 @@ angular.module('PmoxApp')
          }
          
          $scope.showOdBook = function() {
-           $scope.loadFiltersWithStatusData($scope.user.projMasterData);
+          
+           ///alert(JSON.stringify($scope.user))
+           
+           if(!$scope.user.roleName.startsWith("SALES")){
+             $scope.getFilterData('---All Sales Mangers---','SALES') ; 
+             //$scope.loadFiltersWithStatusData($scope.user.projMasterData);
+           }
            $scope.showOB=true;
            $scope.showPnL=false;
            $scope.showProjects=false;

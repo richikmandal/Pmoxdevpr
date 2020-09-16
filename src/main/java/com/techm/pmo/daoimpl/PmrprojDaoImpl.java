@@ -135,31 +135,31 @@ public class PmrprojDaoImpl implements PmrprojDao {
             
             if(user.getFilterRoleSel().equals("PRJ") ) {
               
-              getPrjAssoct = getFilterProject(getPrjAssoct, user);
+              getPrjAssoct = getFilterProject(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("PM") ) {
               
-              getPrjAssoct = getFilterPM(getPrjAssoct, user);
+              getPrjAssoct = getFilterPM(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("PGM") ) {
               
-              getPrjAssoct =  getFilterPGM(getPrjAssoct, user);
+              getPrjAssoct =  getFilterPGM(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("SALES") ) {
               
-              getPrjAssoct =  getFilterSPGM(getPrjAssoct, user);
+              getPrjAssoct =  getFilterSPGM(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("IBU") ) {
               
-              getPrjAssoct =  getFilterIBU(getPrjAssoct, user);
+              getPrjAssoct =  getFilterIBU(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("IBG") ) {
               
-              getPrjAssoct =  getFilterIBG(getPrjAssoct, user);
+              getPrjAssoct =  getFilterIBG(getPrjAssoct, user,false);
             }
             if(user.getFilterRoleSel().equals("SBU")) {
               
-              getPrjAssoct =  getFilterSBU(getPrjAssoct, user);
+              getPrjAssoct =  getFilterSBU(getPrjAssoct, user,false);
             }
            
           } 
@@ -171,6 +171,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
             }
           }, mapper);
 
+          user.setTotalOnShoreCount(0);
+          user.setTotalOffShoreCount(0);
+          
       for (User usr : usrData) {
         if(usr.getOnOff().equals("ONSITE")) {
           user.setTotalOnShoreCount(usr.getOnOffCnt());
@@ -290,31 +293,31 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if(user.getFilterRoleSel()!=null) {
       if(user.getFilterRoleSel().equals("PRJ") ) {
         
-        getPrjMasterDataFinal = getFilterProject(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal = getFilterProject(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("PM") ) {
         
-        getPrjMasterDataFinal = getFilterPM(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal = getFilterPM(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("PGM") ) {
         
-        getPrjMasterDataFinal =  getFilterPGM(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal =  getFilterPGM(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("SALES") ) {
         
-        getPrjMasterDataFinal =  getFilterSPGM(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal =  getFilterSPGM(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("IBU") ) {
         
-        getPrjMasterDataFinal =  getFilterIBU(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal =  getFilterIBU(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("IBG") ) {
         
-        getPrjMasterDataFinal =  getFilterIBG(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal =  getFilterIBG(getPrjMasterDataFinal, user,false);
       }
       if(user.getFilterRoleSel().equals("SBU")) {
         
-        getPrjMasterDataFinal =  getFilterSBU(getPrjMasterDataFinal, user);
+        getPrjMasterDataFinal =  getFilterSBU(getPrjMasterDataFinal, user,false);
       }
      
     } 
@@ -378,31 +381,31 @@ public class PmrprojDaoImpl implements PmrprojDao {
       if(user.getFilterRoleSel()!=null) {
         if(user.getFilterRoleSel().equals("PRJ") ) {
           
-          getPrjResourcDataFinal = getFilterProject(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal = getFilterProject(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("PM") ) {
           
-          getPrjResourcDataFinal = getFilterPM(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal = getFilterPM(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("PGM") ) {
           
-          getPrjResourcDataFinal =  getFilterPGM(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal =  getFilterPGM(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("SALES") ) {
           
-          getPrjResourcDataFinal =  getFilterSPGM(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal =  getFilterSPGM(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("IBU") ) {
           
-          getPrjResourcDataFinal =  getFilterIBU(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal =  getFilterIBU(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("IBG") ) {
           
-          getPrjResourcDataFinal =  getFilterIBG(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal =  getFilterIBG(getPrjResourcDataFinal, user,false);
         }
         if(user.getFilterRoleSel().equals("SBU")) {
           
-          getPrjResourcDataFinal =  getFilterSBU(getPrjResourcDataFinal, user);
+          getPrjResourcDataFinal =  getFilterSBU(getPrjResourcDataFinal, user,false);
         }
        
       }    
@@ -653,90 +656,111 @@ public class PmrprojDaoImpl implements PmrprojDao {
     return null;
   }
   
-  public String getFilterProject(String queryFinal,User user)
+  public String getFilterProject(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if(user.getPrjNme() !=null && !user.getPrjNme().equals("---All Projects---")) {
       
       queryFinal = queryFinal +  " AND PROJECT_DESC = '"+user.getPrjNme()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY PROJECT_DESC ";
+      }
     }
     else {
       
-      queryFinal = getFilterPM(queryFinal,user);
+      queryFinal = getFilterPM(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
   
-  public String getFilterPM(String queryFinal,User user)
+  public String getFilterPM(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if( user.getPmName() !=null && !user.getPmName().equals("---All PMs---")) {
       
       queryFinal = queryFinal +  " AND PM_NAME= '"+user.getPmName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY PM_NAME ";
+      }
     }
     else {
-      queryFinal = getFilterPGM(queryFinal,user);
+      queryFinal = getFilterPGM(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
   
-  public String getFilterPGM(String queryFinal,User user)
+  public String getFilterPGM(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if( user.getPgmName() !=null && !user.getPgmName().equals("---All PGMs---")) {
       
       queryFinal = queryFinal +  " AND PGM_NAME= '"+user.getPgmName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY PGM_NAME ";
+      }
     }
     else {
-      queryFinal = getFilterIBU(queryFinal,user);
+      queryFinal = getFilterIBU(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
   
-  public String getFilterSPGM(String queryFinal,User user)
+  public String getFilterSPGM(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if( user.getSpgmName() !=null && !user.getSpgmName().equals("---All Sales Mangers---")) {
       
       queryFinal = queryFinal +  " AND SALES_MGR_NAME= '"+user.getSpgmName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY SALES_MGR_NAME ";
+      }
     }
     else {
-      queryFinal = getFilterIBU(queryFinal,user);
+      queryFinal = getFilterIBU(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
   
-  public String getFilterIBU(String queryFinal,User user)
+  public String getFilterIBU(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if( user.getIbuName()!=null &&  !user.getIbuName().equals("---All IBU---")) {
       
       queryFinal = queryFinal +  " AND IBU= '"+user.getIbuName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY IBU ";
+      }
     }
     else {
-      queryFinal = getFilterIBG(queryFinal,user);
+      queryFinal = getFilterIBG(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
   
-  public String getFilterIBG(String queryFinal,User user)
+  public String getFilterIBG(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if( user.getIbgName()!=null &&  !user.getIbgName().equals("---All IBG---")) {
       
       queryFinal = queryFinal +  " AND IBG= '"+user.getIbgName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY IBG ";
+      }
     }
     else {
-      queryFinal = getFilterSBU(queryFinal,user);
+      queryFinal = getFilterSBU(queryFinal,user,grpByRqrd);
     }
     return queryFinal;
   }
-  public String getFilterSBU(String queryFinal,User user)
+  public String getFilterSBU(String queryFinal,User user,Boolean grpByRqrd)
   {
     
     if(user.getSbuName()!=null && !user.getSbuName().equals("---All SBU---")) {
       
       queryFinal = queryFinal +  " AND SBU= '"+user.getSbuName()+"'";
+      if(grpByRqrd) {
+        queryFinal = queryFinal+" GROUP BY SBU ";
+      }
     }
    
     return queryFinal;
@@ -767,31 +791,31 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if(user.getFilterRoleSel()!=null) {
       if(user.getFilterRoleSel().equals("PRJ") ) {
         
-        getPmSeriesQueryFinal = getFilterProject(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal = getFilterProject(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("PM") ) {
         
-        getPmSeriesQueryFinal = getFilterPM(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal = getFilterPM(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("PGM") ) {
         
-        getPmSeriesQueryFinal =  getFilterPGM(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal =  getFilterPGM(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("SALES") ) {
         
-        getPmSeriesQueryFinal =  getFilterSPGM(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal =  getFilterSPGM(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("IBU") ) {
         
-        getPmSeriesQueryFinal =  getFilterIBU(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal =  getFilterIBU(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("IBG") ) {
         
-        getPmSeriesQueryFinal =  getFilterIBG(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal =  getFilterIBG(getPmSeriesQueryFinal, user ,false);
       }
       if(user.getFilterRoleSel().equals("SBU")) {
         
-        getPmSeriesQueryFinal =  getFilterSBU(getPmSeriesQueryFinal, user);
+        getPmSeriesQueryFinal =  getFilterSBU(getPmSeriesQueryFinal, user ,false);
       }
      
     }
@@ -908,19 +932,19 @@ public class PmrprojDaoImpl implements PmrprojDao {
           
           if(user.getFilterRoleSel().equals("SALES") ) {
             
-            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user);
+            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user,false);
           }
           if(user.getFilterRoleSel().equals("IBU") ) {
             
-            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user);
+            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user,false);
           }
           if(user.getFilterRoleSel().equals("IBG") ) {
             
-            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user);
+            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user,false);
           }
           if(user.getFilterRoleSel().equals("SBU")) {
             
-            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user);
+            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,false);
           }
          
         }
@@ -939,23 +963,23 @@ public class PmrprojDaoImpl implements PmrprojDao {
           
           if(user.getFilterRoleSel().equals("SALES") ) {
             
-            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user);
-            groupBy = " GROUP BY SALES_MGR_NAME";
+            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user,true);
+            //groupBy = " GROUP BY SALES_MGR_NAME";
           }
           if(user.getFilterRoleSel().equals("IBU") ) {
             
-            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user);
-            groupBy = " GROUP BY IBU";
+            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user,true);
+           // groupBy = " GROUP BY IBU";
           }
           if(user.getFilterRoleSel().equals("IBG") ) {
             
-            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user);
-            groupBy = "GROUP BY IBG";
+            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user,true);
+           // groupBy = "GROUP BY IBG";
           }
           if(user.getFilterRoleSel().equals("SBU")) {
             
-            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user);
-            groupBy = " GROUP BY SBU";
+            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,true);
+            //groupBy = " GROUP BY SBU";
           }
          
         }

@@ -85,6 +85,15 @@ angular.module('PmoxApp')
             
           });
         };
+        
+        $scope.resetLogin= function () {
+          
+          $scope.showdropdown=false;
+          $scope.showlogin=true;
+          $scope.showenter=false;
+          $scope.disablelogin=false;
+          $scope.roleList = [];
+        }
 
         $scope.fetchUserDetails = function (username){
           
