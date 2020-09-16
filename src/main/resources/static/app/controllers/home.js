@@ -878,8 +878,7 @@ angular.module('PmoxApp')
                     text: 'HTR Distribution',
                     style: {                    
                         fontSize: '15px',                      
-                   }
-                                      
+                   }                                     
                 },
                 credits: {
                   enabled: false
