@@ -67,9 +67,7 @@ angular.module('PmoxApp')
                   $scope.showenter=true;
                   $scope.disablelogin=true;
                   loginuser=res.user;
-                  
-                  //$rootScope.$broadcast('LoginSuccessful');
-                 // $state.go('home');
+                 
                   
               } else {
          

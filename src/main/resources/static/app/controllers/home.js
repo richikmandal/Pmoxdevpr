@@ -1652,7 +1652,6 @@ angular.module('PmoxApp')
                      }
                  },
                legend: {
-                              //  layout: 'horizontal',
                                 align: 'right',
                                 verticalAlign: 'middle',
                                 floating: false,

@@ -652,7 +652,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
   @Override
   public List<ProfitAndLossData> getP_L(String user) {
-    // TODO Auto-generated method stub
+   
     return null;
   }
   
