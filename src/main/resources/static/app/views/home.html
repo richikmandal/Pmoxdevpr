@@ -200,7 +200,6 @@
 										</div>
 									</div>
 									
-
 									<div class="col-lg-8">
 										<div class="text-white" style="padding-top: 5px;">
 											<a ng-click="showOdBook()"><b>Revenue Projection</b></a>
@@ -209,31 +208,11 @@
 									<div class="col-lg-2" style="text-align: right">
 										
 									</div>
-
 								</div>
 							</li>
 							<li class="list-group-item  text-white rounded" id="grad2" style="height: 33px;">
 								<div class="row">
-									<div class="col-lg-3">
-										<div class="samll text-white" >
-											<b>Q1:{{cfyQOne}}</b>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="samll text-white" >
-											<b>Q2:{{cfyQTwo}}</b>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="samll text-white" >
-											<b>Q3:{{cfyQThree}}</b>
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="samll text-white" >
-											<b>Q4:{{cfyQFour}}</b>
-										</div>
-									</div>
+									<a><b style="font-size: 1.1rem; padding-left: 7px"> Q1: $ {{cfyQOne}} M &nbsp; Q2: $ {{cfyQTwo}} M &nbsp; Q3: $ {{cfyQThree}} M&nbsp; Q4: $ {{cfyQFour}} M</b></a>
 								</div>
 							</li>
 						</ul>
@@ -285,8 +264,8 @@
 
 									<div class="col-lg-10">
 										<div class="text-white" style="padding-top: 5px;">
-											<a ng-click="showProjectChrt()"><b>Projects
-													({{totalProjectCount}}) | Associates
+											<a  ng-click="showProjectChrt()"><b>Projects
+													({{totalProjectCount}}) &nbsp; | &nbsp; Associates
 													({{totalOffShoreCount+totalOnShoreCount}})</b></a>
 										</div>
 									</div>
