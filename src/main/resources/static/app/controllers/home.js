@@ -251,7 +251,7 @@ angular.module('PmoxApp')
                    }
                  },
                  title: {
-                     text: 'Revenue & EBIDTA Chart',
+                     text: 'Revenue vs EBIDTA',
                      style: {                    
                         fontSize: '15px',
                        
@@ -297,11 +297,9 @@ angular.module('PmoxApp')
                  },
                  legend: {
                      //layout: 'vertical',
-                     align: 'top',
-                     x: 200,
-                     verticalAlign: 'top',
-                     y: 50,
-                     floating: true,
+                     align: 'center',
+                     verticalAlign: 'bottom',
+                     floating: false,
                      backgroundColor:
                          Highcharts.defaultOptions.legend.backgroundColor || // theme
                          'rgba(255,255,255,0.25)'
@@ -319,7 +317,7 @@ angular.module('PmoxApp')
                      name: 'EBIDTA(%)',
                      type: 'spline',
                      data: ebidtaData,
-                     lineColor: 'red',
+                     color: '#ffbf00',
                      tooltip: {
                          valueSuffix: ''
                      }
@@ -406,13 +404,13 @@ angular.module('PmoxApp')
                break;
              case 'SALES':
                
-               angular.forEach($scope.pgManagers, function (valueOut, keyOut) {
+              /* angular.forEach($scope.pgManagers, function (valueOut, keyOut) {
   
                  if(valueOut.id==='allpgm'){
                    $scope.pgmdata=valueOut;
                  }
                
-               });  
+               });  */
                $scope.getDistinctPM(projMasterData);
                $scope.getDistinctProject(projMasterData);
                break;
@@ -469,6 +467,8 @@ angular.module('PmoxApp')
                 
              });  
            }
+           
+           $scope.sbuNames = $scope.sbuNames.sort((a, b) => (a.name > b.name) ? 1 : -1);
          
          }; 
          
@@ -503,6 +503,8 @@ angular.module('PmoxApp')
                               
              });  
            }
+           
+           $scope.ibgNames = $scope.ibgNames.sort((a, b) => (a.name > b.name) ? 1 : -1);
          
          }; 
          
@@ -539,6 +541,8 @@ angular.module('PmoxApp')
                
              });  
            }
+           
+           $scope.ibuNames = $scope.ibuNames.sort((a, b) => (a.name > b.name) ? 1 : -1);
          
          }; 
          
@@ -559,7 +563,9 @@ angular.module('PmoxApp')
              spgm.id=spgmArr[0];
              spgm.name=spgmArr[1];
              $scope.sPgManagers = [];
-             $scope.sPgManagers.push(spgm);
+             if(pgm.name!='BUFFER'){
+               $scope.sPgManagers.push(spgm);
+             }
              $scope.sPgmdata=spgm;
              
            }else{
@@ -570,11 +576,15 @@ angular.module('PmoxApp')
                   var pgm = new Object();
                   pgm.id=pgmArr[0];
                   pgm.name=pgmArr[1];
-                  $scope.sPgManagers.push(pgm);
+                  if(pgm.name!='BUFFER'){
+                    $scope.sPgManagers.push(pgm);
+                  }
                   $scope.sPgmdata=$scope.sPgManagers[0];
                 
               });  
            }
+           
+           $scope.sPgManagers = $scope.sPgManagers.sort((a, b) => (a.name > b.name) ? 1 : -1);
          
          }; 
          
@@ -611,6 +621,7 @@ angular.module('PmoxApp')
              });  
            }
            
+           $scope.pgManagers = $scope.pgManagers.sort((a, b) => (a.name > b.name) ? 1 : -1);
          
          }; 
          
@@ -647,6 +658,8 @@ angular.module('PmoxApp')
                            
              });  
            }
+           
+           $scope.manNames = $scope.manNames.sort((a, b) => (a.pmname > b.pmname) ? 1 : -1);
          
          }; 
                   
@@ -684,6 +697,8 @@ angular.module('PmoxApp')
                
              });  
            }
+           
+           $scope.projects = $scope.projects.sort((a, b) => (a.pname > b.pname) ? 1 : -1);
          
          }; 
         
@@ -883,11 +898,18 @@ angular.module('PmoxApp')
                 credits: {
                   enabled: false
                 },
+                tooltip: {
+                  formatter: function () {
+                      return '<b>' + this.x + '</b><br/>' +
+                          this.series.name + ': ' + this.y + '<br/>' ;
+                  }
+
+              },
                 plotOptions: {
                     series: {
                       dataLabels: {
                           enabled: true,
-                          format: '<b>{point.name}</b> ({point.y:,.0f})',
+                          format: '<b>{point.name}</b> ({point.y:,.0f}%)',
                           softConnector: true
                       }
                       
@@ -906,7 +928,8 @@ angular.module('PmoxApp')
                           plotOptions: {
                               series: {
                                   dataLabels: {
-                                      inside: true
+                                      inside: true,
+                                      format: '<b>{point.name}</b> ({point.y:,.0f}%)'
                                   },
                                   center: ['50%', '50%'],
                                   width: '100%'
@@ -1295,8 +1318,7 @@ angular.module('PmoxApp')
                  tooltip: {
                      formatter: function () {
                          return '<b>' + this.x + '</b><br/>' +
-                             this.series.name + ': ' + this.y + '<br/>' +
-                             'Total: ' + this.point.stackTotal;
+                             this.series.name + ': ' + this.y + '<br/>' ;
                      }
 
                  },
@@ -1394,7 +1416,7 @@ angular.module('PmoxApp')
                    }
                  },
                  title: {
-                     text: 'Revenue & EBIDTA Chart'
+                     text: 'Revenue vs EBIDTA'
                  },
                  xAxis: [{
                      categories: ['Apr', 'May', 'Jun',
@@ -1435,10 +1457,8 @@ angular.module('PmoxApp')
                  legend: {
                      //layout: 'vertical',
                      align: 'center',
-                     x: 200,
-                     verticalAlign: 'top',
-                     y: 50,
-                     floating: true,
+                     verticalAlign: 'bottom',
+                     floating: false,
                      backgroundColor:
                          Highcharts.defaultOptions.legend.backgroundColor || // theme
                          'rgba(255,255,255,0.25)'
@@ -1607,98 +1627,7 @@ angular.module('PmoxApp')
                       }
                   }] 
                     
-            }
- 
-             $scope.chartOBForecast = {
-            
-                   chart: {
-                     type: 'column',
-                  style: {
-                                  fontFamily: 'Bahnschrift'
-                              }
-                 },
-                 plotOptions: {
-                   series: {
-                       stacking: 'normal',
-                       allowPointSelect: true,
-                       states: {
-                           select: {
-                               color: null,
-                               borderWidth:5,
-                               borderColor:'Blue'
-                           }
-                       }
-                   }
-               },
-
-                 title: {
-                     text: 'Revenue Projection'
-                 },credits: {
-                   enabled: false
-                 },
-                 xAxis: {
-                     categories: ['CFY-Q1', 'CFY-Q2', 'CFY-Q3', 'CFY-Q4']
-
-                 },
-
-                 yAxis: {
-                     allowDecimals: false,
-                     min: 0,
-                     title: {
-                         align: 'high'
-                       },labels: {
-                            overflow: 'justify'
-                        }
-                 },
-
-                 tooltip: {
-                     formatter: function () {
-                         return '<b>' + this.x + '</b><br/>' +
-                             this.series.name + ': ' + this.y + '<br/>' +
-                             'Total: ' + this.point.stackTotal;
-                     }
-
-                 },
-
-                 plotOptions: {
-                     column: {
-                         stacking: 'normal'
-                     }
-                 },
-               legend: {
-                                align: 'right',
-                                verticalAlign: 'middle',
-                                floating: false,
-                                borderWidth: 1,
-                                backgroundColor:
-                                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-                                shadow: true
-                            },
-                            credits: {
-                                enabled: false
-                            },
-                   series: [{
-                                name: 'Target',
-                                data: [3.38, 3.38, 3.38, 3.38],
-                                stack: 'target'
-                        
-                            }, {
-                                name: 'Upside',
-                                data: [0.00, 0.06, 0.18, 0.12],
-                                stack: 'project'
-                            }, {
-                                name: 'Pipeline',
-                                data: [0.00, 0.06, 0.18, 0.12],
-                                stack: 'project'
-                            },
-                            {
-                              name: 'Forecast',
-                              data: [1.69, 2.15, 2.32, 2.02],
-                              stack: 'project'
-                          }]
-
-            
-             }     
+            }  
 
          }
          
@@ -1762,52 +1691,55 @@ angular.module('PmoxApp')
            
          }
          
-		 $scope.sortByValue = function(jsObj){
-  		   
-		     var sortedArray = [];
-  		    for(var i in jsObj)
-  		    {
-  		        sortedArray.push([jsObj[i],i]);
-  		    }
-  		    
-  		    return sortedArray.sort();
-		 }
-		 
-		 $scope.reverseByValue = function(jsObj){
-       
+     $scope.sortByValue = function(jsObj){
+         
+         var sortedArray = [];
+          for(var i in jsObj)
+          {
+              sortedArray.push([jsObj[i],i]);
+          }
+          
+          return sortedArray.sort();
+     }
+     
+     $scope.reverseByValue = function(jsObj){
+
+         var totalVal = $scope.totalOffShoreCount + $scope.totalOnShoreCount ;
+
        var sortedArray = [];
         for(var i in jsObj)
         {
             // Push each JSON Object entry in array by [value, key]
-            sortedArray.push([i,jsObj[i]]);
+          //alert('----'+(jsObj[i]*100)/totalVal)
+            sortedArray.push([i,(jsObj[i]*100)/totalVal]);
         }
         return sortedArray.sort().reverse();
    }
-		 
-		 $scope.sumArrays = function(arrays) {
-		
-		   const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
-		   const result = Array.from({ length: n });
-		   return result.map((_, i) => arrays.map(xs => xs[i] || 0).reduce((sum, x) => { sum = sum + x ;return parseFloat(sum.toFixed(2))}));
-		 }
-		 
-		 $scope.showProgress=function(){
-		   
-		   $scope.loaderds =true;
+     
+     $scope.sumArrays = function(arrays) {
+    
+       const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
+       const result = Array.from({ length: n });
+       return result.map((_, i) => arrays.map(xs => xs[i] || 0).reduce((sum, x) => { sum = sum + x ;return parseFloat(sum.toFixed(2))}));
+     }
+     
+     $scope.showProgress=function(){
+       
+       $scope.loaderds =true;
        // $scope.showSaveBtn11=true;
      }
-		 
-		 $scope.hideProgress=function(){
-		  $scope.loaderds =false;
+     
+     $scope.hideProgress=function(){
+      $scope.loaderds =false;
        // $scope.showSaveBtn11=true;
      }
-		 
-		 $scope.goOrderBook=function(){    
+     
+     $scope.goOrderBook=function(){    
        $state.go('odbook');
       
     }
-        	    
-	    $scope.getselectval = function (selData) {
+              
+      $scope.getselectval = function (selData) {
        
          $scope.projects=[];
          $scope.showdropdown=true; 

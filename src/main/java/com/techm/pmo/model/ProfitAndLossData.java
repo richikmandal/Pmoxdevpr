@@ -5,7 +5,6 @@ public class ProfitAndLossData {
   private String projectId;
   private String ProjectDescription;
   private String month;
-  private String quarter​;
   private String fy;
   private String onHc;
   private String offHc;
@@ -88,14 +87,6 @@ public class ProfitAndLossData {
 
   public void setMonth(String month) {
     this.month = month;
-  }
-
-  public String getQuarter​() {
-    return quarter​;
-  }
-
-  public void setQuarter​(String quarter​) {
-    this.quarter​ = quarter​;
   }
 
   public String getFy() {
