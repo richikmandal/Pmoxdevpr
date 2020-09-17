@@ -40,7 +40,7 @@ angular.module('PmoxApp')
           $scope.init = function () {
             $scope.disableTabs=true;  
                       
-           $scope.user = $scope.loadProjectMasterData($scope.user)[0] ; 
+           $scope.user = $scope.loadProjectMasterData(AuthService.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
           
            $scope.totalProjectCount = $scope.projects.length-1;
@@ -899,17 +899,15 @@ angular.module('PmoxApp')
                   enabled: false
                 },
                 tooltip: {
-                  formatter: function () {
-                      return '<b>' + this.x + '</b><br/>' +
-                          this.series.name + ': ' + this.y + '<br/>' ;
-                  }
-
+                  // Nice and easy number formatting
+                  valueDecimals: 2,
+                  shared: true
               },
                 plotOptions: {
                     series: {
                       dataLabels: {
                           enabled: true,
-                          format: '<b>{point.name}</b> ({point.y:,.0f}%)',
+                          format: '<b>{point.name}</b> ({point.percentage:.1f}%)',
                           softConnector: true
                       }
                       
@@ -917,7 +915,6 @@ angular.module('PmoxApp')
                   center: ['40%', '50%'],
                   width: '80%'
                 },
-               //colors: ['#54b6d1','#bf1717','#83e067'],
                 series: $scope.seriesHtrg,
                 responsive: {
                   rules: [{
@@ -1645,6 +1642,9 @@ angular.module('PmoxApp')
          
          $scope.showProjectChrt = function() {
            
+           if($scope.showOB){
+             $scope.init();
+           }
            $scope.showProjects=true;
            $scope.showAssociates=false;
            $scope.showPnL=false;
@@ -1654,6 +1654,9 @@ angular.module('PmoxApp')
          
          $scope.showAssociateChrt = function() {
            
+           if($scope.showOB){
+             $scope.init();
+           }
            $scope.showAssociates=true;
            $scope.showProjects=false;
            $scope.showPnL=false;
@@ -1662,7 +1665,9 @@ angular.module('PmoxApp')
          }
          
          $scope.showPnLChrt = function() {
-           
+           if($scope.showOB){
+             $scope.init();
+           }
            $scope.showPnL=true;
            $scope.showProjects=false;
            $scope.showAssociates=false;
@@ -1672,12 +1677,7 @@ angular.module('PmoxApp')
          
          $scope.showOdBook = function() {
           
-           ///alert(JSON.stringify($scope.user))
-           
-           if(!$scope.user.roleName.startsWith("SALES")){
-             $scope.getFilterData('---All Sales Mangers---','SALES') ; 
-             //$scope.loadFiltersWithStatusData($scope.user.projMasterData);
-           }
+           $scope.init();
            $scope.showOB=true;
            $scope.showPnL=false;
            $scope.showProjects=false;
@@ -1711,7 +1711,8 @@ angular.module('PmoxApp')
         {
             // Push each JSON Object entry in array by [value, key]
           //alert('----'+(jsObj[i]*100)/totalVal)
-            sortedArray.push([i,(jsObj[i]*100)/totalVal]);
+            //sortedArray.push([i,(jsObj[i]*100)/totalVal]);
+          sortedArray.push([i,jsObj[i]]);
         }
         return sortedArray.sort().reverse();
    }

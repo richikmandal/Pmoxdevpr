@@ -544,7 +544,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
         rsData.setProjectId(prjId);
         rsData.setProjectDescription(rs.getString("PROJECT_DESC"));
         rsData.setMonth(rs.getString("MONTH"));
-        rsData.setQuarter​(rs.getString("QTR"));
+        //rsData.setQuarter(rs.getString("QTR"));
         rsData.setFy(rs.getString("FY"));
         rsData.setOnHc(rs.getString("ON_HC"));
         rsData.setOffHc(rs.getString("OF_HC"));
@@ -963,28 +963,30 @@ public class PmrprojDaoImpl implements PmrprojDao {
           
           if(user.getFilterRoleSel().equals("SALES") ) {
             
-            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user,true);
+            getRevProjTargetFinal =  getFilterSPGM(getRevProjTargetFinal, user,true);
             //groupBy = " GROUP BY SALES_MGR_NAME";
           }
           if(user.getFilterRoleSel().equals("IBU") ) {
             
-            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user,true);
+            getRevProjTargetFinal =  getFilterIBU(getRevProjTargetFinal, user,true);
            // groupBy = " GROUP BY IBU";
           }
           if(user.getFilterRoleSel().equals("IBG") ) {
             
-            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user,true);
+            getRevProjTargetFinal =  getFilterIBG(getRevProjTargetFinal, user,true);
            // groupBy = "GROUP BY IBG";
           }
           if(user.getFilterRoleSel().equals("SBU")) {
             
-            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,true);
+            getRevProjTargetFinal =  getFilterSBU(getRevProjTargetFinal, user,true);
             //groupBy = " GROUP BY SBU";
           }
          
         }
       
-        getRevProjTargetFinal = getRevProjTargetFinal + groupBy ;
+        if(!getRevProjTargetFinal.contains("GROUP BY")) {
+          getRevProjTargetFinal = getRevProjTargetFinal + groupBy ;
+        }
         
         lstTargetData = jdbcMysql.query(getRevProjTargetFinal, new Object[] {user.getUsername()},
             new CasumSeriesMapRowMapper());
