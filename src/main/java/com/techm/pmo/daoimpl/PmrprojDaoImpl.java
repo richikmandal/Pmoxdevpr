@@ -325,7 +325,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
     ProjMap = jdbcMysql.query(getPrjMasterDataFinal, new Object[] {user.getUsername()},
         new PrjMasterMapRowMapper());
     user.setProjMasterData(ProjMap);
-
     return user;
 
   }
