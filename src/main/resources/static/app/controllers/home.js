@@ -917,7 +917,7 @@ angular.module('PmoxApp')
                   center: ['40%', '50%'],
                   width: '80%'
                 },
-               colors: ['#54b6d1','#bf1717','#83e067'],
+               //colors: ['#54b6d1','#bf1717','#83e067'],
                 series: $scope.seriesHtrg,
                 responsive: {
                   rules: [{
