@@ -33,10 +33,10 @@ public class PmrprojDaoImpl implements PmrprojDao {
   @Qualifier("jdbcMysql")
   private JdbcTemplate jdbcMysql;
 
-  private String      getPrjCntFrUser     = "SELECT COUNT(*) FROM PMOX.T_PRJ_MASTER ";
+  private String      getPrjCntFrUser     = "SELECT COUNT(*) FROM PMOX.V_PRJ_MASTER ";
 
   private String       getPmrDatafrUser    =
-      "SELECT Business_Unit, projectId, projectDesc, custId, IBU, IBUDescription,  IbuHeadName, Status, IBG_Description, Project_Main_Type, Project_Type, Project_Start_Date, "
+      "SELECT Business_Unit, projectId, projectDesc, custId, IBU, IBUDescription,  IbuHeadName, Status, IBG_Description, Project_Main_Type, PROJECT_N_TYPE, Project_Start_Date, "
           + " Project_End_Date, Program_Manager_Name,  PM_Delegate_Name,  Project_Manager_Name,  Active_Head_Count, Onsite_Active_Head_Count, Offshore_Active_Head_Count FROM pmox.t_pmr "
           + "  where PM_Delegate_ID= ? ";
 
@@ -58,15 +58,15 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
   String  getPrjMasterData    =
       " SELECT PROJECT_ID, PROJECT_DESC, STATUS, PROJECT_START_DATE, PROJECT_END_DATE, CLOSURE_DATE,SBU, D_SBU_HEAD_ID,D_SBU_HEAD_NAME,S_SBU_HEAD_ID,S_SBU_HEAD_NAME,IBG,D_IBG_HEAD_ID,D_IBG_HEAD_NAME, " + 
-      " S_IBG_HEAD_ID,S_IBG_HEAD_NAME, IBU, D_IBU_HEAD_ID, D_IBU_HEAD_NAME,S_IBU_HEAD_ID,S_IBU_HEAD_NAME, PGM_ID, PGM_NAME,SALES_MGR_ID,SALES_MGR_NAME, PM_ID, PM_NAME,PROJECT_TYPE, DELIVERY_OWNERSHIP, " + 
-      " PRICING_MODEL FROM PMOX.T_PRJ_MASTER ";
+      " S_IBG_HEAD_ID,S_IBG_HEAD_NAME, IBU, D_IBU_HEAD_ID, D_IBU_HEAD_NAME,S_IBU_HEAD_ID,S_IBU_HEAD_NAME, PGM_ID, PGM_NAME,SALES_MGR_ID,SALES_MGR_NAME, PM_ID, PM_NAME,PROJECT_N_TYPE, DELIVERY_OWNERSHIP, " + 
+      " PRICING_MODEL FROM PMOX.V_PRJ_MASTER ";
 
 
   String  getPrjAssoctData    = " SELECT ON_OFF,COUNT(*) ON_OFF_CNT FROM PMOX.T_RES_BASE  WHERE ";
 
   String               getPrjRevEbidta     =
       "SELECT ROUND((NVL(REV_TOTAL,0)/POWER(10,6)),3) AS REV_TOTAL,ROUND(NVL(EBIDTA,0),2) AS EBIDTA FROM ( SELECT ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL,"
-          + " CASE when SUM(REV_TOTAL) <> 0 THEN (SUM(EBIDTA)*100)/SUM(REV_TOTAL) END  AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.T_PRJ_MASTER PJM  "
+          + " CASE when SUM(REV_TOTAL) <> 0 THEN (SUM(EBIDTA)*100)/SUM(REV_TOTAL) END  AS EBIDTA FROM T_PNL_BASE PNL JOIN PMOX.V_PRJ_MASTER PJM  "
           + " ON PJM.PROJECT_ID = pnl.PROJECT_ID ";
   String               getPrjRevEbidta1    = " GROUP BY FY ) A";
   String               getPrjRevEbidta2    =
@@ -78,9 +78,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
   String               getPrjPnLData       =
       "SELECT PNL.PROJECT_ID, PNL.PROJECT_DESC, \"MONTH\", QTR, FY, ON_HC, OF_HC, TOT_HC, E, H, M, T, P1, P2, U1, U2, U3, U4, UJ, REV_TOTAL, SAL_ON, SAL_OFF, SAL_TOTAL, VISA_WP, "
           + " TRAVEL_FOREIGN, TRAVEL_INLAND, SUBCON_EXPNS, SUBCON_EXPNS_ON, SUBCON_EXPNS_OFF, TOTAL_SUBCON_EXPNS, PROJECT_EXPNS, RING_FENCING, IBU_BUFFER_COST, IBG_BUFFER_COST, "
-          + " SBU_BUFFER_COST, ALLOC_DIRECT_COST, OTHER_EXPNS, TOTAL_DIRECT_COST, CONTR, SGNA, EBIDTA, PGM_ID, PM_ID FROM PMOX.T_PNL_BASE PNL JOIN PMOX.T_PRJ_MASTER PGM ON PGM.PROJECT_ID = PNL.PROJECT_ID WHERE ";
+          + " SBU_BUFFER_COST, ALLOC_DIRECT_COST, OTHER_EXPNS, TOTAL_DIRECT_COST, CONTR, SGNA, EBIDTA, PGM_ID, PM_ID FROM PMOX.T_PNL_BASE PNL JOIN PMOX.V_PRJ_MASTER PGM ON PGM.PROJECT_ID = PNL.PROJECT_ID WHERE ";
   String               getPmSeriesData     = "  with rws as ( "
-      + "  select PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,REV_TOTAL,PM_NAME from PMOX.T_PNL_BASE PNL JOIN PMOX.T_PRJ_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "
+      + "  select PJM.PROJECT_ID,PJM.PM_ID,PJM.PGM_ID,PJM.STATUS,REV_TOTAL,PM_NAME from PMOX.T_PNL_BASE PNL JOIN PMOX.V_PRJ_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID "
       + " ) select PGM_ID,PM_NAME,PM_ID,ROUND(SUM(REV_TOTAL),2) AS REV_TOTAL from rws ";
   String               getPmSeriesData1    = " GROUP BY PM_ID,PM_NAME,PGM_ID";
 
@@ -96,7 +96,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       "  ROUND((SUM(JULY_REV_TOTAL)/POWER(10,6)),3) AS JULY_REV_TOTAL,ROUND((SUM(AUGUST_REV_TOTAL)/POWER(10,6)),3) AS AUGUST_REV_TOTAL, ROUND((SUM(SEPTEMBER_REV_TOTAL)/POWER(10,6)),3) AS SEPTEMBER_REV_TOTAL, " + 
       "  ROUND((SUM(OCTOBER_REV_TOTAL)/POWER(10,6)),3) AS OCTOBER_REV_TOTAL,ROUND((SUM(NOVEMBER_REV_TOTAL)/POWER(10,6)),3) AS NOVEMBER_REV_TOTAL,ROUND((SUM(DECEMBER_REV_TOTAL)/POWER(10,6)),3) AS DECEMBER_REV_TOTAL " + 
       "  from (select * from ( select \"MONTH\",PJM.PROJECT_ID,PJM.PM_ID,PJM.PM_NAME,PJM.PGM_ID,PJM.PGM_NAME,PJM.STATUS,PJM.D_IBU_HEAD_ID,PJM.D_IBU_HEAD_NAME,REV_TOTAL,EBIDTA " + 
-      "  from PMOX.T_PNL_BASE PNL   JOIN PMOX.T_PRJ_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID   ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , " + 
+      "  from PMOX.T_PNL_BASE PNL   JOIN PMOX.V_PRJ_MASTER PJM  ON PJM.PROJECT_ID = PNL.PROJECT_ID   ) pivot ( sum(NVL(REV_TOTAL,0)) as REV_TOTAL , " + 
       "  SUM(NVL(EBIDTA,0)) AS EBIDTA for \"MONTH\" in ('JANUARY' AS JANUARY, 'FEBRUARY' AS FEBRUARY ,'MARCH' AS MARCH,'APRIL' AS APRIL,   'MAY' AS MAY," + 
       "  'JUNE' AS JUNE,'JULY' AS JULY,'AUGUST' AS AUGUST,'SEPTEMBER' AS SEPTEMBER,'OCTOBER' AS OCTOBER,   'NOVEMBER' AS NOVEMBER,'DECEMBER' AS DECEMBER))) WHERE ";
   String getPnLData1 = "SELECT HEADER,SUM(CFY_APR) CFY_APR ,SUM(CFY_MAY) CFY_MAY,SUM(CFY_JUN) CFY_JUN,SUM(CFY_JUL) CFY_JUL,SUM(CFY_AUG) CFY_AUG,SUM(CFY_SEP) CFY_SEP,  \r\n" + 
@@ -105,7 +105,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   
   String getPoReceivedDtl = "SELECT * FROM (SELECT PJM.PGM_ID,PJM.PM_ID,PJM.D_IBU_HEAD_ID,CAS.PO_NUM,CAS.CUST_ID,CAS.CUST_NAME,CAS.OPTY_ID,CAS.OPTY_DESC, " + 
       " CAS.CNTRCT_NUM,CAS.CNTRCT_AMT,CAS.CRNCY,CAS.CNTRCT_AMT_USD, CAS.CNTRCT_STATUS,CAS.CNTRCT_START_DATE,CAS.CNTRCT_END_DATE, " + 
-      " CAS.PROJECT_ID, PJM.PROJECT_DESC ,PJM.D_IBU_HEAD_NAME,PJM.PGM_NAME,PJM.PM_NAME,PJM.PROJECT_TYPE  FROM T_CASUM CAS JOIN T_PRJ_MASTER PJM " + 
+      " CAS.PROJECT_ID, PJM.PROJECT_DESC ,PJM.D_IBU_HEAD_NAME,PJM.PGM_NAME,PJM.PM_NAME,PJM.PROJECT_N_TYPE  FROM T_CASUM CAS JOIN V_PRJ_MASTER PJM " + 
      " ON PJM.PROJECT_ID = CAS.PROJECT_ID ) A WHERE ";
   String getPoReceivedDtl1 =  " AND PO_NUM IS NOT NULL AND CNTRCT_STATUS != 'CLOSED' ORDER BY PO_NUM ";
   
@@ -232,7 +232,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pmrdata.setStatus(rs.getString("Status"));
       pmrdata.setIbgName(rs.getString("IBG_Description"));
       pmrdata.setProjMainTyp(rs.getString("Project_Main_Type"));
-      pmrdata.setProjectType(rs.getString("Project_Type"));
+      pmrdata.setProjectType(rs.getString("PROJECT_N_TYPE"));
       pmrdata.setProjStartDt(rs.getString("Project_Start_Date"));
       pmrdata.setProjEndDt(rs.getString("Project_End_Date"));
       pmrdata.setProgramMangrNm(rs.getString("Program_Manager_Name"));
@@ -361,7 +361,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pmData.setsPgmName(rs.getString("SALES_MGR_NAME"));
       pmData.setPmId(rs.getString("PM_ID"));
       pmData.setPmName(rs.getString("PM_NAME"));
-      pmData.setProjectType(rs.getString("PROJECT_TYPE"));
+      pmData.setProjectType(rs.getString("PROJECT_N_TYPE"));
       pmData.setDeliveryOwnership(rs.getString("DELIVERY_OWNERSHIP"));
       pmData.setPricingModel(rs.getString("PRICING_MODEL"));
      
@@ -890,7 +890,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
         casumData.setIbuHeadName(rs.getString("D_IBU_HEAD_NAME"));
         casumData.setPgmName(rs.getString("PGM_NAME"));
         casumData.setPmName(rs.getString("PM_NAME"));
-        casumData.setProjectType(rs.getString("PROJECT_TYPE"));
+        casumData.setProjectType(rs.getString("PROJECT_N_TYPE"));
             
       return casumData;
     }
