@@ -343,12 +343,17 @@ angular.module('PmoxApp')
                break;
              case 'SALES':
                $scope.user.spgmName = filtrObj.name;
+               $scope.user.pmName = '---All PMs---';
+               $scope.user.prjNme = '---All Projects---';
                break;
              case 'PGM':
                $scope.user.pgmName = filtrObj.name;
+               $scope.user.pmName = '---All PMs---';
+               $scope.user.prjNme = '---All Projects---';
                break;
              case 'PM':
                $scope.user.pmName = filtrObj.pmname;
+               $scope.user.prjNme = '---All Projects---';
                break;
              case 'PRJ':
                $scope.user.prjNme = filtrObj.pname;
@@ -563,7 +568,7 @@ angular.module('PmoxApp')
              spgm.id=spgmArr[0];
              spgm.name=spgmArr[1];
              $scope.sPgManagers = [];
-             if(pgm.name!='BUFFER'){
+             if(spgm.name!='BUFFER'){
                $scope.sPgManagers.push(spgm);
              }
              $scope.sPgmdata=spgm;
@@ -573,11 +578,11 @@ angular.module('PmoxApp')
               angular.forEach(distinctsPgm, function (valueOut, keyOut) {
                 
                   var pgmArr = valueOut.split(':');
-                  var pgm = new Object();
-                  pgm.id=pgmArr[0];
-                  pgm.name=pgmArr[1];
-                  if(pgm.name!='BUFFER'){
-                    $scope.sPgManagers.push(pgm);
+                  var spgm = new Object();
+                  spgm.id=pgmArr[0];
+                  spgm.name=pgmArr[1];
+                  if(spgm.name!='BUFFER'){
+                    $scope.sPgManagers.push(spgm);
                   }
                   $scope.sPgmdata=$scope.sPgManagers[0];
                 
@@ -926,7 +931,7 @@ angular.module('PmoxApp')
                               series: {
                                   dataLabels: {
                                       inside: true,
-                                      format: '<b>{point.name}</b> ({point.y:,.0f}%)'
+                                      format: '<b>{point.name}</b> ({point.y:,.1f}%)'
                                   },
                                   center: ['50%', '50%'],
                                   width: '100%'

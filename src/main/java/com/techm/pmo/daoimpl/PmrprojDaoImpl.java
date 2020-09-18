@@ -72,7 +72,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   String               getPrjRevEbidta2    =
       " AND UPPER(\"MONTH\") = TRIM(to_char(add_months( sysdate, -1 ), 'MONTH')) GROUP BY FY ";
 
-  String  getPrjResourcData = "SELECT EMP_ID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.IBU, EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC, REGULAR_CONTRACT "
+  String  getPrjResourcData = "SELECT EMP_ID, EMP_NAME, GENDER, CATEGORY_CODE, HTR_FLAG, RSB.IBU, EMAIL_ID, BAND, EXPERIENCE, COUNTRY, CITY, ON_OFF, RSB.PROJECT_ID, RSB.PROJECT_DESC  "
           + " FROM PMOX.T_RES_BASE RSB WHERE ";
 
   String               getPrjPnLData       =
@@ -131,7 +131,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
 
           getPrjAssoct = getPrjAssoctData + user.getRoleName() + "_ID = ? ";
           
-          if(user.getFilterRoleSel()!=null) {
+         /* if(user.getFilterRoleSel()!=null) {
             
             if(user.getFilterRoleSel().equals("PRJ") ) {
               
@@ -162,7 +162,28 @@ public class PmrprojDaoImpl implements PmrprojDao {
               getPrjAssoct =  getFilterSBU(getPrjAssoct, user,false);
             }
            
-          } 
+          } */
+          
+         
+            
+            getPrjAssoct = getFilterProject(getPrjAssoct, user,false);
+          
+            
+            getPrjAssoct = getFilterPM(getPrjAssoct, user,false);
+         
+            getPrjAssoct =  getFilterPGM(getPrjAssoct, user,false);
+       
+            getPrjAssoct =  getFilterSPGM(getPrjAssoct, user,false);
+         
+            getPrjAssoct =  getFilterIBU(getPrjAssoct, user,false);
+        
+            
+            getPrjAssoct =  getFilterIBG(getPrjAssoct, user,false);
+         
+            
+            getPrjAssoct =  getFilterSBU(getPrjAssoct, user,false);
+          
+          
                     
           usrData = (List<User>) jdbcMysql.query(getPrjAssoct + " GROUP BY ON_OFF ", new PreparedStatementSetter() {
 
@@ -290,7 +311,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
     
     getPrjMasterDataFinal =  getPrjMasterData + "WHERE " + user.getRoleName() + "_ID = ? ";
     
-    if(user.getFilterRoleSel()!=null) {
+   /* if(user.getFilterRoleSel()!=null) {
       if(user.getFilterRoleSel().equals("PRJ") ) {
         
         getPrjMasterDataFinal = getFilterProject(getPrjMasterDataFinal, user,false);
@@ -320,7 +341,26 @@ public class PmrprojDaoImpl implements PmrprojDao {
         getPrjMasterDataFinal =  getFilterSBU(getPrjMasterDataFinal, user,false);
       }
      
-    } 
+    } */
+    
+   
+      getPrjMasterDataFinal = getFilterProject(getPrjMasterDataFinal, user,false);
+   
+      getPrjMasterDataFinal = getFilterPM(getPrjMasterDataFinal, user,false);
+   
+      getPrjMasterDataFinal =  getFilterPGM(getPrjMasterDataFinal, user,false);
+   
+      
+      getPrjMasterDataFinal =  getFilterSPGM(getPrjMasterDataFinal, user,false);
+   
+      getPrjMasterDataFinal =  getFilterIBU(getPrjMasterDataFinal, user,false);
+    
+      
+      getPrjMasterDataFinal =  getFilterIBG(getPrjMasterDataFinal, user,false);
+   
+      
+      getPrjMasterDataFinal =  getFilterSBU(getPrjMasterDataFinal, user,false);
+   
     
     ProjMap = jdbcMysql.query(getPrjMasterDataFinal, new Object[] {user.getUsername()},
         new PrjMasterMapRowMapper());
@@ -377,7 +417,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
   
       getPrjResourcDataFinal = getPrjResourcData + user.getRoleName() + "_ID = ? ";
       
-      if(user.getFilterRoleSel()!=null) {
+      /*if(user.getFilterRoleSel()!=null) {
         if(user.getFilterRoleSel().equals("PRJ") ) {
           
           getPrjResourcDataFinal = getFilterProject(getPrjResourcDataFinal, user,false);
@@ -407,7 +447,24 @@ public class PmrprojDaoImpl implements PmrprojDao {
           getPrjResourcDataFinal =  getFilterSBU(getPrjResourcDataFinal, user,false);
         }
        
-      }    
+      }    */
+      
+      getPrjResourcDataFinal = getFilterProject(getPrjResourcDataFinal, user ,false);
+      
+      
+      getPrjResourcDataFinal = getFilterPM(getPrjResourcDataFinal, user ,false);
+ 
+      getPrjResourcDataFinal =  getFilterPGM(getPrjResourcDataFinal, user ,false);
+ 
+      getPrjResourcDataFinal =  getFilterSPGM(getPrjResourcDataFinal, user ,false);
+   
+      getPrjResourcDataFinal =  getFilterIBU(getPrjResourcDataFinal, user ,false);
+  
+      
+      getPrjResourcDataFinal =  getFilterIBG(getPrjResourcDataFinal, user ,false);
+ 
+      
+      getPrjResourcDataFinal =  getFilterSBU(getPrjResourcDataFinal, user ,false);
       
       resourceMap = jdbcMysql.query(getPrjResourcDataFinal + " ORDER BY PROJECT_ID ", new Object[] {user.getUsername()},
           new ResourceMapExtractor());
@@ -428,17 +485,17 @@ public class PmrprojDaoImpl implements PmrprojDao {
       rsData.setIbu(rs.getString("IBU"));
       rsData.setEmpId(rs.getString("EMP_ID"));
       rsData.setEmpName(rs.getString("EMP_NAME"));
-      rsData.setGender(rs.getString("GENDER"));
+      //rsData.setGender(rs.getString("GENDER"));
       rsData.setCatCode(rs.getString("CATEGORY_CODE"));
       rsData.setHtrFlag(rs.getString("HTR_FLAG"));
      // rsData.setCluster(rs.getString("CLUSTER"));
-      rsData.setEmail(rs.getString("EMAIL_ID"));
-      rsData.setBand(rs.getString("BAND"));
-      rsData.setExperience(rs.getString("EXPERIENCE"));
-      rsData.setCountry(rs.getString("COUNTRY"));
-      rsData.setCity(rs.getString("CITY"));
+     // rsData.setEmail(rs.getString("EMAIL_ID"));
+     // rsData.setBand(rs.getString("BAND"));
+      //rsData.setExperience(rs.getString("EXPERIENCE"));
+      //rsData.setCountry(rs.getString("COUNTRY"));
+     // rsData.setCity(rs.getString("CITY"));
       rsData.setOnOff(rs.getString("ON_OFF"));
-      rsData.setRegContract(rs.getString("REGULAR_CONTRACT"));
+      //rsData.setRegContract(rs.getString("REGULAR_CONTRACT"));
 
       return rsData;
     }
@@ -483,7 +540,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
         rsData.setCountry(rs.getString("COUNTRY"));
         rsData.setCity(rs.getString("CITY"));
         rsData.setOnOff(rs.getString("ON_OFF"));
-        rsData.setRegContract(rs.getString("REGULAR_CONTRACT"));
+        //rsData.setRegContract(rs.getString("REGULAR_CONTRACT"));
 
         prjMasterList.add(rsData);
 
@@ -665,10 +722,10 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY PROJECT_DESC ";
       }
     }
-    else {
+    /*else {
       
       queryFinal = getFilterPM(queryFinal,user,grpByRqrd);
-    }
+    }*/
     return queryFinal;
   }
   
@@ -682,9 +739,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY PM_NAME ";
       }
     }
-    else {
+    /* else {
       queryFinal = getFilterPGM(queryFinal,user,grpByRqrd);
-    }
+    }*/
     return queryFinal;
   }
   
@@ -698,9 +755,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY PGM_NAME ";
       }
     }
-    else {
+  /*  else {
       queryFinal = getFilterIBU(queryFinal,user,grpByRqrd);
-    }
+    }*/
     return queryFinal;
   }
   
@@ -714,9 +771,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY SALES_MGR_NAME ";
       }
     }
-    else {
+   /* else {
       queryFinal = getFilterIBU(queryFinal,user,grpByRqrd);
-    }
+    }*/
     return queryFinal;
   }
   
@@ -730,9 +787,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY IBU ";
       }
     }
-    else {
+  /*  else {
       queryFinal = getFilterIBG(queryFinal,user,grpByRqrd);
-    }
+    }*/
     return queryFinal;
   }
   
@@ -746,9 +803,9 @@ public class PmrprojDaoImpl implements PmrprojDao {
         queryFinal = queryFinal+" GROUP BY IBG ";
       }
     }
-    else {
+   /* else {
       queryFinal = getFilterSBU(queryFinal,user,grpByRqrd);
-    }
+    } */
     return queryFinal;
   }
   public String getFilterSBU(String queryFinal,User user,Boolean grpByRqrd)
@@ -787,7 +844,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
     
     getPmSeriesQueryFinal = getPnLData1 + user.getRoleName() + "_ID = ? " ;
     
-    if(user.getFilterRoleSel()!=null) {
+    /*if(user.getFilterRoleSel()!=null) {
       if(user.getFilterRoleSel().equals("PRJ") ) {
         
         getPmSeriesQueryFinal = getFilterProject(getPmSeriesQueryFinal, user ,false);
@@ -817,8 +874,26 @@ public class PmrprojDaoImpl implements PmrprojDao {
         getPmSeriesQueryFinal =  getFilterSBU(getPmSeriesQueryFinal, user ,false);
       }
      
-    }
+    }*/
         
+    
+        getPmSeriesQueryFinal = getFilterProject(getPmSeriesQueryFinal, user ,false);
+     
+        
+        getPmSeriesQueryFinal = getFilterPM(getPmSeriesQueryFinal, user ,false);
+   
+        getPmSeriesQueryFinal =  getFilterPGM(getPmSeriesQueryFinal, user ,false);
+   
+        getPmSeriesQueryFinal =  getFilterSPGM(getPmSeriesQueryFinal, user ,false);
+     
+        getPmSeriesQueryFinal =  getFilterIBU(getPmSeriesQueryFinal, user ,false);
+    
+        
+        getPmSeriesQueryFinal =  getFilterIBG(getPmSeriesQueryFinal, user ,false);
+   
+        
+        getPmSeriesQueryFinal =  getFilterSBU(getPmSeriesQueryFinal, user ,false);
+     
     getPmSeriesQueryFinal = getPmSeriesQueryFinal + getPnLData2 ;
     System.out.println("getPmSeriesQueryFinal--"+getPmSeriesQueryFinal);
    
@@ -927,7 +1002,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
      * " AND SALES_MGR_NAME= '"+user.getSpgmName()+"'"; }
      */
         
-        if(user.getFilterRoleSel()!=null) {
+       /* if(user.getFilterRoleSel()!=null) {
           
           if(user.getFilterRoleSel().equals("SALES") ) {
             
@@ -946,7 +1021,19 @@ public class PmrprojDaoImpl implements PmrprojDao {
             getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,false);
           }
          
-        }
+        }*/
+        
+
+            getRevProjQueryFinal =  getFilterSPGM(getRevProjQueryFinal, user,false);
+         
+            
+            getRevProjQueryFinal =  getFilterIBU(getRevProjQueryFinal, user,false);
+          
+            getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user,false);
+          
+            
+            getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,false);
+          
           
           getRevProjQueryFinal = getRevProjQueryFinal + getRevProjectionDtl1 ;
           System.out.println("getRevProjQueryFinal--"+getRevProjQueryFinal);
@@ -958,7 +1045,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
         
         groupBy = "GROUP BY " + user.getRoleName() + "_ID";
         
-        if(user.getFilterRoleSel()!=null) {
+     /*   if(user.getFilterRoleSel()!=null) {
           
           if(user.getFilterRoleSel().equals("SALES") ) {
             
@@ -981,7 +1068,18 @@ public class PmrprojDaoImpl implements PmrprojDao {
             //groupBy = " GROUP BY SBU";
           }
          
-        }
+        } */
+        
+   
+          
+          getRevProjTargetFinal =  getFilterSPGM(getRevProjTargetFinal, user,true);
+                
+          getRevProjTargetFinal =  getFilterIBU(getRevProjTargetFinal, user,true);
+        
+          getRevProjTargetFinal =  getFilterIBG(getRevProjTargetFinal, user,true);
+         
+          getRevProjTargetFinal =  getFilterSBU(getRevProjTargetFinal, user,true);
+        
       
         if(!getRevProjTargetFinal.contains("GROUP BY")) {
           getRevProjTargetFinal = getRevProjTargetFinal + groupBy ;
