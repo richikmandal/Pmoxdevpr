@@ -681,17 +681,17 @@
 											       	 <span ng-switch-when="EBIDTA(%)"><b>{{(pnlData.monJun).toFixed(2)==='0.00' ? '' : pnlData.monJun.toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;" id="Q1">
-											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</b></span>
-											         <span ng-switch-when="ONSITE #" style="padding-left: 7px">{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</span>
-											       	 <span ng-switch-when="OFFSHORE #" style="padding-left: 7px">{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</span>
-											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="CNB COST" style="padding-left: 7px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="TNL COST" style="padding-left: 7px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 7px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/3).toFixed(2)}}</b></span>
+											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)===0 ? '' :(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</b></span>
+											         <span ng-switch-when="ONSITE #">{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)===0 ? '' :(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</span>
+											       	 <span ng-switch-when="OFFSHORE #">{{(pnlData.monApr+pnlData.monMay+pnlData.monJun)===0 ? '' :(pnlData.monApr+pnlData.monMay+pnlData.monJun)}}</span>
+											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="CNB COST" style="padding-left: 10px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="TNL COST" style="padding-left: 10px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 10px">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monApr+pnlData.monMay+pnlData.monJun)/3).toFixed(2)==='0.00' ? '' : ((pnlData.monApr+pnlData.monMay+pnlData.monJun)/3).toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;">
 											         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monJul===0 ? '' : pnlData.monJul}}</b></span>
@@ -733,17 +733,17 @@
 											       	 <span ng-switch-when="EBIDTA(%)"><b>{{(pnlData.monSep).toFixed(2)==='0.00' ? '' : pnlData.monSep.toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;" id="Q2">
-											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</b></span>
-											         <span ng-switch-when="ONSITE #" style="padding-left: 7px">{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</span>
-											       	 <span ng-switch-when="OFFSHORE #" style="padding-left: 7px">{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</span>
-											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="CNB COST" style="padding-left: 7px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="TNL COST" style="padding-left: 7px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 7px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/3).toFixed(2)}}</b></span>
+											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)===0 ? '' :(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</b></span>
+											         <span ng-switch-when="ONSITE #">{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)===0 ? '' :(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</span>
+											       	 <span ng-switch-when="OFFSHORE #">{{(pnlData.monJul+pnlData.monAug+pnlData.monSep)===0 ? '' :(pnlData.monJul+pnlData.monAug+pnlData.monSep)}}</span>
+											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="CNB COST" style="padding-left: 10px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="TNL COST" style="padding-left: 10px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 10px">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monJul+pnlData.monAug+pnlData.monSep)/3).toFixed(2)==='0.00' ? '' : ((pnlData.monJul+pnlData.monAug+pnlData.monSep)/3).toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;">
 											        <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monOct===0 ? '' : pnlData.monOct}}</b></span>
@@ -785,17 +785,17 @@
 											       	 <span ng-switch-when="EBIDTA(%)"><b>{{(pnlData.monDec).toFixed(2)==='0.00' ? '' : pnlData.monDec.toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;" id="Q3">
-											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</b></span>
-											         <span ng-switch-when="ONSITE #" style="padding-left: 7px">{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</span>
-											       	 <span ng-switch-when="OFFSHORE #" style="padding-left: 7px">{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</span>
-											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="CNB COST" style="padding-left: 7px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="TNL COST" style="padding-left: 7px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 7px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/3).toFixed(2)}}</b></span>
+											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)===0 ? '' :(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</b></span>
+											         <span ng-switch-when="ONSITE #">{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)===0 ? '' :(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</span>
+											       	 <span ng-switch-when="OFFSHORE #">{{(pnlData.monOct+pnlData.monNov+pnlData.monDec)===0 ? '' :(pnlData.monOct+pnlData.monNov+pnlData.monDec)}}</span>
+											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="CNB COST" style="padding-left: 10px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="TNL COST" style="padding-left: 10px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 10px">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monOct+pnlData.monNov+pnlData.monDec)/3).toFixed(2)==='0.00' ? '' : ((pnlData.monOct+pnlData.monNov+pnlData.monDec)/3).toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;">
 											         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.monJan===0 ? '' : pnlData.monJan}}</b></span>
@@ -837,17 +837,17 @@
 											       	 <span ng-switch-when="EBIDTA(%)"><b>{{(pnlData.monMar).toFixed(2)==='0.00' ? '' : pnlData.monMar.toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;" id="Q4">
-											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</b></span>
-											         <span ng-switch-when="ONSITE #" style="padding-left: 7px">{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</span>
-											       	 <span ng-switch-when="OFFSHORE #" style="padding-left: 7px">{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</span>
-											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="CNB COST" style="padding-left: 7px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="TNL COST" style="padding-left: 7px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 7px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
-											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
-											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/3).toFixed(2)}}</b></span>
+											         <span ng-switch-when="HEAD COUNT #"><b>{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)===0 ? '' :(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</b></span>
+											         <span ng-switch-when="ONSITE #">{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)===0 ? '' :(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</span>
+											       	 <span ng-switch-when="OFFSHORE #">{{(pnlData.monJan+pnlData.monFeb+pnlData.monMar)===0 ? '' :(pnlData.monJan+pnlData.monFeb+pnlData.monMar)}}</span>
+											       	 <span ng-switch-when="REVENUE"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="DIRECT COST" ><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="CNB COST" style="padding-left: 10px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="TNL COST" style="padding-left: 10px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="BUFFER COST"  style="padding-left: 10px">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="SGNA COST"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</b></span>
+											       	 <span ng-switch-when="EBIDTA">{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)==='0.000' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/1000000).toFixed(3)}}</span>
+											       	 <span ng-switch-when="EBIDTA(%)"><b>{{((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/3).toFixed(2)==='0.00' ? '' : ((pnlData.monJan+pnlData.monFeb+pnlData.monMar)/3).toFixed(2)}}</b></span>
 											       	</td>
 											       	<td style="text-align: right;">
 											         <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.total===0 ? '' : pnlData.total}}</b></span>
