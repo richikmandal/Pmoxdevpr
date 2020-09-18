@@ -219,22 +219,29 @@ angular.module('PmoxApp')
             ebidtap.attribute = "EBIDTA(%)"
             ebidtap.monApr = revenue.monApr==0 ? 0 : (ebidta.monApr*100/revenue.monApr); 
             ebidtap.monMay = revenue.monMay==0 ? 0 : (ebidta.monMay*100/revenue.monMay) ; 
-            ebidtap.monJun = revenue.monJun==0 ? 0 : (ebidta.monJun*100/revenue.monJun) ; 
+            ebidtap.monJun = revenue.monJun==0 ? 0 : (ebidta.monJun*100/revenue.monJun) ;
+            ebidtap.monQ1Tot = (revenue.monApr+revenue.monMay+revenue.monJun)==0 ? 0 : ((ebidta.monApr+ebidta.monMay+ebidta.monJun)*100/(revenue.monApr+revenue.monMay+revenue.monJun));
             ebidtap.monJul = revenue.monJul==0 ? 0 : (ebidta.monJul*100/revenue.monJul) ; 
             ebidtap.monAug = revenue.monAug==0 ? 0 : (ebidta.monAug*100/revenue.monAug) ; 
             ebidtap.monSep = revenue.monSep==0 ? 0 : (ebidta.monSep*100/revenue.monSep) ; 
+            ebidtap.monQ2Tot = (revenue.monJul+revenue.monAug+revenue.monSep)==0 ? 0 : ((ebidta.monJul+ebidta.monAug+ebidta.monSep)*100/(revenue.monJul+revenue.monAug+revenue.monSep));
             ebidtap.monOct = revenue.monOct==0 ? 0 : (ebidta.monOct*100/revenue.monOct) ; 
             ebidtap.monNov = revenue.monNov==0 ? 0 : (ebidta.monNov*100/revenue.monNov) ; 
             ebidtap.monDec = revenue.monDec==0 ? 0 : (ebidta.monDec*100/revenue.monDec) ; 
+            ebidtap.monQ3Tot = (revenue.monOct+revenue.monNov+revenue.monDec)==0 ? 0 : ((ebidta.monOct+ebidta.monNov+ebidta.monDec)*100/(revenue.monOct+revenue.monNov+revenue.monDec));
             ebidtap.monJan = revenue.monJan==0 ? 0 : (ebidta.monJan*100/revenue.monJan) ; 
             ebidtap.monFeb = revenue.monFeb==0 ? 0 : (ebidta.monFeb*100/revenue.monFeb) ; 
             ebidtap.monMar = revenue.monMar==0 ? 0 : (ebidta.monMar*100/revenue.monMar) ; 
+            ebidtap.monQ4Tot = (revenue.monJan+revenue.monFeb+revenue.monMar)==0 ? 0 : ((ebidta.monJan+ebidta.monFeb+ebidta.monMar)*100/(revenue.monJan+revenue.monFeb+revenue.monMar));
             ebidtap.total  = revenue.total== 0 ? 0 : (ebidta.total*100/revenue.total) ; 
+ 
                        
             $scope.totalEbidta = ebidtap.total.toFixed(2);
             ebidtaData=[ebidtap.monApr ==0 ? null : parseFloat(ebidtap.monApr.toFixed(2)) ,ebidtap.monMay==0 ? null : parseFloat(ebidtap.monMay.toFixed(2)),ebidtap.monJun==0 ? null : parseFloat(ebidtap.monJun.toFixed(2)),ebidtap.monJul==0 ? null : parseFloat(ebidtap.monJul.toFixed(2)),
             ebidtap.monAug==0 ? null : parseFloat(ebidtap.monAug.toFixed(2)),ebidtap.monSep==0 ? null : parseFloat(ebidtap.monSep.toFixed(2)),ebidtap.monOct==0 ? null : parseFloat(ebidtap.monOct.toFixed(2)),ebidtap.monNov==0 ? null : parseFloat(ebidtap.monNov.toFixed(2)),ebidtap.monDec==0 ? null : parseFloat(ebidtap.monDec.toFixed(2)),
-            ebidtap.monJan==0 ? null : parseFloat(ebidtap.monJan.toFixed(2)),ebidtap.monFeb==0 ? null : parseFloat(ebidtap.monFeb.toFixed(2)),ebidtap.monMar==0 ? null : parseFloat(ebidtap.monMar.toFixed(2))];
+            ebidtap.monJan==0 ? null : parseFloat(ebidtap.monJan.toFixed(2)),ebidtap.monFeb==0 ? null : parseFloat(ebidtap.monFeb.toFixed(2)),ebidtap.monMar==0 ? null : parseFloat(ebidtap.monMar.toFixed(2)),
+             ebidtap.monQ1Tot ==0 ? null : parseFloat(ebidtap.monQ1Tot.toFixed(2)),ebidtap.monQ2Tot ==0 ? null : parseFloat(ebidtap.monQ2Tot.toFixed(2)),
+             ebidtap.monQ3Tot ==0 ? null : parseFloat(ebidtap.monQ3Tot.toFixed(2)), ebidtap.monQ4Tot ==0 ? null : parseFloat(ebidtap.monQ4Tot.toFixed(2))];
           
             $scope.pnlSummaryData.push(ebidtap);
           
@@ -905,19 +912,23 @@ angular.module('PmoxApp')
                 },
                 tooltip: {
                   // Nice and easy number formatting
-                  valueDecimals: 2,
+                  
                   shared: true
               },
                 plotOptions: {
                     series: {
                       dataLabels: {
                           enabled: true,
-                          format: '<b>{point.name}</b> ({point.percentage:.1f}%)',
+                          inside: true,
+                          align: "center",
+                          verticalAlign: "middle",
+                          format: '<b>{point.name}</b> ({point.y} , {point.percentage:.1f}%)',
+                        
                           softConnector: true
                       }
                       
                   },
-                  center: ['40%', '50%'],
+                  center: ['50%', '50%'],
                   width: '80%'
                 },
                 series: $scope.seriesHtrg,
@@ -931,7 +942,7 @@ angular.module('PmoxApp')
                               series: {
                                   dataLabels: {
                                       inside: true,
-                                      format: '<b>{point.name}</b> ({point.y:,.1f}%)'
+                                      format: '<b>{point.name}</b> ({point.y:,.0f}%)'
                                   },
                                   center: ['50%', '50%'],
                                   width: '100%'
@@ -1655,6 +1666,13 @@ angular.module('PmoxApp')
            $scope.showPnL=false;
            $scope.showOB=false;
            
+           if($scope.showProjects=true){
+               document.getElementById('projectIcon').style.backgroundColor = '#ffc20d';
+               document.getElementById('pnlIcon').style.backgroundColor = '#838ba3';  
+                document.getElementById('revIcon').style.backgroundColor = '#838ba3';
+               
+           }
+           
          }
          
          $scope.showAssociateChrt = function() {
@@ -1670,13 +1688,19 @@ angular.module('PmoxApp')
          }
          
          $scope.showPnLChrt = function() {
-           if($scope.showOB){
-             $scope.init();
-           }
+           
            $scope.showPnL=true;
            $scope.showProjects=false;
            $scope.showAssociates=false;
-           $scope.showOB=false;
+           $scope.showOB=false;           
+           
+           if($scope.showPnL=true){
+               document.getElementById('pnlIcon').style.backgroundColor = '#ffc20d'; 
+               document.getElementById('projectIcon').style.backgroundColor = '#838ba3'; 
+               document.getElementById('revIcon').style.backgroundColor = '#838ba3'; 
+               
+           
+           }
            
          }
          
@@ -1687,9 +1711,14 @@ angular.module('PmoxApp')
            $scope.showPnL=false;
            $scope.showProjects=false;
            $scope.showAssociates=false;
-           
-         }
-         
+             if($scope.showOB=true){
+               document.getElementById('revIcon').style.backgroundColor = '#ffc20d'; 
+               document.getElementById('pnlIcon').style.backgroundColor = '#838ba3'; 
+               document.getElementById('projectIcon').style.backgroundColor = '#838ba3';
+               
+               }          
+          }
+          
          $scope.showInProgress = function() {
            
            alert("I am in progress...");
