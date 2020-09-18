@@ -239,9 +239,7 @@ angular.module('PmoxApp')
             $scope.totalEbidta = ebidtap.total.toFixed(2);
             ebidtaData=[ebidtap.monApr ==0 ? null : parseFloat(ebidtap.monApr.toFixed(2)) ,ebidtap.monMay==0 ? null : parseFloat(ebidtap.monMay.toFixed(2)),ebidtap.monJun==0 ? null : parseFloat(ebidtap.monJun.toFixed(2)),ebidtap.monJul==0 ? null : parseFloat(ebidtap.monJul.toFixed(2)),
             ebidtap.monAug==0 ? null : parseFloat(ebidtap.monAug.toFixed(2)),ebidtap.monSep==0 ? null : parseFloat(ebidtap.monSep.toFixed(2)),ebidtap.monOct==0 ? null : parseFloat(ebidtap.monOct.toFixed(2)),ebidtap.monNov==0 ? null : parseFloat(ebidtap.monNov.toFixed(2)),ebidtap.monDec==0 ? null : parseFloat(ebidtap.monDec.toFixed(2)),
-            ebidtap.monJan==0 ? null : parseFloat(ebidtap.monJan.toFixed(2)),ebidtap.monFeb==0 ? null : parseFloat(ebidtap.monFeb.toFixed(2)),ebidtap.monMar==0 ? null : parseFloat(ebidtap.monMar.toFixed(2)),
-             ebidtap.monQ1Tot ==0 ? null : parseFloat(ebidtap.monQ1Tot.toFixed(2)),ebidtap.monQ2Tot ==0 ? null : parseFloat(ebidtap.monQ2Tot.toFixed(2)),
-             ebidtap.monQ3Tot ==0 ? null : parseFloat(ebidtap.monQ3Tot.toFixed(2)), ebidtap.monQ4Tot ==0 ? null : parseFloat(ebidtap.monQ4Tot.toFixed(2))];
+            ebidtap.monJan==0 ? null : parseFloat(ebidtap.monJan.toFixed(2)),ebidtap.monFeb==0 ? null : parseFloat(ebidtap.monFeb.toFixed(2)),ebidtap.monMar==0 ? null : parseFloat(ebidtap.monMar.toFixed(2))];
           
             $scope.pnlSummaryData.push(ebidtap);
           
@@ -1688,6 +1686,10 @@ angular.module('PmoxApp')
          }
          
          $scope.showPnLChrt = function() {
+         
+         if($scope.showOB){
+             $scope.init();
+           }
            
            $scope.showPnL=true;
            $scope.showProjects=false;
