@@ -345,7 +345,7 @@ angular.module('PmoxApp')
                break;
              case 'IBU':
                $scope.user.ibuName = filtrObj.name;
-         			$scope.user.spgmName = '---All Sales Mangers---';
+              $scope.user.spgmName = '---All Sales Mangers---';
                $scope.user.pgmName = '---All PGMs---';
                $scope.user.pmName = '---All PMs---';
                $scope.user.prjNme = '---All Projects---';

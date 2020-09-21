@@ -767,9 +767,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if( user.getSpgmName() !=null && !user.getSpgmName().equals("---All Sales Mangers---")) {
       
       queryFinal = queryFinal +  " AND SALES_MGR_NAME= '"+user.getSpgmName()+"'";
-      if(grpByRqrd) {
-        queryFinal = queryFinal+" GROUP BY SALES_MGR_NAME ";
-      }
     }
    /* else {
       queryFinal = getFilterIBU(queryFinal,user,grpByRqrd);
@@ -783,9 +780,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if( user.getIbuName()!=null &&  !user.getIbuName().equals("---All IBU---")) {
       
       queryFinal = queryFinal +  " AND IBU= '"+user.getIbuName()+"'";
-      if(grpByRqrd) {
-        queryFinal = queryFinal+" GROUP BY IBU ";
-      }
     }
   /*  else {
       queryFinal = getFilterIBG(queryFinal,user,grpByRqrd);
@@ -799,9 +793,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if( user.getIbgName()!=null &&  !user.getIbgName().equals("---All IBG---")) {
       
       queryFinal = queryFinal +  " AND IBG= '"+user.getIbgName()+"'";
-      if(grpByRqrd) {
-        queryFinal = queryFinal+" GROUP BY IBG ";
-      }
+      
     }
    /* else {
       queryFinal = getFilterSBU(queryFinal,user,grpByRqrd);
@@ -814,9 +806,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
     if(user.getSbuName()!=null && !user.getSbuName().equals("---All SBU---")) {
       
       queryFinal = queryFinal +  " AND SBU= '"+user.getSbuName()+"'";
-      if(grpByRqrd) {
-        queryFinal = queryFinal+" GROUP BY SBU ";
-      }
     }
    
     return queryFinal;
@@ -1031,8 +1020,8 @@ public class PmrprojDaoImpl implements PmrprojDao {
           
             getRevProjQueryFinal =  getFilterIBG(getRevProjQueryFinal, user,false);
           
-            
             getRevProjQueryFinal =  getFilterSBU(getRevProjQueryFinal, user,false);
+           
           
           
           getRevProjQueryFinal = getRevProjQueryFinal + getRevProjectionDtl1 ;
@@ -1079,12 +1068,30 @@ public class PmrprojDaoImpl implements PmrprojDao {
           getRevProjTargetFinal =  getFilterIBG(getRevProjTargetFinal, user,true);
          
           getRevProjTargetFinal =  getFilterSBU(getRevProjTargetFinal, user,true);
-        
-      
-        if(!getRevProjTargetFinal.contains("GROUP BY")) {
+          
+          if( user.getSbuName() !=null && !user.getSpgmName().equals("---All SBU---")) {
+            
+            groupBy = " GROUP BY SBU ";
+          }
+          
+          if( user.getIbgName()!=null &&  !user.getIbgName().equals("---All IBG---")) {
+            
+            groupBy = " GROUP BY IBG ";
+          }
+          
+          if( user.getIbuName()!=null &&  !user.getIbuName().equals("---All IBU---")) {
+            
+            groupBy = " GROUP BY IBU ";
+          }
+          
+          if( user.getSpgmName() !=null && !user.getSpgmName().equals("---All Sales Mangers---")) {
+            
+            groupBy = " GROUP BY SALES_MGR_NAME ";
+          }
+          
+          
           getRevProjTargetFinal = getRevProjTargetFinal + groupBy ;
-        }
-        
+       
         lstTargetData = jdbcMysql.query(getRevProjTargetFinal, new Object[] {user.getUsername()},
             new CasumSeriesMapRowMapper());
         
