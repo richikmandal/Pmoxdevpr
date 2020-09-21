@@ -90,6 +90,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>PmoX_v1.0.1</finalName>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
