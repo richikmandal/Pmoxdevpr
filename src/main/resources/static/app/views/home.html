@@ -433,7 +433,7 @@
 											<tbody>
 												<tr ng-repeat="rev in revProjectionData" ng-switch on="rev.category" >
 													<td >
-														 <span ng-switch-when="a-Target"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
+														 <span  ng-switch-when="a-Target"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
@@ -512,7 +512,7 @@
 							<div class="card-body">
 								<div class="row align-items-center flex-row">
 									<div class="col-lg-12">
-										<hc-pie-chart title="Project Type" data="pieFrPtch"></hc-pie-chart>
+										<hc-pie-chart style="font-size:15px; font-family: 'Bahnschrift';" title="Project Type" data="pieFrPtch"></hc-pie-chart>
 									</div>
 								</div>
 							</div>
