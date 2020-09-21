@@ -628,7 +628,7 @@
 										      </tr>
 										    </thead>
 										    <tbody>
-												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute" >
+												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute" ng-style="(($index === 0) || ($index === 3) || ($index === 4) || ($index === 8) || ($index === 10)) ? {'background-color': '#d8d8d8'} : {'background-color': 'white'}">
 											        <td style="text-align: left;">
 											       	 <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.attribute}}</b></span>
 											       	 <span ng-switch-when="ONSITE #" style="padding-left: 10px">{{pnlData.attribute}}</span>
