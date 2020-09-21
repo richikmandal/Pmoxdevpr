@@ -9,6 +9,7 @@ angular.module('PmoxApp')
           $scope.showAssociates=false;
           $scope.showPnL=false;
           $scope.showOB=true;
+          $scope.showNoValidOB=false;
           $scope.makeShrink = false; 
           $scope.sbuName = '';
           $scope.ibgName = '';
@@ -39,6 +40,14 @@ angular.module('PmoxApp')
           
           $scope.init = function () {
             $scope.disableTabs=true;  
+            $scope.showNoValidOB = false;
+            alert(AuthService.user.roleName)
+            if(AuthService.user.roleName === 'PGM' || AuthService.user.roleName == 'PM'){
+              
+              $scope.showNoValidOB = true;
+              
+            }
+            alert( $scope.showNoValidOB)
                       
            $scope.user = $scope.loadProjectMasterData(AuthService.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
@@ -49,11 +58,11 @@ angular.module('PmoxApp')
            $scope.loadProjRevProjectionData($scope.user); 
            $scope.loadPnLSummaryData($scope.user);
            $scope.loadPricingMdlData($scope.user.projMasterData);
-           $scope.loadProjStatus($scope.user.projMasterData);
+           //$scope.loadProjStatus($scope.user.projMasterData);
            $scope.loadProjManaged($scope.user.projMasterData); 
            $scope.loadProjTech($scope.user.projMasterData);
            $scope.loadProjType($scope.user.projMasterData);
-           $scope.loadProjLocChrt($scope.user.resourceMap);
+          // $scope.loadProjLocChrt($scope.user.resourceMap);
            
            
          };        

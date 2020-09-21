@@ -43,7 +43,7 @@ public class ProjectController {
   }
   
 
-  @GetMapping("/getPmrSmryDataFrUser/{username}")
+ /* @GetMapping("/getPmrSmryDataFrUser/{username}")
   public String getPmrSmryDataFrUser(@PathVariable String username) {
 
     Gson gsonRes = new Gson();
@@ -71,7 +71,7 @@ public class ProjectController {
   public List<Casum> getCasum(@PathVariable String user) {
     System.out.println("Subrajit" + user);
     return pmrservice.getCasum(user);
-  }
+  } */
   
   @PostMapping("/getPmSeriesData")
   public String getPmSeriesData(@RequestBody User user) {
