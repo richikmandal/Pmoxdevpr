@@ -382,13 +382,13 @@
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">SALES</span>
 						<select class="form-control" name="spgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="sProgramManager as sProgramManager.name for sProgramManager in sPgManagers"
-							ng-model="sPgmdata" ng-change="getFilterData(sPgmdata,'SALES')" ng-disabled="!showOB">
+							ng-model="sPgmdata" ng-change="getFilterData(sPgmdata,'SALES')">
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROGRAM</span>
-						<select class="form-control" name="pgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-disabled="showOB"
+						<select class="form-control" name="pgm" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" 
 							ng-options="programManager as programManager.name for programManager in pgManagers"
 							ng-model="pgmdata" ng-change="getFilterData(pgmdata,'PGM')">
 						</select>
@@ -396,13 +396,13 @@
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PM</span>
-						<select name="pm" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"	ng-disabled="showOB" ng-options="name as name.pmname for name in manNames"	ng-model="pmData" ng-change="getFilterData(pmData,'PM')">
+						<select name="pm" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;"	ng-options="name as name.pmname for name in manNames"	ng-model="pmData" ng-change="getFilterData(pmData,'PM')">
 						</select>
 					</div>
 					<div class="input-group col-xl-3 col-md-6"
 						style="width: 100%;padding-left: 15px;">
 						<span class="input-group-addon" style="width: 88px;height: 24px;padding-top: 3px;padding-bottom: 3px;padding-left: 10px;">PROJECT</span>
-						<select name="prj" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-disabled="showOB" ng-options="project as project.pname for project in projects"
+						<select name="prj" class="form-control" style="width: 94%;padding-top: 2px;padding-bottom: 2px;" ng-options="project as project.pname for project in projects"
 							ng-model="selProject" ng-change="getFilterData(selProject,'PRJ')">
 						</select>
 					</div>

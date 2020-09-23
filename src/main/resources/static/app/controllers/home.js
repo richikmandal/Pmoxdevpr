@@ -41,14 +41,13 @@ angular.module('PmoxApp')
           $scope.init = function () {
             $scope.disableTabs=true;  
             $scope.showNoValidOB = false;
-            //alert(AuthService.user.roleName)
+          /*
             if(AuthService.user.roleName === 'PGM' || AuthService.user.roleName == 'PM'){
               
               $scope.showPnLChrt();                          
               $scope.showNoValidOB = true;
-            }
-            //alert( $scope.showNoValidOB)
-                      
+            }*/
+                              
            $scope.user = $scope.loadProjectMasterData(AuthService.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
           
@@ -361,11 +360,13 @@ angular.module('PmoxApp')
              break;
              case 'SALES':
                $scope.user.spgmName = filtrObj.name;
+               $scope.user.pgmName = '---All PGMs---';
                $scope.user.pmName = '---All PMs---';
                $scope.user.prjNme = '---All Projects---';
                break;
              case 'PGM':
                $scope.user.pgmName = filtrObj.name;
+               $scope.user.spgmName = '---All Sales Mangers---';
                $scope.user.pmName = '---All PMs---';
                $scope.user.prjNme = '---All Projects---';
                break;
@@ -1245,10 +1246,13 @@ angular.module('PmoxApp')
                $scope.cfyQFour = foreCast.cfyQFour;
                               
                var gap = new Object();
-               gap.cfyQOne = parseFloat((target.cfyQOne - foreCast.cfyQOne).toFixed(3)); 
-               gap.cfyQTwo = parseFloat((target.cfyQTwo - foreCast.cfyQTwo).toFixed(3)) ;
-               gap.cfyQThree = parseFloat((target.cfyQThree - foreCast.cfyQThree).toFixed(3));
-               gap.cfyQFour = parseFloat((target.cfyQFour - foreCast.cfyQFour).toFixed(3)) ;
+               if(target.cfyQOne!=0){gap.cfyQOne = parseFloat((target.cfyQOne - foreCast.cfyQOne).toFixed(3))}else{gap.cfyQOne = parseFloat(target.cfyQOne).toFixed(3)}; 
+               if(target.cfyQTwo!=0){gap.cfyQTwo = parseFloat((target.cfyQTwo - foreCast.cfyQTwo).toFixed(3))}else{gap.cfyQTwo = parseFloat(0.00).toFixed(3)};
+               if(target.cfyQThree!=0){gap.cfyQThree = parseFloat((target.cfyQThree - foreCast.cfyQThree).toFixed(3))}else{gap.cfyQThree = parseFloat(0).toFixed(3)};
+               if(target.cfyQFour!=0){gap.cfyQFour = parseFloat((target.cfyQFour - foreCast.cfyQFour).toFixed(3))}else{gap.cfyQFour = parseFloat(0).toFixed(3)};
+               //gap.cfyQTwo = parseFloat((target.cfyQTwo - foreCast.cfyQTwo).toFixed(3)) ;
+               //gap.cfyQThree = parseFloat((target.cfyQThree - foreCast.cfyQThree).toFixed(3));
+               //gap.cfyQFour = parseFloat((target.cfyQFour - foreCast.cfyQFour).toFixed(3)) ;
                gap.category = "g-Gap";
                revProjectionData.push(gap);
                               
@@ -1269,10 +1273,14 @@ angular.module('PmoxApp')
                revProjectionData.push(chngLstForcst);
                               
                var achvment = new Object();
-               achvment.cfyQOne = parseFloat(((foreCast.cfyQOne*100)/target.cfyQOne).toFixed(3));  
-               achvment.cfyQTwo =  parseFloat(((foreCast.cfyQTwo*100)/target.cfyQTwo).toFixed(3)); 
-               achvment.cfyQThree =  parseFloat(((foreCast.cfyQThree*100)/target.cfyQThree).toFixed(3)); 
-               achvment.cfyQFour = parseFloat(((foreCast.cfyQFour*100)/target.cfyQFour).toFixed(3)); 
+               if(target.cfyQOne!=0){achvment.cfyQOne = parseFloat(((foreCast.cfyQOne*100)/target.cfyQOne).toFixed(3))}else{achvment.cfyQOne = parseFloat((0).toFixed(3))}; 
+               if(target.cfyQTwo!=0){achvment.cfyQTwo = parseFloat(((foreCast.cfyQTwo*100)/target.cfyQTwo).toFixed(3))}else{achvment.cfyQTwo = parseFloat((0).toFixed(3))}; 
+               if(target.cfyQThree!=0){achvment.cfyQThree = parseFloat(((foreCast.cfyQThree*100)/target.cfyQThree).toFixed(3))}else{achvment.cfyQThree = parseFloat((0).toFixed(3))}; 
+               if(target.cfyQFour!=0){achvment.cfyQFour = parseFloat(((foreCast.cfyQFour*100)/target.cfyQFour).toFixed(3))}else{achvment.cfyQFour = parseFloat((0).toFixed(3))}; 
+              // achvment.cfyQOne = parseFloat(((foreCast.cfyQOne*100)/target.cfyQOne).toFixed(3));  
+               //achvment.cfyQTwo =  parseFloat(((foreCast.cfyQTwo*100)/target.cfyQTwo).toFixed(3)); 
+               //achvment.cfyQThree =  parseFloat(((foreCast.cfyQThree*100)/target.cfyQThree).toFixed(3)); 
+               //achvment.cfyQFour = parseFloat(((foreCast.cfyQFour*100)/target.cfyQFour).toFixed(3)); 
                achvment.category = "l-Achievement %";
                revProjectionData.push(achvment);
                
