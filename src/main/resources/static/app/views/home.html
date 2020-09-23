@@ -431,7 +431,8 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr ng-repeat="rev in revProjectionData" ng-switch on="rev.category" >
+												<tr ng-repeat="rev in revProjectionData" ng-switch on="rev.category" ng-style="(($index === 0) || ($index === 5) || ($index === 9) || ($index === 10) || 
+($index === 11)) ? {'background-color': '#ececec'} : {'background-color': 'white'}" >
 													<td >
 														 <span  ng-switch-when="a-Target"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{rev.category.substring(rev.category.indexOf("-")+1,rev.category.length)}}</b></span>
@@ -506,7 +507,7 @@
 				</div>
 				
 				<div class="row shadow-lg" ng-show="showNoValidOB" style="text-align: center">
-					<span style="width: 100%"><b>Data is not available for this entry.</b></span>
+					<span style="width: 100%"><b>This page is for Sales Team, IBU Head and above</b></span>
 				</div>
 			</section>
 			<section class="py-2" id="section44" ng-show="showProjects">
@@ -594,37 +595,37 @@
 										
 										<table class="table-sm table-bordered" id="pnltable" style="width:100%;border:2px solid black;height: 400px; font-size:1.0rem" >
 										    <thead >
-											<tr style="text-align: center; color: #ffffff;" id="grad1">
-										        <th style="width:25%;text-align: center;" rowspan="2" id="grad3"></th>
+											<tr style="text-align: center; color: #ffffff; background-color:#d10d0d">
+										        <th style="width:25%;text-align: center;background-color:#d10d0d;" rowspan="2" >Parameter</th>
 										        <th colspan="4" style="text-align: center;">CFY-Q1</th>
 												<th colspan="4" style="text-align: center;">CFY-Q2</th>
 												<th colspan="4" style="text-align: center;">CFY-Q3</th>
 										        <th colspan="4" style="text-align: center;">CFY-Q4</th>
-												<th rowspan="2" id="grad3">Total</th>
+												<th rowspan="2" style="background-color:#d10d0d;">Total</th>
 										      </tr>
 
-										      <tr style="color: #ffffff;" id="grad2">
+										      <tr style="color: #0d0d0d; background-color:#a19d9d">
 										        	
 										        <th style="width:4%;text-align: center;">Apr</th>
 										        <th style="width:4%;text-align: center;">May</th>
 												<th style="width:4%;text-align: center;">Jun</th>
-												<th style="width:4.5%;text-align: center;">Q1</th>
+												<th style="width:4.5%;text-align: center; color: #ffffff;background-color:#606363;">Q1</th>
 												<th style="width:4%;text-align: center;">Jul</th>
 												<th style="width:4%;text-align: center;">Aug</th>
 												<th style="width:4%;text-align: center;">Sep</th>
-												<th style="width:4.5%;text-align: center;">Q2</th>
+												<th style="width:4.5%;text-align: center; color: #ffffff; background-color:#606363;">Q2</th>
 												<th style="width:4%;text-align: center;">Oct</th>
 												<th style="width:4%;text-align: center;">Nov</th>	
 										        <th style="width:4%;text-align: center;">Dec</th>
-										        <th style="width:4.5%;text-align: center;">Q3</th>
+										        <th style="width:4.5%;text-align: center; color: #ffffff; background-color:#606363;">Q3</th>
 										        <th style="width:4%;text-align: center;">Jan</th>
 												<th style="width:4%;text-align: center;">Feb</th>
 												<th style="width:4%;text-align: center;">Mar</th>
-												<th style="width:4.5%;text-align: center;">Q4</th>
+												<th style="width:4.5%;text-align: center; color: #ffffff; background-color:#606363;">Q4</th>
 										      </tr>
 										    </thead>
 										    <tbody>
-												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute" ng-style="(($index === 0) || ($index === 3) || ($index === 4) || ($index === 8) || ($index === 10)) ? {'background-color': '#d8d8d8'} : {'background-color': 'white'}">
+												<tr style="text-align: center;" ng-repeat="pnlData in pnlSummaryData" ng-switch on="pnlData.attribute" ng-style="(($index === 0) || ($index === 3) || ($index === 4) || ($index === 8) || ($index === 10)) ? {'background-color': '#ececec'} : {'background-color': 'white'}">
 											        <td style="text-align: left;">
 											       	 <span ng-switch-when="HEAD COUNT #"><b>{{pnlData.attribute}}</b></span>
 											       	 <span ng-switch-when="ONSITE #" style="padding-left: 10px">{{pnlData.attribute}}</span>

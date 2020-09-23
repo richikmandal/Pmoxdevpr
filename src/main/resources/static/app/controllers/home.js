@@ -41,13 +41,13 @@ angular.module('PmoxApp')
           $scope.init = function () {
             $scope.disableTabs=true;  
             $scope.showNoValidOB = false;
-            alert(AuthService.user.roleName)
+            //alert(AuthService.user.roleName)
             if(AuthService.user.roleName === 'PGM' || AuthService.user.roleName == 'PM'){
               
+              $scope.showPnLChrt();                          
               $scope.showNoValidOB = true;
-              
             }
-            alert( $scope.showNoValidOB)
+            //alert( $scope.showNoValidOB)
                       
            $scope.user = $scope.loadProjectMasterData(AuthService.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
@@ -58,11 +58,11 @@ angular.module('PmoxApp')
            $scope.loadProjRevProjectionData($scope.user); 
            $scope.loadPnLSummaryData($scope.user);
            $scope.loadPricingMdlData($scope.user.projMasterData);
-           //$scope.loadProjStatus($scope.user.projMasterData);
+           $scope.loadProjStatus($scope.user.projMasterData);
            $scope.loadProjManaged($scope.user.projMasterData); 
            $scope.loadProjTech($scope.user.projMasterData);
            $scope.loadProjType($scope.user.projMasterData);
-          // $scope.loadProjLocChrt($scope.user.resourceMap);
+           $scope.loadProjLocChrt($scope.user.resourceMap);
            
            
          };        
@@ -295,7 +295,7 @@ angular.module('PmoxApp')
                      title: {
                          text: 'Revenue ($)',
                          style: {
-                             color: Highcharts.getOptions().colors[0]
+                             color: Highcharts.getOptions().colors[1]
                          }
                      },
                      labels: {
@@ -563,7 +563,7 @@ angular.module('PmoxApp')
                  ibu.id=ibuArr[0];
                  ibu.name=ibuArr[1];
                  $scope.ibuNames.push(ibu);
-
+                  $scope.ibuName = $scope.ibuNames[0];
                
              });  
            }
@@ -1703,9 +1703,7 @@ angular.module('PmoxApp')
          
          $scope.showPnLChrt = function() {
          
-         if($scope.showOB){
-             $scope.init();
-           }
+       
            
            $scope.showPnL=true;
            $scope.showProjects=false;
