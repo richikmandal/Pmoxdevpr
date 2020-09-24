@@ -300,7 +300,7 @@ angular.module('PmoxApp')
                      labels: {
                          format: '$ {value} M',
                          style: {
-                             color: Highcharts.getOptions().colors[0]
+                             color: Highcharts.getOptions().colors[1]
                          }
                      },
                      opposite: true
@@ -1687,11 +1687,13 @@ angular.module('PmoxApp')
            $scope.showAssociates=false;
            $scope.showPnL=false;
            $scope.showOB=false;
+           $scope.showOP=false;
            
            if($scope.showProjects=true){
                document.getElementById('projectIcon').style.backgroundColor = '#ffc20d';
                document.getElementById('pnlIcon').style.backgroundColor = '#838ba3';  
                 document.getElementById('revIcon').style.backgroundColor = '#838ba3';
+                document.getElementById('opIcon').style.backgroundColor = '#838ba3';
                
            }
            
@@ -1706,7 +1708,7 @@ angular.module('PmoxApp')
            $scope.showProjects=false;
            $scope.showPnL=false;
            $scope.showOB=false;
-           
+           $scope.showOP=false;
          }
          
          $scope.showPnLChrt = function() {
@@ -1717,11 +1719,12 @@ angular.module('PmoxApp')
            $scope.showProjects=false;
            $scope.showAssociates=false;
            $scope.showOB=false;           
-           
+           $scope.showOP=false;
            if($scope.showPnL=true){
                document.getElementById('pnlIcon').style.backgroundColor = '#ffc20d'; 
                document.getElementById('projectIcon').style.backgroundColor = '#838ba3'; 
                document.getElementById('revIcon').style.backgroundColor = '#838ba3'; 
+               document.getElementById('opIcon').style.backgroundColor = '#838ba3';
                
            
            }
@@ -1735,17 +1738,32 @@ angular.module('PmoxApp')
            $scope.showPnL=false;
            $scope.showProjects=false;
            $scope.showAssociates=false;
+           $scope.showOP=false;
              if($scope.showOB=true){
                document.getElementById('revIcon').style.backgroundColor = '#ffc20d'; 
                document.getElementById('pnlIcon').style.backgroundColor = '#838ba3'; 
                document.getElementById('projectIcon').style.backgroundColor = '#838ba3';
+               document.getElementById('opIcon').style.backgroundColor = '#838ba3';
                
                }          
           }
           
          $scope.showInProgress = function() {
-           
-           alert("I am in progress...");
+          
+           $scope.init(); 
+           $scope.showOP=true;          
+           $scope.showOB=false;
+           $scope.showPnL=false;
+           $scope.showProjects=false;
+           $scope.showAssociates=false;
+           if($scope.showOP=true){
+               document.getElementById('opIcon').style.backgroundColor = '#ffc20d'; 
+               document.getElementById('pnlIcon').style.backgroundColor = '#838ba3'; 
+               document.getElementById('projectIcon').style.backgroundColor = '#838ba3'; 
+               document.getElementById('revIcon').style.backgroundColor = '#838ba3';
+               
+               }    
+         
            
          }
          

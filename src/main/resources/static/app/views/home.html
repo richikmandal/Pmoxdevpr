@@ -406,9 +406,13 @@
 							ng-model="selProject" ng-change="getFilterData(selProject,'PRJ')">
 						</select>
 					</div>
+				</div>				
+			</section>			
+			
+			<div class="row shadow-lg" ng-show="showOP" style="text-align: center; background-color:#f5e107">
+					<span style="width: 100%"><b>This page is under progress</b></span>
 				</div>
 				
-			</section>
 			<section class="py-2" id="section88" ng-show="showOB">
 				<div class="row shadow-lg mb-4" ng-show="!showNoValidOB">
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
@@ -443,7 +447,7 @@
 													</td>
 													<td></td>
 													<td style="text-align: right;">
-														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne).toFixed(3)==='0.000' ? '' : (rev.cfyQOne).toFixed(3)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQOne).toFixed(3)}}</b></span>
@@ -451,7 +455,7 @@
 														 <span ng-switch-default>{{(rev.cfyQOne).toFixed(3)}}</span>
 													</td>
 													<td style="text-align: right;">
-														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQTwo).toFixed(3)==='0.000' ? '' : (rev.cfyQTwo).toFixed(3)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQTwo).toFixed(3)}}</b></span>
@@ -459,7 +463,7 @@
 														 <span ng-switch-default>{{(rev.cfyQTwo).toFixed(3)}}</span>
 													</td>
 													<td style="text-align: right;">
-														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQThree).toFixed(3)==='0.000' ? '' : (rev.cfyQThree).toFixed(3)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQThree).toFixed(3)}}</b></span>
@@ -467,7 +471,7 @@
 														 <span ng-switch-default>{{(rev.cfyQThree).toFixed(3)}}</span>
 													</td>
 													<td style="text-align: right;">
-														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQFour).toFixed(3)}==='0.000' ? '' : (rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQFour).toFixed(3)}}</b></span>
@@ -475,7 +479,8 @@
 														 <span ng-switch-default>{{(rev.cfyQFour).toFixed(3)}}</span>
 													</td>
 													<td style="text-align: right;">
-														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
+														 <span ng-switch-when="a-Target"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)==='0.000' ? '' : 
+														 (rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="j-Upside(P3)"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="k-Pipeline(P0 to P2)"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
 														 <span ng-switch-when="f-ForeCast"><b>{{(rev.cfyQOne+rev.cfyQTwo+rev.cfyQThree+rev.cfyQFour).toFixed(3)}}</b></span>
@@ -497,7 +502,7 @@
 						<div class="card shadow-lg mb-3">
 							<div class="card-body" style="padding-bottom: 5px;padding-top: 9px;">
 								<div class="row align-items-center flex-row">
-									<div class="col-lg-12" style=" height: 400px;">
+									<div class="col-lg-12" >
 										<hc-chart options="chartOBForecast"></hc-chart>
 									</div>
 								</div>
@@ -537,7 +542,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="py-2" id="section55" ng-show="showAssociates">
+			<section class="py-2" id="section55" ng-show="showAssociates" >
 				<div class="row shadow-lg mb-4">
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						
@@ -589,7 +594,7 @@
 				<div class="row shadow-lg mb-4">
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						<div class="card shadow-lg mb-3">
-							<div class="card-body" style="padding-top: 10px;padding-bottom: 10px;padding-right: 10px;padding-left: 10px;">
+							<div class="card-body" style="padding-left: 10px;padding-top: 10px;padding-right: 5px;padding-bottom: 5px;">
 								<div class="row align-items-center flex-row">
 									<div class="col-lg-12">
 										
@@ -871,7 +876,7 @@
 					</div>
 					<div class="col-lg-6 mb-4 mb-lg-0 pl-lg-0">
 						<div class="card shadow-lg mb-3">
-							<div class="card-body">
+							<div class="card-body" style="padding-bottom: 5px;padding-top: 9px;">
 								<div class="row align-items-center flex-row">
 									<div class="col-lg-12">
 										<!-- <canvas id="base" class="chart chart-pie" chart-data="prjTypeCnt" chart-labels="prjType" ></canvas>   -->
