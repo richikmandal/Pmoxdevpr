@@ -29,12 +29,8 @@ public class PmrServiceImpl implements PmrService {
 	    // TODO Auto-generated method stub
 	  
 	  user = pmrprojdao.getPmrDataFrUser(user);
-	 // if(user.getRoleName().equals("PGM")||user.getRoleName().equals("PM")) {
 	    user = pmrprojdao.getProjectMasterDataForPGM(user);
 	    user = pmrprojdao.getResourceDataForPGM(user);
-	   // user = pmrprojdao.getPandLDataForPGM(user);
-	  //}
-	  
 	    return user;
 	  }
 

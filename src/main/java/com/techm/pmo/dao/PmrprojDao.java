@@ -26,8 +26,6 @@ public interface PmrprojDao {
   
   public User getResourceDataForPGM(User user);
 
-  public User getPandLDataForPGM(User user);
-
   public List<Pmrdata> getPmSeriesData(User user);
  
   public List<ProfitAndLossData> getPnLSummary(User user);
