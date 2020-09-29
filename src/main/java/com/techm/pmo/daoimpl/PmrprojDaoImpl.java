@@ -119,7 +119,6 @@ public class PmrprojDaoImpl implements PmrprojDao {
   
   String getRevProjTarget = " SELECT 'a-Target' AS CATEGORY , sum(CFY_Q1) CFYQ1,sum(CFY_Q2) CFYQ2,sum(CFY_Q3) CFYQ3,sum(CFY_Q4) CFYQ4 FROM T_REV_TARGET WHERE ";
     
-  
   @Override
   public User getPmrDataFrUser(User user) {
 

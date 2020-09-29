@@ -41,13 +41,7 @@ angular.module('PmoxApp')
           $scope.init = function () {
             $scope.disableTabs=true;  
             $scope.showNoValidOB = false;
-          /*
-            if(AuthService.user.roleName === 'PGM' || AuthService.user.roleName == 'PM'){
-              
-              $scope.showPnLChrt();                          
-              $scope.showNoValidOB = true;
-            }*/
-                              
+               
            $scope.user = $scope.loadProjectMasterData(AuthService.user)[0] ; 
            $scope.loadFiltersWithStatusData($scope.user.projMasterData);
           
