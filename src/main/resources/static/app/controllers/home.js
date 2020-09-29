@@ -176,7 +176,10 @@ angular.module('PmoxApp')
              data: JSON.stringify(userFrSearch),
              timeout: 30000,
              crossDomain: true,
-             success: function (data) {               
+             success: function (data) { 
+               
+               
+               console.log(JSON.stringify(data));
              
                $scope.pnlSummaryData = data;
                
@@ -243,7 +246,6 @@ angular.module('PmoxApp')
             ebidtap.monQ4Tot = (revenue.monJan+revenue.monFeb+revenue.monMar)==0 ? 0 : ((ebidta.monJan+ebidta.monFeb+ebidta.monMar)*100/(revenue.monJan+revenue.monFeb+revenue.monMar));
             ebidtap.total  = revenue.total== 0 ? 0 : (ebidta.total*100/revenue.total) ; 
  
-                       
             $scope.totalEbidta = ebidtap.total.toFixed(2);
             ebidtaData=[ebidtap.monApr ==0 ? null : parseFloat(ebidtap.monApr.toFixed(2)) ,ebidtap.monMay==0 ? null : parseFloat(ebidtap.monMay.toFixed(2)),ebidtap.monJun==0 ? null : parseFloat(ebidtap.monJun.toFixed(2)),ebidtap.monJul==0 ? null : parseFloat(ebidtap.monJul.toFixed(2)),
             ebidtap.monAug==0 ? null : parseFloat(ebidtap.monAug.toFixed(2)),ebidtap.monSep==0 ? null : parseFloat(ebidtap.monSep.toFixed(2)),ebidtap.monOct==0 ? null : parseFloat(ebidtap.monOct.toFixed(2)),ebidtap.monNov==0 ? null : parseFloat(ebidtap.monNov.toFixed(2)),ebidtap.monDec==0 ? null : parseFloat(ebidtap.monDec.toFixed(2)),
@@ -428,13 +430,6 @@ angular.module('PmoxApp')
                break;
              case 'SALES':
                
-              /* angular.forEach($scope.pgManagers, function (valueOut, keyOut) {
-  
-                 if(valueOut.id==='allpgm'){
-                   $scope.pgmdata=valueOut;
-                 }
-               
-               });  */
                $scope.getDistinctPM(projMasterData);
                $scope.getDistinctProject(projMasterData);
                break;
@@ -446,7 +441,7 @@ angular.module('PmoxApp')
                $scope.getDistinctProject(projMasterData);
                break;
              case 'PRJ':
-              // $scope.user.prjNme = filtrObj.name;
+              
                break;
              default : 
                 $scope.getDistinctSbu(projMasterData);

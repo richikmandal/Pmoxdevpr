@@ -103,8 +103,8 @@ public class PmrprojDaoImpl implements PmrprojDao {
       "SUM(CFY_OCT) CFY_OCT,SUM(CFY_NOV) CFY_NOV,SUM(CFY_DEC) CFY_DEC, SUM(CFY_JAN) CFY_JAN,SUM(CFY_FEB) CFY_FEB,SUM(CFY_MAR) CFY_MAR FROM V_PNL_CALC  WHERE ";
   String getPnLData2 = " GROUP BY HEADER ORDER BY HEADER";
   
-  String getPnLData3 = "SELECT \"MONTH\",MONTH_NO, SUM(\"ON #\") \"ON #\", SUM(\"OF #\") \"OF #\", SUM(\"HC #\") \"HC #\", SUM(REVENUE) REVENUE, SUM(\"DIRECT COST\") \"DIRECT COST\", "+
-       " SUM(\"CNB COST\") \"CNB COST\", SUM(\"TNL COST\") \"TNL COST\", SUM(\"BUFFER COST\") \"BUFFER COST\",SUM(\"SGNA COST\") \"SGNA COST\", SUM(EBIDTA) EBIDTA ,SUM(REVENUE)*100/SUM(EBIDTA) AS \"EBIDTA%\" "+
+  String getPnLData3 = "SELECT \"MONTH\",MONTH_NO, SUM(\"ON #\") \"ON #\",SUM(\"OF #\") \"OF #\", SUM(\"HC #\") \"HC #\", ROUND((SUM(REVENUE)/POWER(10,6)),3) REVENUE, ROUND((SUM(\"DIRECT COST\")/POWER(10,6)),3) \"DIRECT COST\", "+
+       " ROUND((SUM(\"CNB COST\")/POWER(10,6)),3) \"CNB COST\", ROUND((SUM(\"TNL COST\")/POWER(10,6)),3) \"TNL COST\", ROUND((SUM(\"BUFFER COST\")/POWER(10,6)),3) \"BUFFER COST\",ROUND((SUM(\"SGNA COST\")/POWER(10,6)),3) \"SGNA COST\", ROUND((SUM(EBIDTA)/POWER(10,6)),3) EBIDTA ,ROUND((SUM(EBIDTA)*100/SUM(REVENUE)),2) AS \"EBIDTA%\" "+
        " FROM PMOX.V_PNL_CALC_NEW WHERE ";
   String getPnLData4= " GROUP BY MONTH ,MONTH_NO ORDER BY MONTH_NO ";
   
@@ -217,9 +217,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pmrdata.setBuisnessUnit(rs.getString("Business_Unit"));
       pmrdata.setProjectId(rs.getString("projectId"));
       pmrdata.setProjectDesc(rs.getString("projectDesc"));
-      // pmrdata.setCustId(rs.getInt("custId"));
       pmrdata.setIbuName(rs.getString("IBU"));
-      // pmrdata.setIbuDesc(rs.getString("IBUDescription"));
       pmrdata.setIbuHeadName(rs.getString("IbuHeadName"));
       pmrdata.setStatus(rs.getString("Status"));
       pmrdata.setIbgName(rs.getString("IBG_Description"));
@@ -729,6 +727,7 @@ public class PmrprojDaoImpl implements PmrprojDao {
       pnlData.setBufferCost(rs.getFloat("BUFFER COST"));
       pnlData.setSgnaCost(rs.getFloat("SGNA COST"));
       pnlData.setEbidta(rs.getFloat("EBIDTA"));
+      pnlData.setEbidtaper(rs.getFloat("EBIDTA%"));
      
       return pnlData;
     }
